@@ -1,16 +1,27 @@
+// Core AIR (Algebraic Intermediate Representation) traits and builders
 use p3_air::{Air, AirBuilder, BaseAir};
+// Blake3 cryptographic hash function AIR implementation
 use p3_blake3_air::Blake3Air;
+// Field-based challenger for Fiat-Shamir transformations
 use p3_challenger::FieldChallenger;
+// Polynomial commitment scheme traits
 use p3_commit::PolynomialSpace;
+// Field arithmetic traits and implementations
 use p3_field::{ExtensionField, Field, PrimeCharacteristicRing, PrimeField64};
+// Keccak cryptographic hash function AIR implementation
 use p3_keccak_air::KeccakAir;
+// Matrix data structures for execution traces
 use p3_matrix::dense::RowMajorMatrix;
+// Poseidon2 linear layer implementations
 use p3_poseidon2::GenericPoseidon2LinearLayers;
+// Poseidon2 cryptographic hash function AIR implementations
 use p3_poseidon2_air::{Poseidon2Air, VectorizedPoseidon2Air};
+// STARK protocol constraint builders and folders
 use p3_uni_stark::{
     DebugConstraintBuilder, ProverConstraintFolder, StarkGenericConfig, SymbolicAirBuilder,
     VerifierConstraintFolder,
 };
+// Random number generation utilities
 use rand::distr::StandardUniform;
 use rand::prelude::Distribution;
 
@@ -86,6 +97,7 @@ impl<
 {
     #[inline]
     fn width(&self) -> usize {
+        // Return the execution trace width for the specific hash function AIR
         match self {
             Self::Blake3(b3_air) => <Blake3Air as BaseAir<F>>::width(b3_air),
             Self::Poseidon2(p2_air) => p2_air.width(),
@@ -117,6 +129,7 @@ impl<
 {
     #[inline]
     fn eval(&self, builder: &mut AB) {
+        // Evaluate the AIR constraints using the appropriate hash function implementation
         match self {
             Self::Blake3(b3_air) => b3_air.eval(builder),
             Self::Poseidon2(p2_air) => p2_air.eval(builder),
@@ -160,9 +173,11 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+        // Generate execution trace matrix for the specified number of hash operations
         match self {
             Self::Blake3(b3_air) => b3_air.generate_trace_rows(num_hashes, extra_capacity_bits),
             Self::Poseidon2(p2_air) => {
+                // Use vectorized trace generation for Poseidon2 to improve performance
                 p2_air.generate_vectorized_trace_rows(num_hashes, extra_capacity_bits)
             }
             Self::Keccak(k_air) => k_air.generate_trace_rows(num_hashes, extra_capacity_bits),
