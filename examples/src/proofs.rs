@@ -64,7 +64,7 @@ const fn get_poseidon2_mmcs<
     // Create sponge hasher using the 24-width permutation
     let hash = Poseidon2Sponge::new(perm24);
 
-    // Create compression function using the 16-width permutation  
+    // Create compression function using the 16-width permutation
     let compress = Poseidon2Compression::new(perm16);
 
     Poseidon2MerkleMmcs::<F, _, _>::new(hash, compress)
@@ -181,6 +181,12 @@ pub fn prove_m31_keccak<
     let fri_params = create_benchmark_fri_params(challenge_mmcs);
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_params.log_blowup);
+
+    // for (index, row) in trace.row_slices().enumerate() {
+    //     println!("trace[{}] {} elems: {:?}", index, row.len(), row);
+    // }
+
+    println!("Trace done");
 
     let pcs = CirclePcs::new(val_mmcs, fri_params);
     let challenger = SerializingChallenger32::from_hasher(vec![], Keccak256Hash {});

@@ -25,6 +25,7 @@ use p3_poseidon2_air::{Poseidon2Air, RoundConstants, VectorizedPoseidon2Air};
 // Deterministic random number generation for reproducible tests
 use rand::SeedableRng;
 use rand::rngs::SmallRng;
+use tracing_subscriber;
 
 use crate::dfts::DftChoice;
 use crate::proofs::{
@@ -262,6 +263,8 @@ fn test_end_to_end_mersenne31_vectorized_poseidon2_hashes_poseidon2_merkle_tree(
 
 #[test]
 fn test_end_to_end_mersenne31_poseidon2_hashes_keccak_merkle_tree() -> Result<(), impl Debug> {
+    tracing_subscriber::fmt::init();
+    
     // WARNING: Use a real cryptographic PRNG in applications!!
     let mut rng = SmallRng::seed_from_u64(1);
 

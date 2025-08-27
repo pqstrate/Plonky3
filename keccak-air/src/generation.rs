@@ -18,6 +18,8 @@ pub fn generate_trace_rows<F: PrimeField64>(
     inputs: Vec<[u64; 25]>,
     extra_capacity_bits: usize,
 ) -> RowMajorMatrix<F> {
+    println!("Generating Keccak trace with {} columns", NUM_KECCAK_COLS);
+
     let num_rows = (inputs.len() * NUM_ROUNDS).next_power_of_two();
     let trace_length = num_rows * NUM_KECCAK_COLS;
 

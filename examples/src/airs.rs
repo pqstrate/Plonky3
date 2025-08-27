@@ -173,6 +173,7 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+        println!("here");
         // Generate execution trace matrix for the specified number of hash operations
         match self {
             Self::Blake3(b3_air) => b3_air.generate_trace_rows(num_hashes, extra_capacity_bits),
@@ -203,6 +204,7 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+        println!("here 2");
         self.generate_trace_rows(num_hashes, extra_capacity_bits)
     }
 }
@@ -225,6 +227,7 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+        println!("here 3");
         self.generate_trace_rows(num_hashes, extra_capacity_bits)
     }
 }
@@ -264,6 +267,8 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+
+        println!("here 4");
         self.generate_vectorized_trace_rows(num_hashes, extra_capacity_bits)
     }
 }
@@ -301,6 +306,8 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
+
+        println!("here 5 {}", WIDTH);
         self.generate_trace_rows(num_hashes, extra_capacity_bits)
     }
 }

@@ -58,14 +58,14 @@ const P2_LOG_VECTOR_LEN: u8 = 3;
 const P2_VECTOR_LEN: usize = 1 << P2_LOG_VECTOR_LEN;
 
 /// Command-line arguments for configuring STARK proof generation.
-/// 
+///
 /// This structure defines all the configurable parameters for generating
 /// cryptographic hash function proofs using the Plonky3 STARK system.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
     /// The prime field to use for STARK arithmetic.
-    /// 
+    ///
     /// Different fields have different security properties and performance characteristics:
     /// - BabyBear: 31-bit prime, good for general use
     /// - KoalaBear: 31-bit prime, optimized for certain operations  
@@ -74,7 +74,7 @@ struct Args {
     field: FieldOptions,
 
     /// The cryptographic hash function to prove.
-    /// 
+    ///
     /// Each hash function has different execution trace widths and complexities:
     /// - Blake3: Wide trace, modern cryptographic hash
     /// - KeccakF: Keccak-f[1600] permutation, used in SHA-3
@@ -83,14 +83,14 @@ struct Args {
     objective: ProofOptions,
 
     /// The log base 2 of the desired execution trace length.
-    /// 
+    ///
     /// Larger traces allow proving more hash computations but require more time.
     /// For example: 10 = 1024 rows, 15 = 32768 rows
     #[arg(short, long)]
     log_trace_length: u8,
 
     /// The discrete Fourier transform implementation to use.
-    /// 
+    ///
     /// DFT is used in polynomial operations during proof generation:
     /// - RecursiveDft: Memory-efficient for smaller traces
     /// - Radix2DitParallel: Faster for larger traces with parallelization
@@ -99,7 +99,7 @@ struct Args {
     discrete_fourier_transform: DftOptions,
 
     /// The hash function to use for Merkle tree construction.
-    /// 
+    ///
     /// The Merkle tree is used in the polynomial commitment scheme:
     /// - KeccakF: Uses Keccak-f[1600] permutation
     /// - Poseidon2: Uses arithmetic-friendly Poseidon2 hash
@@ -227,9 +227,9 @@ fn main() {
 
                     // BabyBear-specific constants for constructing the Poseidon2 AIR
                     // These parameters are optimized for the BabyBear field characteristics
-                    const SBOX_DEGREE: u64 = 7;        // Degree-7 S-box (x^7)
-                    const SBOX_REGISTERS: usize = 1;    // Partial S-box (only 1 element per round)
-                    const PARTIAL_ROUNDS: usize = 13;   // Fewer partial rounds due to higher S-box degree
+                    const SBOX_DEGREE: u64 = 7; // Degree-7 S-box (x^7)
+                    const SBOX_REGISTERS: usize = 1; // Partial S-box (only 1 element per round)
+                    const PARTIAL_ROUNDS: usize = 13; // Fewer partial rounds due to higher S-box degree
 
                     let p2_air: VectorizedPoseidon2Air<
                         BabyBear,
@@ -282,9 +282,9 @@ fn main() {
 
                     // Mersenne31-specific constants for constructing the Poseidon2 AIR
                     // These parameters leverage Mersenne31's efficient arithmetic properties
-                    const SBOX_DEGREE: u64 = 5;        // Degree-5 S-box (x^5)
-                    const SBOX_REGISTERS: usize = 1;    // Partial S-box layer
-                    const PARTIAL_ROUNDS: usize = 14;   // Balanced security/performance tradeoff
+                    const SBOX_DEGREE: u64 = 5; // Degree-5 S-box (x^5)
+                    const SBOX_REGISTERS: usize = 1; // Partial S-box layer
+                    const PARTIAL_ROUNDS: usize = 14; // Balanced security/performance tradeoff
 
                     let p2_air: VectorizedPoseidon2Air<
                         Mersenne31,

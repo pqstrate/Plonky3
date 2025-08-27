@@ -93,6 +93,8 @@ pub fn generate_trace_rows<
     );
 
     let ncols = num_cols::<WIDTH, SBOX_DEGREE, SBOX_REGISTERS, HALF_FULL_ROUNDS, PARTIAL_ROUNDS>();
+    println!("Number of columns: {}", ncols);
+
     let mut vec = Vec::with_capacity((n * ncols) << extra_capacity_bits);
     let trace = &mut vec.spare_capacity_mut()[..n * ncols];
     let trace = RowMajorMatrixViewMut::new(trace, ncols);
