@@ -39,6 +39,9 @@ members = [
 ]
 
 [workspace.dependencies]
+
+ark-std = { version ="0.5.0", features = [ "print-trace" ] }
+
 bincode = { version = "2.0.0", default-features = false }
 blake3 = { version = "1.5", default-features = false }
 clap = { version = "4.5.23", features = ["derive"] }

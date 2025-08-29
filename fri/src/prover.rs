@@ -1,5 +1,6 @@
 use alloc::vec;
 use alloc::vec::Vec;
+use ark_std::{end_timer, perf_trace::println, start_timer};
 use core::iter;
 
 use itertools::{Itertools, izip};
@@ -75,18 +76,23 @@ where
         // Final_poly_degree must be less than or equal to the degree of the smallest polynomial.
         assert!(log_min_height > params.log_final_poly_len + params.log_blowup);
     }
-
+    println!("poly len: {}", inputs.len());
+    let commit_timer= start_timer!(|| "commit phase");
     // Continually fold the inputs down until the polynomial degree reaches final_poly_degree.
     // Returns a vector of commitments to the intermediate stage polynomials, the intermediate stage polynomials
     // themselves and the final polynomial.
     // Note that the challenger observes the commitments and the final polynomial inside this function so we don't
     // need to observe the output of this function here.
     let commit_phase_result = commit_phase(folding, params, inputs, challenger);
+    end_timer!(commit_timer);
 
+    let pow_timer = start_timer!(|| "proof of work");
     // Produce a proof of work witness before receiving any query challenges.
     // This helps to prevent grinding attacks.
     let pow_witness = challenger.grind(params.proof_of_work_bits);
+    end_timer!(pow_timer);
 
+    let query_timer = start_timer!(|| "query phase");
     let query_proofs = info_span!("query phase").in_scope(|| {
         // Sample num_queries indexes to check.
         // The probability that no two FRI indices are equal (ignoring extra query index bits) is:
@@ -118,6 +124,7 @@ where
         .take(params.num_queries)
         .collect()
     });
+    end_timer!(query_timer);
 
     FriProof {
         commit_phase_commits: commit_phase_result.commits,

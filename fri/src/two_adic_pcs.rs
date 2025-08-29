@@ -15,6 +15,7 @@
 
 use alloc::vec;
 use alloc::vec::Vec;
+use ark_std::{end_timer, start_timer};
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
@@ -507,6 +508,7 @@ where
 
         let folding: TwoAdicFriFoldingForMmcs<Val, InputMmcs> = TwoAdicFriFolding(PhantomData);
 
+        let fri_timer = start_timer!(|| "Produce FRI proof");
         // Produce the FRI proof.
         let fri_proof = prover::prove_fri(
             &folding,
@@ -517,6 +519,7 @@ where
             &commitment_data_with_opening_points,
             &self.mmcs,
         );
+        end_timer!(fri_timer);
 
         (all_opened_values, fri_proof)
     }
