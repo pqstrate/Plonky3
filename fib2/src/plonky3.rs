@@ -1,10 +1,10 @@
 use p3_challenger::{HashChallenger, SerializingChallenger64};
 use p3_commit::ExtensionMmcs;
 use p3_dft::Radix2DitParallel;
-use p3_field::{PrimeCharacteristicRing, PrimeField64};
+use p3_field::PrimeField64;
 use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_params};
 use p3_goldilocks::Goldilocks;
-use p3_keccak::{ KeccakF};
+use p3_keccak::KeccakF;
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
 use p3_uni_stark::{StarkConfig, prove, verify};
@@ -26,28 +26,6 @@ pub fn p3_generate_proof(
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("🔐 Generating Plonky3 STARK proof with simple increment constraint...");
 
-    // === CREATE SIMPLE SYNTHETIC TRACE ===
-    // Generate a simple trace that actually satisfies the increment constraint
-    let trace_height = 64; // Power of 2 for STARK requirements
-    let trace_width = 4; // Simple trace with just 4 columns
-
-    println!(
-        "   • Creating synthetic trace: {}×{}",
-        trace_height, trace_width
-    );
-
-    let mut trace_data = Vec::with_capacity(trace_height * trace_width);
-
-    for row in 0..trace_height {
-        // Column 0: incrementing values (0, 1, 2, 3, ...)
-        trace_data.push(Goldilocks::from_u64(row as u64));
-
-        // Other columns: simple patterns that don't interfere with our constraint
-        trace_data.push(Goldilocks::from_u64(row as u64 * 2)); // Column 1: 2*row
-        trace_data.push(Goldilocks::from_u64(42)); // Column 2: constant
-        trace_data.push(Goldilocks::from_u64((row as u64).pow(2) % 1000)); // Column 3: row^2 mod 1000
-    }
-    
     let byte_hash = ByteHash {};
     let u64_hash = U64Hash::new(KeccakF {});
     let field_hash = FieldHash::new(u64_hash);

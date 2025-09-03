@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("========================\n");
 
     let base = 5;
-    for log_iter in 1..12 {
+    for log_iter in 0..12 {
         let iteration = base << log_iter;
         println!("\n🔐 Generating proof from Plonky3 trace...");
         let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iteration)?;

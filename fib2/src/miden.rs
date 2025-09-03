@@ -1,6 +1,6 @@
 use std::time::Instant;
-use ark_std::{start_timer, end_timer};
 
+use ark_std::{end_timer, start_timer};
 pub use miden_processor::ExecutionTrace as MidenTrace;
 use miden_prover::{ProvingOptions, prove};
 use miden_verifier::verify;
