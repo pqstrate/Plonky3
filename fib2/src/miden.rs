@@ -19,11 +19,12 @@ pub fn miden_generate_proof(
     program: &Program,
     stack_inputs: StackInputs,
     advice_inputs: AdviceInputs,
+    using_blake: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("🔐 Generating native Miden STARK proof...");
 
     // Generate proof
-    let proving_options = ProvingOptions::default();
+    let proving_options = ProvingOptions::with_96_bit_security(!using_blake);
     let mut host_for_proving = DefaultHost::default();
 
     let proof_start = Instant::now();

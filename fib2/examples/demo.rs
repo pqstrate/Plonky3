@@ -35,7 +35,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             miden_trace.main_trace_width()
         );
 
-        match miden_generate_proof(&program, stack_inputs, advice_inputs) {
+        println!("\n🔐 Miden with blake3.");
+        match miden_generate_proof(&program, stack_inputs.clone(), advice_inputs.clone(), true) {
+            Ok(()) => println!("   ✅ Miden proof generation successful!"),
+            Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
+        }
+
+        println!("\n🔐 Miden with rpo256.");
+        match miden_generate_proof(&program, stack_inputs, advice_inputs, false) {
             Ok(()) => println!("   ✅ Miden proof generation successful!"),
             Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
         }
