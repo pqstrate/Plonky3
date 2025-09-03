@@ -13,56 +13,34 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🎯 Demo of New fib2 APIs");
     println!("========================\n");
 
-    // === Demo 1: Generate traces for different iteration counts ===
-    println!("📊 Demo 1: Generating traces for different iterations...");
-
-    for &iterations in &[5, 15, 25] {
+    for &iterations in &[5, 10, 20, 40, 80, 160, 320, 640, 1280] {
+        println!("\n🔐 Generating proof from Plonky3 trace...");
+        let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iterations)?;
         println!(
-            "\n   • Generating traces for {} Fibonacci iterations...",
-            iterations
-        );
-        let (miden_trace, p3_trace) = trace_gen(iterations)?;
-
-        println!(
-            "     - Miden trace: {}×{}",
-            miden_trace.length(),
-            miden_trace.main_trace_width()
-        );
-        println!(
-            "     - P3 trace: {}×{}",
+            "========================\n   Using P3 trace ({}×{}) for proof generation...\n========================",
             p3_trace.height(),
             p3_trace.width()
         );
-        println!("     - Files: fib_{}_trace_[miden|p3].log", iterations);
+
+        match p3_generate_proof(p3_trace) {
+            Ok(()) => println!("   ✅ P3 proof generation successful!"),
+            Err(e) => println!("   ❌ P3 proof generation failed: {}", e),
+        }
+
+        println!(
+            "========================\n   Using Miden trace ({}×{}) for proof generation...\n========================",
+            miden_trace.length(),
+            miden_trace.main_trace_width()
+        );
+
+        match miden_generate_proof(&program, stack_inputs, advice_inputs) {
+            Ok(()) => println!("   ✅ Miden proof generation successful!"),
+            Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
+        }
+
+        println!("\n🎉 All API demos completed!");
+        println!("   Check the generated fib_*_trace_*.log files to see the traces.");
     }
-
-    // === Demo 2: Generate proof from Plonky3 trace ===
-    println!("\n🔐 Demo 2: Generating proof from Plonky3 trace...");
-    let (miden_trace, p3_trace) = trace_gen(30)?;
-    println!(
-        "   Using P3 trace ({}×{}) for proof generation...",
-        p3_trace.height(),
-        p3_trace.width()
-    );
-
-    match p3_generate_proof(p3_trace) {
-        Ok(()) => println!("   ✅ P3 proof generation successful!"),
-        Err(e) => println!("   ❌ P3 proof generation failed: {}", e),
-    }
-
-    println!(
-        "   Using Miden trace ({}×{}) for proof generation...",
-        miden_trace.length(),
-        miden_trace.main_trace_width()
-    );
-
-    match miden_generate_proof(miden_trace) {
-        Ok(()) => println!("   ✅ Miden proof generation successful!"),
-        Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
-    }
-
-    println!("\n🎉 All API demos completed!");
-    println!("   Check the generated fib_*_trace_*.log files to see the traces.");
 
     Ok(())
 }

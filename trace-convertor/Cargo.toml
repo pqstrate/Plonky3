@@ -17,8 +17,8 @@ p3-field.workspace = true
 p3-util.workspace = true
 
 # Miden VM dependencies
-miden-processor = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
-miden-core = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
+miden-processor = { path = "../../miden-vm/processor", default-features = false }
+miden-core = { path = "../../miden-vm/core", default-features = false }
 winter-prover = { version = "0.13", default-features = false }
 
 [dev-dependencies]
@@ -26,9 +26,19 @@ winter-prover = { version = "0.13", default-features = false }
 p3-baby-bear.workspace = true
 
 # For examples - additional Miden dependencies needed for full program execution
-miden-core = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
-miden-assembly = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
+miden-core = { path = "../../miden-vm/core", default-features = false }
+miden-assembly = { path = "../../miden-vm/assembly", default-features = false }
 
 [features]
 default = []
 # miden = ["dep:miden-vm", "dep:miden-processor"]
+
+[patch.crates-io]
+winter-air = { path = "../../winterfell/air", default-features = false }
+winter-crypto = { path = "../../winterfell/crypto" }
+winter-fri = { path = "../../winterfell/fri" }
+winter-math = { path = "../../winterfell/math", default-features = false }
+winter-prover = { path = "../../winterfell/prover", default-features = false }
+winter-rand-utils = { path = "../../winterfell/utils/rand" }
+winter-utils = { path = "../../winterfell/utils/core", default-features = false }
+winter-verifier = { path = "../../winterfell/verifier", default-features = false }

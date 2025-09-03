@@ -1,16 +1,15 @@
 use p3_challenger::{HashChallenger, SerializingChallenger64};
 use p3_commit::ExtensionMmcs;
 use p3_dft::Radix2DitParallel;
-use p3_field::{PrimeCharacteristicRing, PrimeField64, extension::BinomialExtensionField};
+use p3_field::{PrimeCharacteristicRing, PrimeField64};
 use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_params};
 use p3_goldilocks::Goldilocks;
-use p3_keccak::{Keccak256Hash, KeccakF};
-use p3_matrix::{Matrix, dense::RowMajorMatrix};
-use p3_merkle_tree::MerkleTreeMmcs;
-use p3_symmetric::{CompressionFunctionFromHasher, PaddingFreeSponge, SerializingHasher};
+use p3_keccak::{ KeccakF};
+use p3_matrix::Matrix;
+use p3_matrix::dense::RowMajorMatrix;
 use p3_uni_stark::{StarkConfig, prove, verify};
 
-use crate::IncrementAir;
+use crate::{ByteHash, Challenge, FieldHash, IncrementAir, MyCompress, U64Hash, Val, ValMmcs};
 
 /// Generate a Plonky3 STARK proof using a simple increment constraint
 ///
@@ -23,7 +22,7 @@ use crate::IncrementAir;
 /// # Returns
 /// * `Result<(), Box<dyn std::error::Error>>` - Success or error
 pub fn p3_generate_proof(
-    _p3_trace: RowMajorMatrix<Goldilocks>,
+    p3_trace: RowMajorMatrix<Goldilocks>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("🔐 Generating Plonky3 STARK proof with simple increment constraint...");
 
@@ -48,37 +47,14 @@ pub fn p3_generate_proof(
         trace_data.push(Goldilocks::from_u64(42)); // Column 2: constant
         trace_data.push(Goldilocks::from_u64((row as u64).pow(2) % 1000)); // Column 3: row^2 mod 1000
     }
-
-    let synthetic_trace = RowMajorMatrix::new(trace_data, trace_width);
-
-    // === TYPE DEFINITIONS FOR STARK SYSTEM ===
-
-    // Base field: Goldilocks - a 64-bit prime field (2^64 - 2^32 + 1)
-    type Val = Goldilocks;
-
-    // Extension field: degree-2 extension of Goldilocks for better security
-    type Challenge = BinomialExtensionField<Val, 2>;
-
-    // === HASH FUNCTION SETUP ===
-    type ByteHash = Keccak256Hash;
-    type U64Hash = PaddingFreeSponge<KeccakF, 25, 17, 4>;
-    type FieldHash = SerializingHasher<U64Hash>;
+    
     let byte_hash = ByteHash {};
     let u64_hash = U64Hash::new(KeccakF {});
     let field_hash = FieldHash::new(u64_hash);
 
-    // === COMPRESSION FUNCTION ===
-    type MyCompress = CompressionFunctionFromHasher<U64Hash, 2, 4>;
     let compress = MyCompress::new(u64_hash);
 
     // === MERKLE TREE COMMITMENT SCHEME ===
-    type ValMmcs = MerkleTreeMmcs<
-        [Val; p3_keccak::VECTOR_LEN],
-        [u64; p3_keccak::VECTOR_LEN],
-        FieldHash,
-        MyCompress,
-        4,
-    >;
     let val_mmcs = ValMmcs::new(field_hash, compress);
 
     // Extension field commitment scheme
@@ -108,15 +84,15 @@ pub fn p3_generate_proof(
     let config = MyConfig::new(pcs, challenger);
 
     println!(
-        "   • Synthetic trace dimensions: {}×{}",
-        synthetic_trace.height(),
-        synthetic_trace.width()
+        "   • P3 trace dimensions: {}×{}",
+        p3_trace.height(),
+        p3_trace.width()
     );
 
     // Display first few values to confirm correct increment pattern
     println!("   • First few values in column 0 (should increment):");
-    for i in 0..std::cmp::min(8, synthetic_trace.height()) {
-        let row = synthetic_trace.row_slice(i).unwrap();
+    for i in 0..std::cmp::min(8, p3_trace.height()) {
+        let row = p3_trace.row_slice(i).unwrap();
         println!("     Row {}: {}", i, row[0].as_canonical_u64());
     }
 
@@ -130,7 +106,7 @@ pub fn p3_generate_proof(
     println!("\n🔐 Generating proof...");
     let start_time = std::time::Instant::now();
 
-    let proof = prove(&config, &air, synthetic_trace, &vec![]);
+    let proof = prove(&config, &air, p3_trace, &vec![]);
 
     let proof_time = start_time.elapsed();
     println!("   • Proof generated in {:.2}s", proof_time.as_secs_f64());

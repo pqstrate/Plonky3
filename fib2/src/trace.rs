@@ -3,10 +3,12 @@ use std::io::Write;
 
 use miden_assembly::Assembler;
 use miden_processor::{AdviceInputs, DefaultHost, ExecutionOptions, StackInputs, execute};
+use miden_vm::{AdviceInputs as VmAdviceInputs, StackInputs as VmStackInputs};
 use p3_air::{Air, AirBuilder, BaseAir};
 use p3_field::{PrimeCharacteristicRing, PrimeField64};
 use p3_goldilocks::Goldilocks;
-use p3_matrix::{Matrix, dense::RowMajorMatrix};
+use p3_matrix::Matrix;
+use p3_matrix::dense::RowMajorMatrix;
 use p3_trace_convertor::{TraceConverter, convert_miden_trace};
 use winter_prover::Trace;
 
@@ -128,17 +130,26 @@ impl<AB: AirBuilder> Air<AB> for IncrementAir {
 /// Generate traces for a given number of Fibonacci iterations
 ///
 /// Returns both the Miden VM execution trace and the converted Plonky3 trace.
+/// Also returns the program and inputs needed for proof generation.
 /// Writes traces to files: fib_{fib_iter}_trace_miden.log and fib_{fib_iter}_trace_p3.log
 ///
 /// # Arguments
 /// * `fib_iter` - Number of Fibonacci iterations to compute
 ///
 /// # Returns
-/// * `(ExecutionTrace, RowMajorMatrix<Goldilocks>)` - Tuple of Miden trace and Plonky3 trace
+/// * `(ExecutionTrace, RowMajorMatrix<Goldilocks>, Program, StackInputs, AdviceInputs)` - Tuple of traces and execution parameters
 pub fn trace_gen(
     fib_iter: usize,
-) -> Result<(miden_processor::ExecutionTrace, RowMajorMatrix<Goldilocks>), Box<dyn std::error::Error>>
-{
+) -> Result<
+    (
+        miden_processor::ExecutionTrace,
+        RowMajorMatrix<Goldilocks>,
+        miden_vm::Program,
+        miden_vm::StackInputs,
+        miden_vm::AdviceInputs,
+    ),
+    Box<dyn std::error::Error>,
+> {
     println!("🚀 Generating trace using Miden VM execution...");
 
     // Create a simple Fibonacci program in Miden Assembly
@@ -230,5 +241,15 @@ pub fn trace_gen(
     let p3_filename = format!("fib_{}_trace_p3.log", fib_iter);
     write_plonky3_trace_to_file(&plonky3_trace, &p3_filename)?;
 
-    Ok((miden_trace, plonky3_trace))
+    // Convert inputs to miden_vm types for proof generation
+    let vm_stack_inputs = VmStackInputs::default();
+    let vm_advice_inputs = VmAdviceInputs::default();
+
+    Ok((
+        miden_trace,
+        plonky3_trace,
+        program,
+        vm_stack_inputs,
+        vm_advice_inputs,
+    ))
 }

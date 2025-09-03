@@ -25,8 +25,24 @@ p3-uni-stark.workspace = true
 rand.workspace = true
 tracing.workspace = true
 
+ark-std = { version = "0.5", features = ["print-trace"] }
+
 # Trace convertor and Miden VM dependencies
 p3-trace-convertor = { path = "../trace-convertor" }
-miden-assembly = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
-miden-processor = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
+
+miden-assembly = { path = "../../miden-vm/assembly", default-features = false }
+miden-processor = { path = "../../miden-vm/processor", default-features = false }
+miden-prover = { path = "../../miden-vm/prover", default-features = false, features = ["std"] }
+miden-verifier = { path = "../../miden-vm/verifier", default-features = false }
+miden-vm = { path = "../../miden-vm/miden-vm", default-features = false }
 winter-prover = { version = "0.13", default-features = false }
+
+[patch.crates-io]
+winter-air = { path = "../../winterfell/air", default-features = false }
+winter-crypto = { path = "../../winterfell/crypto" }
+winter-fri = { path = "../../winterfell/fri" }
+winter-math = { path = "../../winterfell/math", default-features = false }
+winter-prover = { path = "../../winterfell/prover", default-features = false, features = ["std"] }
+winter-rand-utils = { path = "../../winterfell/utils/rand" }
+winter-utils = { path = "../../winterfell/utils/core", default-features = false }
+winter-verifier = { path = "../../winterfell/verifier", default-features = false }

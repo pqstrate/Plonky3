@@ -12,7 +12,7 @@ use crate::trace_gen;
 #[test]
 fn test_trace_gen() {
     match trace_gen(10) {
-        Ok((miden_trace, p3_trace)) => {
+        Ok((miden_trace, p3_trace, _program, _stack_inputs, _advice_inputs)) => {
             // Verify basic properties of both traces
             assert!(miden_trace.length() > 0, "Miden trace should have rows");
             assert!(
