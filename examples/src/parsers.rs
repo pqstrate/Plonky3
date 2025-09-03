@@ -5,9 +5,11 @@
 //!
 //! For most of the enums, this allows the user to
 
+// Command-line argument parsing utilities
 use clap::ValueEnum;
 use clap::builder::PossibleValue;
 
+// Available prime field options for STARK proofs
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum FieldOptions {
     BabyBear,
@@ -15,6 +17,7 @@ pub enum FieldOptions {
     Mersenne31,
 }
 
+// Available cryptographic hash functions for generating proofs
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum ProofOptions {
     Blake3Permutations,
@@ -22,6 +25,7 @@ pub enum ProofOptions {
     Poseidon2Permutations,
 }
 
+// Available Discrete Fourier Transform implementation options
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DftOptions {
     None,
@@ -29,6 +33,7 @@ pub enum DftOptions {
     RecursiveDft,
 }
 
+// Available hash functions for Merkle tree construction
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum MerkleHashOptions {
     KeccakF,
