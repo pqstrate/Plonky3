@@ -15,10 +15,10 @@
 
 use alloc::vec;
 use alloc::vec::Vec;
-use ark_std::{end_timer, start_timer};
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
+use ark_std::{end_timer, start_timer};
 use itertools::{Itertools, izip};
 use p3_challenger::{CanObserve, FieldChallenger, GrindingChallenger};
 use p3_commit::{BatchOpening, Mmcs, OpenedValues, Pcs};

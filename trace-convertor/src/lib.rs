@@ -31,13 +31,12 @@ extern crate alloc;
 use alloc::vec::Vec;
 use core::fmt;
 
-use p3_field::PrimeField;
-use p3_matrix::dense::RowMajorMatrix;
-use p3_util::log2_strict_usize;
-
 // Import actual Miden VM types
 use miden_core::{Felt, FieldElement};
 use miden_processor::ExecutionTrace;
+use p3_field::PrimeField;
+use p3_matrix::dense::RowMajorMatrix;
+use p3_util::log2_strict_usize;
 
 /// Error type for trace conversion operations
 #[derive(Debug)]

@@ -1,8 +1,9 @@
 use alloc::vec;
 use alloc::vec::Vec;
-use ark_std::{end_timer, perf_trace::println, start_timer};
 use core::iter;
 
+use ark_std::perf_trace::println;
+use ark_std::{end_timer, start_timer};
 use itertools::{Itertools, izip};
 use p3_challenger::{CanObserve, FieldChallenger, GrindingChallenger};
 use p3_commit::{BatchOpening, Mmcs};

@@ -7,15 +7,14 @@
 //!
 //! This eliminates the need to write traces to disk and read them back.
 
+// Import Miden VM components for creating and executing programs
+use miden_assembly::Assembler;
+use miden_processor::{AdviceInputs, DefaultHost, ExecutionOptions, StackInputs, execute};
 use p3_field::PrimeCharacteristicRing;
 use p3_goldilocks::Goldilocks;
 use p3_matrix::Matrix;
 use p3_trace_convertor::{TraceConverter, convert_miden_trace};
 use winter_prover::Trace;
-
-// Import Miden VM components for creating and executing programs
-use miden_assembly::Assembler;
-use miden_processor::{AdviceInputs, DefaultHost, ExecutionOptions, StackInputs, execute};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🚀 Miden VM to Plonky3 Direct Conversion Example");
