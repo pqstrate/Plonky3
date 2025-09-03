@@ -13,9 +13,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🎯 Demo of New fib2 APIs");
     println!("========================\n");
 
-    for &iterations in &[5, 10, 20, 40, 80, 160, 320, 640, 1280] {
+    let base = 5;
+    for log_iter in 1..12 {
+        let iteration = base << log_iter;
         println!("\n🔐 Generating proof from Plonky3 trace...");
-        let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iterations)?;
+        let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iteration)?;
         println!(
             "========================\n   Using P3 trace ({}×{}) for proof generation...\n========================",
             p3_trace.height(),
