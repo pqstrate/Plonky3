@@ -35,10 +35,10 @@ where
     A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
 {
     let proof_timer = start_timer!(|| "Total proof generation");
-    
+
     #[cfg(debug_assertions)]
     crate::check_constraints::check_constraints(air, &trace, public_values);
-    
+
     // 0 ----- Instance setup: degrees, constraints, domains --------------------------
     let step_timer = start_timer!(|| "Step 0: Instance setup");
 
@@ -93,9 +93,9 @@ where
     // Initialize the PCS and the Challenger.
     let pcs = config.pcs();
     let mut challenger = config.initialise_challenger();
-    
+
     end_timer!(step_timer);
-    
+
     // 1 ----- Commit to execution trace -------------------------------------------
     let step_timer = start_timer!(|| "Step 1: Commit to execution trace");
 
@@ -133,7 +133,6 @@ where
 
     // Observe the public input values.
     challenger.observe_slice(public_values);
-
 
     // 2 ----- Compute quotient polynomial -------------------------------------------
     let step_timer = start_timer!(|| "Step 2: Compute quotient polynomial");
@@ -227,7 +226,7 @@ where
     let (quotient_commit, quotient_data) = info_span!("commit to quotient poly chunks")
         .in_scope(|| pcs.commit_quotient(quotient_domain, quotient_flat, quotient_degree));
     challenger.observe(quotient_commit.clone());
-    
+
     end_timer!(step_timer);
 
     // If zk is enabled, we generate random extension field values of the size of the randomized trace. If `n` is the degree of the initial trace,
@@ -258,7 +257,7 @@ where
     if let Some(r_commit) = opt_r_commit {
         challenger.observe(r_commit);
     }
-    
+
     // 4 ----- Sample out-of-domain point ------------------------------------------
     let step_timer = start_timer!(|| "Step 4: Sample out-of-domain point");
 
@@ -275,9 +274,9 @@ where
     // cases but it is a completeness issue and contributes a completeness error of |gK| = 2N/|EF|.
     let zeta: SC::Challenge = challenger.sample_algebra_element();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
-    
+
     end_timer!(step_timer);
-    
+
     // 5 ----- Open polynomials at out-of-domain point ----------------------------
     let step_timer = start_timer!(|| "Step 5: Open polynomials");
 
@@ -310,10 +309,10 @@ where
         quotient_chunks,
         random,
     };
-    
+
     end_timer!(step_timer);
     end_timer!(proof_timer);
-    
+
     Proof {
         commitments,
         opened_values,

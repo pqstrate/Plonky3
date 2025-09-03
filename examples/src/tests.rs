@@ -264,7 +264,7 @@ fn test_end_to_end_mersenne31_vectorized_poseidon2_hashes_poseidon2_merkle_tree(
 #[test]
 fn test_end_to_end_mersenne31_poseidon2_hashes_keccak_merkle_tree() -> Result<(), impl Debug> {
     tracing_subscriber::fmt::init();
-    
+
     // WARNING: Use a real cryptographic PRNG in applications!!
     let mut rng = SmallRng::seed_from_u64(1);
 

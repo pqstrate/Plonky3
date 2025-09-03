@@ -267,7 +267,6 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
-
         println!("here 4");
         self.generate_vectorized_trace_rows(num_hashes, extra_capacity_bits)
     }
@@ -306,7 +305,6 @@ impl<
     where
         StandardUniform: Distribution<F>,
     {
-
         println!("here 5 {}", WIDTH);
         self.generate_trace_rows(num_hashes, extra_capacity_bits)
     }

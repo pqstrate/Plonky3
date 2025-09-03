@@ -24,3 +24,9 @@ p3-symmetric.workspace = true
 p3-uni-stark.workspace = true
 rand.workspace = true
 tracing.workspace = true
+
+# Trace convertor and Miden VM dependencies
+p3-trace-convertor = { path = "../trace-convertor" }
+miden-assembly = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
+miden-processor = { git = "https://github.com/0xMiden/miden-vm.git", default-features = false }
+winter-prover = { version = "0.13", default-features = false }

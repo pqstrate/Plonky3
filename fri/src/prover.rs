@@ -76,8 +76,8 @@ where
         // Final_poly_degree must be less than or equal to the degree of the smallest polynomial.
         assert!(log_min_height > params.log_final_poly_len + params.log_blowup);
     }
-    println!("poly len: {}", inputs.len());
-    let commit_timer= start_timer!(|| "commit phase");
+    println!("input poly len: {}", inputs.len());
+    let commit_timer = start_timer!(|| "commit phase");
     // Continually fold the inputs down until the polynomial degree reaches final_poly_degree.
     // Returns a vector of commitments to the intermediate stage polynomials, the intermediate stage polynomials
     // themselves and the final polynomial.
