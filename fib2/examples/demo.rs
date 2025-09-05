@@ -24,9 +24,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             p3_trace.width()
         );
 
-        match p3_generate_proof(p3_trace) {
-            Ok(()) => println!("   ✅ P3 proof generation successful!"),
-            Err(e) => println!("   ❌ P3 proof generation failed: {}", e),
+        println!("\n🔐 P3 with Keccak.");
+        match p3_generate_proof(p3_trace.clone(), true) {
+            Ok(()) => println!("   ✅ P3 Keccak proof generation successful!"),
+            Err(e) => println!("   ❌ P3 Keccak proof generation failed: {}", e),
+        }
+
+        println!("\n🔐 P3 with Poseidon2.");
+        match p3_generate_proof(p3_trace, false) {
+            Ok(()) => println!("   ✅ P3 Poseidon2 proof generation successful!"),
+            Err(e) => println!("   ❌ P3 Poseidon2 proof generation failed: {}", e),
         }
 
         println!(

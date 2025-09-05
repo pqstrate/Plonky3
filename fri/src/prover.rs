@@ -75,7 +75,13 @@ where
     let log_min_height = log2_strict_usize(inputs.last().unwrap().len());
     if params.log_final_poly_len > 0 {
         // Final_poly_degree must be less than or equal to the degree of the smallest polynomial.
-        assert!(log_min_height > params.log_final_poly_len + params.log_blowup);
+        assert!(
+            log_min_height > params.log_final_poly_len + params.log_blowup,
+            "log min height {} <= log final poly len {} + log blowup {}",
+            log_min_height,
+            params.log_final_poly_len,
+            params.log_blowup
+        );
     }
     println!("input poly len: {}", inputs.len());
     let commit_timer = start_timer!(|| "commit phase");

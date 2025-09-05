@@ -241,7 +241,12 @@ where
         // todo: handle extrapolation for LDEs we don't have
         assert_eq!(domain.shift(), Val::GENERATOR);
         let lde = self.mmcs.get_matrices(prover_data)[idx];
-        assert!(lde.height() >= domain.size());
+        assert!(
+            lde.height() >= domain.size(),
+            "lde {} too small for domain {}",
+            lde.height(),
+            domain.size()
+        );
         lde.split_rows(domain.size()).0.bit_reverse_rows()
     }
 

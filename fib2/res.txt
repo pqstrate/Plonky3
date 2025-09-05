@@ -40,28 +40,28 @@ Converting trace: 64×80 -> 64×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................10.520µs
+····End:     Step 0: Instance setup ................................................9.688µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................237.471µs
+····End:     Step 1: Commit to execution trace .....................................235.120µs
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 64, Quotient domain: 64
-····End:     Step 2: Compute quotient polynomial ...................................17.543µs
+····End:     Step 2: Compute quotient polynomial ...................................17.914µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................48.330µs
+····End:     Step 3: Commit to quotient polynomial .................................48.050µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................441ns
+····End:     Step 4: Sample out-of-domain point ....................................461ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................51.686µs
+········End:     commit phase ......................................................56.655µs
 ······Start:   proof of work
-········End:     proof of work .....................................................891ns
+········End:     proof of work .....................................................1.002µs
 ······Start:   query phase
-········End:     query phase .......................................................155.298µs
-······End:     Produce FRI proof ...................................................223.886µs
-····End:     Step 5: Open polynomials ..............................................304.236µs
-··End:     Total proof generation ..................................................645.569µs
+········End:     query phase .......................................................148.287µs
+······End:     Produce FRI proof ...................................................222.125µs
+····End:     Step 5: Open polynomials ..............................................300.261µs
+··End:     Total proof generation ..................................................639.426µs
    • Proof generated in 0.00s
 
 ✅ Verifying proof...
@@ -74,38 +74,77 @@ input poly len: 1
 ========================
    Using Miden trace (64×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................8.165µs
+······End:     Step 0: AIR and channel setup .......................................9.328µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 512
-······End:     Step 1: Commit to execution trace ...................................1.435ms
+······End:     Step 1: Commit to execution trace ...................................1.441ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................219.849µs
+······End:     Step 2: Evaluate constraints ........................................215.523µs
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................248.352µs
+······End:     Step 3: Commit to constraint evaluations ............................250.499µs
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................147.174µs
+······End:     Step 4: Build DEEP composition polynomial ...........................151.794µs
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................21.690µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................22.011µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................28.914µs
+······End:     Step 6: Compute FRI layers ..........................................25.789µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................1.625ms
+······End:     Step 7: Determine query positions ...................................1.626ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................26.560µs
-····End:     Total proof generation ................................................3.808ms
-··End:     Miden STARK proof generation ............................................3.927ms
+······End:     Step 8: Build proof object ..........................................23.464µs
+····End:     Total proof generation ................................................3.812ms
+··End:     Miden STARK proof generation ............................................3.925ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 3.932235ms
+   📊 Proof generation time: 3.93074ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................177.871µs
+··End:     Miden proof verification ................................................174.777µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 182.619µs
+   ⏱️  Verification time: 179.726µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................38.131µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................36.224ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................208.720µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................7.690ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................376.164µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................21.470µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................109.916µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................535.365ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................47.609µs
+····End:     Total proof generation ................................................580.140ms
+··End:     Miden STARK proof generation ............................................580.269ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 580.275059ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................4.304ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 4.309869ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -151,28 +190,28 @@ Converting trace: 64×80 -> 64×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................2.013µs
+····End:     Step 0: Instance setup ................................................4.448µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................189.853µs
+····End:     Step 1: Commit to execution trace .....................................201.928µs
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 64, Quotient domain: 64
-····End:     Step 2: Compute quotient polynomial ...................................15.048µs
+····End:     Step 2: Compute quotient polynomial ...................................17.994µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................46.987µs
+····End:     Step 3: Commit to quotient polynomial .................................49.502µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................431ns
+····End:     Step 4: Sample out-of-domain point ....................................491ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................49.742µs
+········End:     commit phase ......................................................58.790µs
 ······Start:   proof of work
-········End:     proof of work .....................................................871ns
+········End:     proof of work .....................................................1.062µs
 ······Start:   query phase
-········End:     query phase .......................................................78.045µs
-······End:     Produce FRI proof ...................................................142.935µs
-····End:     Step 5: Open polynomials ..............................................215.961µs
-··End:     Total proof generation ..................................................494.649µs
+········End:     query phase .......................................................82.805µs
+······End:     Produce FRI proof ...................................................158.697µs
+····End:     Step 5: Open polynomials ..............................................237.535µs
+··End:     Total proof generation ..................................................538.507µs
    • Proof generated in 0.00s
 
 ✅ Verifying proof...
@@ -185,38 +224,77 @@ input poly len: 1
 ========================
    Using Miden trace (64×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................2.355µs
+······End:     Step 0: AIR and channel setup .......................................4.038µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 512
-······End:     Step 1: Commit to execution trace ...................................1.347ms
+······End:     Step 1: Commit to execution trace ...................................1.443ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................209.469µs
+······End:     Step 2: Evaluate constraints ........................................216.625µs
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................248.381µs
+······End:     Step 3: Commit to constraint evaluations ............................256.890µs
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................144.187µs
+······End:     Step 4: Build DEEP composition polynomial ...........................151.103µs
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................25.798µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................22.643µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................25.368µs
+······End:     Step 6: Compute FRI layers ..........................................31.188µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................2.210ms
+······End:     Step 7: Determine query positions ...................................2.324ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................20.157µs
-····End:     Total proof generation ................................................4.275ms
-··End:     Miden STARK proof generation ............................................4.367ms
+······End:     Step 8: Build proof object ..........................................21.610µs
+····End:     Total proof generation ................................................4.521ms
+··End:     Miden STARK proof generation ............................................4.613ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 4.37083ms
+   📊 Proof generation time: 4.617273ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................122.698µs
+··End:     Miden proof verification ................................................131.406µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 127.377µs
+   ⏱️  Verification time: 136.395µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................37.199µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................37.050ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................218.008µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................7.869ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................394.487µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................22.021µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................109.866µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................196.504ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................41.417µs
+····End:     Total proof generation ................................................242.299ms
+··End:     Miden STARK proof generation ............................................242.390ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 242.395518ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................4.084ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 4.09106ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -262,28 +340,28 @@ Converting trace: 128×80 -> 128×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................3.827µs
+····End:     Step 0: Instance setup ................................................3.957µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................405.894µs
+····End:     Step 1: Commit to execution trace .....................................395.570µs
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 128, Quotient domain: 128
-····End:     Step 2: Compute quotient polynomial ...................................27.271µs
+····End:     Step 2: Compute quotient polynomial ...................................27.792µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................92.021µs
+····End:     Step 3: Commit to quotient polynomial .................................91.521µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................431ns
+····End:     Step 4: Sample out-of-domain point ....................................451ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................96.409µs
+········End:     commit phase ......................................................97.613µs
 ······Start:   proof of work
-········End:     proof of work .....................................................1.293µs
+········End:     proof of work .....................................................1.634µs
 ······Start:   query phase
-········End:     query phase .......................................................91.360µs
-······End:     Produce FRI proof ...................................................204.239µs
-····End:     Step 5: Open polynomials ..............................................326.276µs
-··End:     Total proof generation ..................................................881.998µs
+········End:     query phase .......................................................89.447µs
+······End:     Produce FRI proof ...................................................204.553µs
+····End:     Step 5: Open polynomials ..............................................328.865µs
+··End:     Total proof generation ..................................................873.433µs
    • Proof generated in 0.00s
 
 ✅ Verifying proof...
@@ -296,38 +374,77 @@ input poly len: 1
 ========================
    Using Miden trace (128×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................4.278µs
+······End:     Step 0: AIR and channel setup .......................................3.817µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 1024
-······End:     Step 1: Commit to execution trace ...................................3.006ms
+······End:     Step 1: Commit to execution trace ...................................3.049ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................299.386µs
+······End:     Step 2: Evaluate constraints ........................................297.246µs
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................546.766µs
+······End:     Step 3: Commit to constraint evaluations ............................547.564µs
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................276.032µs
+······End:     Step 4: Build DEEP composition polynomial ...........................282.237µs
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................45.124µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................46.226µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................54.521µs
+······End:     Step 6: Compute FRI layers ..........................................54.222µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................12.918ms
+······End:     Step 7: Determine query positions ...................................13.127ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................25.968µs
-····End:     Total proof generation ................................................17.222ms
-··End:     Miden STARK proof generation ............................................17.374ms
+······End:     Step 8: Build proof object ..........................................24.325µs
+····End:     Total proof generation ................................................17.476ms
+··End:     Miden STARK proof generation ............................................17.619ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 17.381028ms
+   📊 Proof generation time: 17.624516ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................154.848µs
+··End:     Miden proof verification ................................................146.684µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 167.12µs
+   ⏱️  Verification time: 151.504µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................35.927µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 1024
+······End:     Step 1: Commit to execution trace ...................................73.478ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................315.120µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................15.792ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................529.871µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................47.539µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................222.706µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................855.128ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................54.481µs
+····End:     Total proof generation ................................................945.676ms
+··End:     Miden STARK proof generation ............................................945.780ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 945.784322ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................4.414ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 4.422309ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -373,28 +490,28 @@ Converting trace: 256×80 -> 256×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................2.525µs
+····End:     Step 0: Instance setup ................................................6.212µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................803.453µs
+····End:     Step 1: Commit to execution trace .....................................884.173µs
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 256, Quotient domain: 256
-····End:     Step 2: Compute quotient polynomial ...................................45.083µs
+····End:     Step 2: Compute quotient polynomial ...................................51.797µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................178.872µs
+····End:     Step 3: Commit to quotient polynomial .................................180.117µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................441ns
+····End:     Step 4: Sample out-of-domain point ....................................471ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................180.595µs
+········End:     commit phase ......................................................188.282µs
 ······Start:   proof of work
-········End:     proof of work .....................................................861ns
+········End:     proof of work .....................................................1.132µs
 ······Start:   query phase
-········End:     query phase .......................................................95.758µs
-······End:     Produce FRI proof ...................................................291.802µs
-····End:     Step 5: Open polynomials ..............................................504.528µs
-··End:     Total proof generation ..................................................1.561ms
+········End:     query phase .......................................................107.511µs
+······End:     Produce FRI proof ...................................................312.684µs
+····End:     Step 5: Open polynomials ..............................................540.110µs
+··End:     Total proof generation ..................................................1.691ms
    • Proof generated in 0.00s
 
 ✅ Verifying proof...
@@ -407,38 +524,77 @@ input poly len: 1
 ========================
    Using Miden trace (256×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................2.275µs
+······End:     Step 0: AIR and channel setup .......................................6.121µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 2048
-······End:     Step 1: Commit to execution trace ...................................6.654ms
+······End:     Step 1: Commit to execution trace ...................................6.877ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................486.173µs
+······End:     Step 2: Evaluate constraints ........................................526.755µs
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................1.185ms
+······End:     Step 3: Commit to constraint evaluations ............................1.264ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................526.999µs
+······End:     Step 4: Build DEEP composition polynomial ...........................568.133µs
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................96.820µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................102.743µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................118.911µs
+······End:     Step 6: Compute FRI layers ..........................................129.653µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................1.205ms
+······End:     Step 7: Determine query positions ...................................1.310ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................24.596µs
-····End:     Total proof generation ................................................10.346ms
-··End:     Miden STARK proof generation ............................................10.527ms
+······End:     Step 8: Build proof object ..........................................44.773µs
+····End:     Total proof generation ................................................10.901ms
+··End:     Miden STARK proof generation ............................................11.143ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 10.531684ms
+   📊 Proof generation time: 11.149719ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................160.969µs
+··End:     Miden proof verification ................................................193.142µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 165.608µs
+   ⏱️  Verification time: 198.552µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................39.664µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 2048
+······End:     Step 1: Commit to execution trace ...................................149.227ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................551.992µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................30.968ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................809.804µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................99.747µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................5.143ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................167.942ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................68.658µs
+····End:     Total proof generation ................................................354.944ms
+··End:     Miden STARK proof generation ............................................355.254ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 355.260248ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................5.854ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 5.859817ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -484,28 +640,28 @@ Converting trace: 512×80 -> 512×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................7.253µs
+····End:     Step 0: Instance setup ................................................5.160µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................1.772ms
+····End:     Step 1: Commit to execution trace .....................................1.779ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 512, Quotient domain: 512
-····End:     Step 2: Compute quotient polynomial ...................................95.037µs
+····End:     Step 2: Compute quotient polynomial ...................................88.616µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................364.998µs
+····End:     Step 3: Commit to quotient polynomial .................................357.709µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................461ns
+····End:     Step 4: Sample out-of-domain point ....................................471ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................379.725µs
+········End:     commit phase ......................................................377.917µs
 ······Start:   proof of work
-········End:     proof of work .....................................................1.623µs
+········End:     proof of work .....................................................1.643µs
 ······Start:   query phase
-········End:     query phase .......................................................119.171µs
-······End:     Produce FRI proof ...................................................521.008µs
-····End:     Step 5: Open polynomials ..............................................945.997µs
-··End:     Total proof generation ..................................................3.217ms
+········End:     query phase .......................................................208.109µs
+······End:     Produce FRI proof ...................................................604.671µs
+····End:     Step 5: Open polynomials ..............................................1.033ms
+··End:     Total proof generation ..................................................3.292ms
    • Proof generated in 0.00s
 
 ✅ Verifying proof...
@@ -518,6 +674,8 @@ input poly len: 1
 ========================
    Using Miden trace (512×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
@@ -525,31 +683,68 @@ Start:   Miden STARK proof generation
 ······End:     Step 0: AIR and channel setup .......................................4.759µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 4096
-······End:     Step 1: Commit to execution trace ...................................15.257ms
+······End:     Step 1: Commit to execution trace ...................................14.737ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................998.275µs
+······End:     Step 2: Evaluate constraints ........................................846.393µs
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................2.713ms
+······End:     Step 3: Commit to constraint evaluations ............................2.602ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................1.105ms
+······End:     Step 4: Build DEEP composition polynomial ...........................1.040ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................227.573µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................215.222µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................208.648µs
+······End:     Step 6: Compute FRI layers ..........................................200.114µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................1.231ms
+······End:     Step 7: Determine query positions ...................................1.183ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................38.562µs
-····End:     Total proof generation ................................................21.842ms
-··End:     Miden STARK proof generation ............................................22.143ms
+······End:     Step 8: Build proof object ..........................................35.436µs
+····End:     Total proof generation ................................................20.913ms
+··End:     Miden STARK proof generation ............................................21.192ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 22.149306ms
+   📊 Proof generation time: 21.203498ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................251.116µs
+··End:     Miden proof verification ................................................236.973µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 256.647µs
+   ⏱️  Verification time: 245.95µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................37.280µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 4096
+······End:     Step 1: Commit to execution trace ...................................293.609ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................1.117ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................62.419ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................1.313ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................223.318µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................10.303ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.454s
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................78.918µs
+····End:     Total proof generation ................................................1.823s
+··End:     Miden STARK proof generation ............................................1.823s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 1.823849381s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................6.737ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 6.744512ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -595,28 +790,28 @@ Converting trace: 1024×80 -> 1024×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.422µs
+····End:     Step 0: Instance setup ................................................6.121µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................3.619ms
+····End:     Step 1: Commit to execution trace .....................................3.609ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 1024, Quotient domain: 1024
-····End:     Step 2: Compute quotient polynomial ...................................167.301µs
+····End:     Step 2: Compute quotient polynomial ...................................173.585µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................702.786µs
+····End:     Step 3: Commit to quotient polynomial .................................702.053µs
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................500ns
+····End:     Step 4: Sample out-of-domain point ....................................491ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................710.200µs
+········End:     commit phase ......................................................712.813µs
 ······Start:   proof of work
-········End:     proof of work .....................................................902ns
+········End:     proof of work .....................................................1.082µs
 ······Start:   query phase
-········End:     query phase .......................................................126.535µs
-······End:     Produce FRI proof ...................................................854.909µs
-····End:     Step 5: Open polynomials ..............................................1.655ms
-··End:     Total proof generation ..................................................6.182ms
+········End:     query phase .......................................................118.522µs
+······End:     Produce FRI proof ...................................................849.298µs
+····End:     Step 5: Open polynomials ..............................................1.648ms
+··End:     Total proof generation ..................................................6.172ms
    • Proof generated in 0.01s
 
 ✅ Verifying proof...
@@ -629,38 +824,77 @@ input poly len: 1
 ========================
    Using Miden trace (1024×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................5.460µs
+······End:     Step 0: AIR and channel setup .......................................5.149µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 8192
-······End:     Step 1: Commit to execution trace ...................................32.006ms
+······End:     Step 1: Commit to execution trace ...................................31.376ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................1.538ms
+······End:     Step 2: Evaluate constraints ........................................1.641ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................5.671ms
+······End:     Step 3: Commit to constraint evaluations ............................5.819ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................2.087ms
+······End:     Step 4: Build DEEP composition polynomial ...........................2.098ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................467.489µs
+······End:     Step 5: Evaluate DEEP composition polynomial ........................481.240µs
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................402.658µs
+······End:     Step 6: Compute FRI layers ..........................................404.316µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................1.429ms
+······End:     Step 7: Determine query positions ...................................1.458ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................38.342µs
-····End:     Total proof generation ................................................43.697ms
-··End:     Miden STARK proof generation ............................................44.145ms
+······End:     Step 8: Build proof object ..........................................55.884µs
+····End:     Total proof generation ................................................43.399ms
+··End:     Miden STARK proof generation ............................................43.906ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 44.154726ms
+   📊 Proof generation time: 43.912575ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................260.194µs
+··End:     Miden proof verification ................................................256.229µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 265.534µs
+   ⏱️  Verification time: 261.389µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................38.222µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 8192
+······End:     Step 1: Commit to execution trace ...................................587.848ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................1.899ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................124.829ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................2.344ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................475.930µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................24.948ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................52.077ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................87.103µs
+····End:     Total proof generation ................................................794.650ms
+··End:     Miden STARK proof generation ............................................794.883ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 794.88743ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................7.610ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 7.616483ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -706,28 +940,28 @@ Converting trace: 2048×80 -> 2048×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.271µs
+····End:     Step 0: Instance setup ................................................6.523µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................7.425ms
+····End:     Step 1: Commit to execution trace .....................................7.526ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 2048, Quotient domain: 2048
-····End:     Step 2: Compute quotient polynomial ...................................333.690µs
+····End:     Step 2: Compute quotient polynomial ...................................373.348µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................1.398ms
+····End:     Step 3: Commit to quotient polynomial .................................1.420ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................491ns
+····End:     Step 4: Sample out-of-domain point ....................................531ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................1.392ms
+········End:     commit phase ......................................................1.435ms
 ······Start:   proof of work
-········End:     proof of work .....................................................932ns
+········End:     proof of work .....................................................1.122µs
 ······Start:   query phase
-········End:     query phase .......................................................154.658µs
-······End:     Produce FRI proof ...................................................1.567ms
-····End:     Step 5: Open polynomials ..............................................3.146ms
-··End:     Total proof generation ..................................................12.340ms
+········End:     query phase .......................................................152.114µs
+······End:     Produce FRI proof ...................................................1.608ms
+····End:     Step 5: Open polynomials ..............................................3.228ms
+··End:     Total proof generation ..................................................12.591ms
    • Proof generated in 0.01s
 
 ✅ Verifying proof...
@@ -740,38 +974,77 @@ input poly len: 1
 ========================
    Using Miden trace (2048×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................5.691µs
+······End:     Step 0: AIR and channel setup .......................................5.791µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 16384
-······End:     Step 1: Commit to execution trace ...................................68.192ms
+······End:     Step 1: Commit to execution trace ...................................67.625ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................3.080ms
+······End:     Step 2: Evaluate constraints ........................................3.411ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................12.164ms
+······End:     Step 3: Commit to constraint evaluations ............................12.525ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................4.200ms
+······End:     Step 4: Build DEEP composition polynomial ...........................4.233ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................1.018ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................1.047ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................816.657µs
+······End:     Step 6: Compute FRI layers ..........................................822.518µs
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................572.874µs
+······End:     Step 7: Determine query positions ...................................584.964µs
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................64.420µs
-····End:     Total proof generation ................................................90.191ms
-··End:     Miden STARK proof generation ............................................91.148ms
+······End:     Step 8: Build proof object ..........................................67.486µs
+····End:     Total proof generation ................................................90.402ms
+··End:     Miden STARK proof generation ............................................91.303ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 91.154337ms
+   📊 Proof generation time: 91.309517ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................290.600µs
+··End:     Miden proof verification ................................................287.047µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 296.17µs
+   ⏱️  Verification time: 292.337µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................41.638µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 16384
+······End:     Step 1: Commit to execution trace ...................................1.196s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................3.831ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................257.885ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................4.473ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................1.052ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................52.394ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................122.114ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................104.986µs
+····End:     Total proof generation ................................................1.638s
+··End:     Miden STARK proof generation ............................................1.640s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 1.640406297s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................8.525ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 8.531834ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -789,7 +1062,7 @@ Start:   Miden proof verification
    ✅ Miden trace written to fib_640_trace_miden.log
    🔄 Converting trace to Plonky3 format...
 Converting trace: 4096×80 -> 4096×80
-   ✅ Conversion completed in 1ms
+   ✅ Conversion completed in 2ms
    📏 Plonky3 trace dimensions: 4096×80
    📈 Conversion stats:
       Original height: 4096
@@ -817,28 +1090,28 @@ Converting trace: 4096×80 -> 4096×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.021µs
+····End:     Step 0: Instance setup ................................................6.542µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................15.539ms
+····End:     Step 1: Commit to execution trace .....................................16.238ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 4096, Quotient domain: 4096
-····End:     Step 2: Compute quotient polynomial ...................................700.571µs
+····End:     Step 2: Compute quotient polynomial ...................................739.743µs
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................2.858ms
+····End:     Step 3: Commit to quotient polynomial .................................2.914ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................521ns
+····End:     Step 4: Sample out-of-domain point ....................................491ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................2.785ms
+········End:     commit phase ......................................................2.922ms
 ······Start:   proof of work
-········End:     proof of work .....................................................1.252µs
+········End:     proof of work .....................................................1.342µs
 ······Start:   query phase
-········End:     query phase .......................................................173.702µs
-······End:     Produce FRI proof ...................................................2.979ms
-····End:     Step 5: Open polynomials ..............................................6.099ms
-··End:     Total proof generation ..................................................25.242ms
+········End:     query phase .......................................................374.460µs
+······End:     Produce FRI proof ...................................................3.316ms
+····End:     Step 5: Open polynomials ..............................................6.596ms
+··End:     Total proof generation ..................................................26.531ms
    • Proof generated in 0.03s
 
 ✅ Verifying proof...
@@ -851,38 +1124,77 @@ input poly len: 1
 ========================
    Using Miden trace (4096×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................4.679µs
+······End:     Step 0: AIR and channel setup .......................................5.491µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 32768
-······End:     Step 1: Commit to execution trace ...................................148.331ms
+······End:     Step 1: Commit to execution trace ...................................150.775ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................6.902ms
+······End:     Step 2: Evaluate constraints ........................................6.910ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................27.119ms
+······End:     Step 3: Commit to constraint evaluations ............................27.206ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................8.364ms
+······End:     Step 4: Build DEEP composition polynomial ...........................8.420ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................2.188ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................2.218ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................1.538ms
+······End:     Step 6: Compute FRI layers ..........................................1.591ms
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................8.477ms
+······End:     Step 7: Determine query positions ...................................8.748ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................81.562µs
-····End:     Total proof generation ................................................203.089ms
-··End:     Miden STARK proof generation ............................................204.856ms
+······End:     Step 8: Build proof object ..........................................85.951µs
+····End:     Total proof generation ................................................206.051ms
+··End:     Miden STARK proof generation ............................................207.666ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 204.862291ms
+   📊 Proof generation time: 207.672703ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................327.869µs
+··End:     Miden proof verification ................................................332.793µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 332.888µs
+   ⏱️  Verification time: 338.142µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................37.460µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 32768
+······End:     Step 1: Commit to execution trace ...................................2.362s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................7.607ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................503.790ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................8.707ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................2.237ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................103.689ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................516.195ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................124.854µs
+····End:     Total proof generation ................................................3.505s
+··End:     Miden STARK proof generation ............................................3.508s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 3.508431446s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................10.180ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 10.188894ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -900,7 +1212,7 @@ Start:   Miden proof verification
    ✅ Miden trace written to fib_1280_trace_miden.log
    🔄 Converting trace to Plonky3 format...
 Converting trace: 8192×80 -> 8192×80
-   ✅ Conversion completed in 2ms
+   ✅ Conversion completed in 4ms
    📏 Plonky3 trace dimensions: 8192×80
    📈 Conversion stats:
       Original height: 8192
@@ -928,28 +1240,28 @@ Converting trace: 8192×80 -> 8192×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.913µs
+····End:     Step 0: Instance setup ................................................6.191µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................32.116ms
+····End:     Step 1: Commit to execution trace .....................................33.566ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 8192, Quotient domain: 8192
-····End:     Step 2: Compute quotient polynomial ...................................1.386ms
+····End:     Step 2: Compute quotient polynomial ...................................1.443ms
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................5.924ms
+····End:     Step 3: Commit to quotient polynomial .................................5.699ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................772ns
+····End:     Step 4: Sample out-of-domain point ....................................561ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................5.518ms
+········End:     commit phase ......................................................5.581ms
 ······Start:   proof of work
-········End:     proof of work .....................................................1.723µs
+········End:     proof of work .....................................................1.363µs
 ······Start:   query phase
-········End:     query phase .......................................................200.923µs
-······End:     Produce FRI proof ...................................................5.743ms
-····End:     Step 5: Open polynomials ..............................................11.958ms
-··End:     Total proof generation ..................................................51.442ms
+········End:     query phase .......................................................310.851µs
+······End:     Produce FRI proof ...................................................5.919ms
+····End:     Step 5: Open polynomials ..............................................12.145ms
+··End:     Total proof generation ..................................................52.899ms
    • Proof generated in 0.05s
 
 ✅ Verifying proof...
@@ -962,38 +1274,77 @@ input poly len: 1
 ========================
    Using Miden trace (8192×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................5.961µs
+······End:     Step 0: AIR and channel setup .......................................6.822µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 65536
-······End:     Step 1: Commit to execution trace ...................................319.168ms
+······End:     Step 1: Commit to execution trace ...................................326.934ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................13.894ms
+······End:     Step 2: Evaluate constraints ........................................13.915ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................59.785ms
+······End:     Step 3: Commit to constraint evaluations ............................59.996ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................18.935ms
+······End:     Step 4: Build DEEP composition polynomial ...........................18.253ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................4.677ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................4.837ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................3.114ms
+······End:     Step 6: Compute FRI layers ..........................................3.194ms
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................757.187µs
+······End:     Step 7: Determine query positions ...................................783.515µs
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................93.674µs
-····End:     Total proof generation ................................................420.535ms
-··End:     Miden STARK proof generation ............................................424.228ms
+······End:     Step 8: Build proof object ..........................................105.807µs
+····End:     Total proof generation ................................................428.126ms
+··End:     Miden STARK proof generation ............................................430.999ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 424.236251ms
+   📊 Proof generation time: 431.005878ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................354.719µs
+··End:     Miden proof verification ................................................373.438µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 360.239µs
+   ⏱️  Verification time: 379.41µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................38.663µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 65536
+······End:     Step 1: Commit to execution trace ...................................4.742s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................13.986ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................1.021s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................17.945ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................4.750ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................213.556ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................312.136ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................139.160µs
+····End:     Total proof generation ................................................6.326s
+··End:     Miden STARK proof generation ............................................6.332s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 6.332171946s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................10.970ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 10.97617ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -1011,7 +1362,7 @@ Start:   Miden proof verification
    ✅ Miden trace written to fib_2560_trace_miden.log
    🔄 Converting trace to Plonky3 format...
 Converting trace: 16384×80 -> 16384×80
-   ✅ Conversion completed in 3ms
+   ✅ Conversion completed in 7ms
    📏 Plonky3 trace dimensions: 16384×80
    📈 Conversion stats:
       Original height: 16384
@@ -1039,29 +1390,29 @@ Converting trace: 16384×80 -> 16384×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.422µs
+····End:     Step 0: Instance setup ................................................6.772µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................67.782ms
+····End:     Step 1: Commit to execution trace .....................................76.208ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 16384, Quotient domain: 16384
-····End:     Step 2: Compute quotient polynomial ...................................2.796ms
+····End:     Step 2: Compute quotient polynomial ...................................4.346ms
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................11.311ms
+····End:     Step 3: Commit to quotient polynomial .................................12.317ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................511ns
+····End:     Step 4: Sample out-of-domain point ....................................661ns
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................10.927ms
+········End:     commit phase ......................................................12.131ms
 ······Start:   proof of work
-········End:     proof of work .....................................................842ns
+········End:     proof of work .....................................................1.142µs
 ······Start:   query phase
-········End:     query phase .......................................................218.215µs
-······End:     Produce FRI proof ...................................................11.166ms
-····End:     Step 5: Open polynomials ..............................................23.518ms
-··End:     Total proof generation ..................................................105.464ms
-   • Proof generated in 0.11s
+········End:     query phase .......................................................391.582µs
+······End:     Produce FRI proof ...................................................12.545ms
+····End:     Step 5: Open polynomials ..............................................26.188ms
+··End:     Total proof generation ..................................................119.115ms
+   • Proof generated in 0.12s
 
 ✅ Verifying proof...
    • Verification completed in 4ms
@@ -1073,38 +1424,77 @@ input poly len: 1
 ========================
    Using Miden trace (16384×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................4.578µs
+······End:     Step 0: AIR and channel setup .......................................6.332µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 131072
-······End:     Step 1: Commit to execution trace ...................................670.777ms
+······End:     Step 1: Commit to execution trace ...................................699.953ms
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................26.984ms
+······End:     Step 2: Evaluate constraints ........................................27.259ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................125.224ms
+······End:     Step 3: Commit to constraint evaluations ............................133.285ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................40.136ms
+······End:     Step 4: Build DEEP composition polynomial ...........................40.210ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................10.069ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................10.662ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................6.269ms
+······End:     Step 6: Compute FRI layers ..........................................6.472ms
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................108.010µs
+······End:     Step 7: Determine query positions ...................................117.990µs
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................109.794µs
-····End:     Total proof generation ................................................879.795ms
-··End:     Miden STARK proof generation ............................................889.941ms
+······End:     Step 8: Build proof object ..........................................127.609µs
+····End:     Total proof generation ................................................918.212ms
+··End:     Miden STARK proof generation ............................................926.482ms
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 889.947523ms
+   📊 Proof generation time: 926.489371ms
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................374.306µs
+··End:     Miden proof verification ................................................394.568µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 379.406µs
+   ⏱️  Verification time: 400.109µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................40.165µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 131072
+······End:     Step 1: Commit to execution trace ...................................9.629s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................28.270ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................2.047s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................40.018ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................11.042ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................438.877ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................118.641ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................166.582µs
+····End:     Total proof generation ................................................12.313s
+··End:     Miden STARK proof generation ............................................12.323s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 12.323836043s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................16.115ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 16.134504ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -1122,7 +1512,7 @@ Start:   Miden proof verification
    ✅ Miden trace written to fib_5120_trace_miden.log
    🔄 Converting trace to Plonky3 format...
 Converting trace: 32768×80 -> 32768×80
-   ✅ Conversion completed in 14ms
+   ✅ Conversion completed in 15ms
    📏 Plonky3 trace dimensions: 32768×80
    📈 Conversion stats:
       Original height: 32768
@@ -1150,28 +1540,28 @@ Converting trace: 32768×80 -> 32768×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.983µs
+····End:     Step 0: Instance setup ................................................6.492µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................157.487ms
+····End:     Step 1: Commit to execution trace .....................................159.556ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 32768, Quotient domain: 32768
-····End:     Step 2: Compute quotient polynomial ...................................9.540ms
+····End:     Step 2: Compute quotient polynomial ...................................9.511ms
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................22.732ms
+····End:     Step 3: Commit to quotient polynomial .................................22.783ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................1.022µs
+····End:     Step 4: Sample out-of-domain point ....................................1.133µs
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................21.976ms
+········End:     commit phase ......................................................22.133ms
 ······Start:   proof of work
-········End:     proof of work .....................................................1.162µs
+········End:     proof of work .....................................................1.212µs
 ······Start:   query phase
-········End:     query phase .......................................................246.628µs
-······End:     Produce FRI proof ...................................................22.245ms
-····End:     Step 5: Open polynomials ..............................................46.867ms
-··End:     Total proof generation ..................................................236.696ms
+········End:     query phase .......................................................247.674µs
+······End:     Produce FRI proof ...................................................22.403ms
+····End:     Step 5: Open polynomials ..............................................47.111ms
+··End:     Total proof generation ..................................................239.021ms
    • Proof generated in 0.24s
 
 ✅ Verifying proof...
@@ -1184,38 +1574,77 @@ input poly len: 1
 ========================
    Using Miden trace (32768×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................5.390µs
+······End:     Step 0: AIR and channel setup .......................................9.698µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 262144
-······End:     Step 1: Commit to execution trace ...................................1.462s
+······End:     Step 1: Commit to execution trace ...................................1.467s
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................55.095ms
+······End:     Step 2: Evaluate constraints ........................................54.657ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................275.838ms
+······End:     Step 3: Commit to constraint evaluations ............................271.324ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................83.511ms
+······End:     Step 4: Build DEEP composition polynomial ...........................79.959ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................22.753ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................22.515ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................12.846ms
+······End:     Step 6: Compute FRI layers ..........................................12.791ms
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................1.087ms
+······End:     Step 7: Determine query positions ...................................1.077ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................2.162ms
-····End:     Total proof generation ................................................1.915s
-··End:     Miden STARK proof generation ............................................1.938s
+······End:     Step 8: Build proof object ..........................................1.839ms
+····End:     Total proof generation ................................................1.911s
+··End:     Miden STARK proof generation ............................................1.930s
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 1.938648664s
+   📊 Proof generation time: 1.930998109s
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................485.583µs
+··End:     Miden proof verification ................................................471.251µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 491.704µs
+   ⏱️  Verification time: 476.952µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................40.175µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 262144
+······End:     Step 1: Commit to execution trace ...................................19.232s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................54.784ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................4.116s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................84.134ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................23.776ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................857.149ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................210.828ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................2.288ms
+····End:     Total proof generation ................................................24.582s
+··End:     Miden STARK proof generation ............................................24.603s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 24.603954907s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................13.494ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 13.503161ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!
@@ -1233,7 +1662,7 @@ Start:   Miden proof verification
    ✅ Miden trace written to fib_10240_trace_miden.log
    🔄 Converting trace to Plonky3 format...
 Converting trace: 65536×80 -> 65536×80
-   ✅ Conversion completed in 41ms
+   ✅ Conversion completed in 40ms
    📏 Plonky3 trace dimensions: 65536×80
    📈 Conversion stats:
       Original height: 65536
@@ -1261,29 +1690,29 @@ Converting trace: 65536×80 -> 65536×80
 🔐 Generating proof...
 Start:   Total proof generation
 ··Start:   Step 0: Instance setup
-····End:     Step 0: Instance setup ................................................6.953µs
+····End:     Step 0: Instance setup ................................................6.532µs
 ··Start:   Step 1: Commit to execution trace
-····End:     Step 1: Commit to execution trace .....................................322.869ms
+····End:     Step 1: Commit to execution trace .....................................345.657ms
 ··Start:   Step 2: Compute quotient polynomial
 Trace domain: 65536, Quotient domain: 65536
-····End:     Step 2: Compute quotient polynomial ...................................21.720ms
+····End:     Step 2: Compute quotient polynomial ...................................22.895ms
 ··Start:   Step 3: Commit to quotient polynomial
-····End:     Step 3: Commit to quotient polynomial .................................48.292ms
+····End:     Step 3: Commit to quotient polynomial .................................54.196ms
 ··Start:   Step 4: Sample out-of-domain point
-····End:     Step 4: Sample out-of-domain point ....................................1.212µs
+····End:     Step 4: Sample out-of-domain point ....................................1.002µs
 ··Start:   Step 5: Open polynomials
 ····Start:   Produce FRI proof
 input poly len: 1
 ······Start:   commit phase
-········End:     commit phase ......................................................45.715ms
+········End:     commit phase ......................................................49.577ms
 ······Start:   proof of work
-········End:     proof of work .....................................................1.032µs
+········End:     proof of work .....................................................1.272µs
 ······Start:   query phase
-········End:     query phase .......................................................476.176µs
-······End:     Produce FRI proof ...................................................46.230ms
-····End:     Step 5: Open polynomials ..............................................98.892ms
-··End:     Total proof generation ..................................................491.881ms
-   • Proof generated in 0.50s
+········End:     query phase .......................................................546.022µs
+······End:     Produce FRI proof ...................................................50.169ms
+····End:     Step 5: Open polynomials ..............................................107.665ms
+··End:     Total proof generation ..................................................530.508ms
+   • Proof generated in 0.54s
 
 ✅ Verifying proof...
    • Verification completed in 5ms
@@ -1295,38 +1724,77 @@ input poly len: 1
 ========================
    Using Miden trace (65536×80) for proof generation...
 ========================
+
+🔐 Miden with blake3.
 🔐 Generating native Miden STARK proof...
 Start:   Miden STARK proof generation
 ··Start:   Total proof generation
 ····Start:   Step 0: AIR and channel setup
-······End:     Step 0: AIR and channel setup .......................................5.610µs
+······End:     Step 0: AIR and channel setup .......................................7.584µs
 ····Start:   Step 1: Commit to execution trace
 lde domain size: 524288
-······End:     Step 1: Commit to execution trace ...................................3.145s
+······End:     Step 1: Commit to execution trace ...................................3.370s
 ····Start:   Step 2: Evaluate constraints
-······End:     Step 2: Evaluate constraints ........................................108.572ms
+······End:     Step 2: Evaluate constraints ........................................111.411ms
 ····Start:   Step 3: Commit to constraint evaluations
-······End:     Step 3: Commit to constraint evaluations ............................582.293ms
+······End:     Step 3: Commit to constraint evaluations ............................611.045ms
 ····Start:   Step 4: Build DEEP composition polynomial
-······End:     Step 4: Build DEEP composition polynomial ...........................157.813ms
+······End:     Step 4: Build DEEP composition polynomial ...........................169.187ms
 ····Start:   Step 5: Evaluate DEEP composition polynomial
-······End:     Step 5: Evaluate DEEP composition polynomial ........................46.588ms
+······End:     Step 5: Evaluate DEEP composition polynomial ........................49.958ms
 ····Start:   Step 6: Compute FRI layers
-······End:     Step 6: Compute FRI layers ..........................................24.936ms
+······End:     Step 6: Compute FRI layers ..........................................26.479ms
 ····Start:   Step 7: Determine query positions
-······End:     Step 7: Determine query positions ...................................7.543ms
+······End:     Step 7: Determine query positions ...................................8.155ms
 ····Start:   Step 8: Build proof object
-······End:     Step 8: Build proof object ..........................................3.724ms
-····End:     Total proof generation ................................................4.076s
-··End:     Miden STARK proof generation ............................................4.112s
+······End:     Step 8: Build proof object ..........................................3.072ms
+····End:     Total proof generation ................................................4.349s
+··End:     Miden STARK proof generation ............................................4.386s
    ✅ Miden proof generated successfully!
-   📊 Proof generation time: 4.112721602s
+   📊 Proof generation time: 4.386908204s
    🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
    🔍 Verifying Miden proof...
 Start:   Miden proof verification
-··End:     Miden proof verification ................................................478.410µs
+··End:     Miden proof verification ................................................522.559µs
    ✅ Proof verification successful!
-   ⏱️  Verification time: 483.729µs
+   ⏱️  Verification time: 528.97µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................44.393µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 524288
+······End:     Step 1: Commit to execution trace ...................................39.329s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................101.950ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................8.121s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................155.361ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................47.116ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................1.736s
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................108.373ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................5.303ms
+····End:     Total proof generation ................................................49.605s
+··End:     Miden STARK proof generation ............................................49.658s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 49.658120232s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................15.465ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 15.47353ms
    🔒 Security level: 96 bits
    🎉 Successfully generated and verified native Miden STARK proof!
    ✅ Miden proof generation successful!

@@ -151,7 +151,7 @@ pub fn trace_gen(
     Box<dyn std::error::Error>,
 > {
     println!("🚀 Generating trace using Miden VM execution...");
-
+    let fib_iter = 20000;
     // Create a simple Fibonacci program in Miden Assembly
     // This creates a computation with incrementing steps suitable for our constraint
     let masm_code = format!(
