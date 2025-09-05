@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Plonky3 Fibonacci WASM Prover</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005a8b;
+        }
+        .result {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .error {
+            background-color: #ffe8e8;
+            border: 1px solid #f44336;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Plonky3 Fibonacci WASM Prover</h1>
+    
+    <div class="container">
+        <h3>Prover Information</h3>
+        <div id="info"></div>
+    </div>
+
+    <div class="container">
+        <h3>Calculate Fibonacci Number</h3>
+        <input type="number" id="fib-n" placeholder="Enter n" value="10" min="0" max="50">
+        <button onclick="calculateFib()">Calculate F(n)</button>
+        <div id="fib-result"></div>
+    </div>
+
+    <div class="container">
+        <h3>Test WASM Functions</h3>
+        <button onclick="testSimple()">Test Simple Function</button>
+        <button onclick="testFibSimple()">Test Fibonacci Simple</button>
+        <button onclick="testMinimal()">Test Minimal Proof</button>
+        <button onclick="testTrace()">Test Trace Generation</button>
+        <div id="test-result"></div>
+    </div>
+
+    <div class="container">
+        <h3>Generate and Verify ZK Proof</h3>
+        <p>Note: Generates a real zero-knowledge proof using Goldilocks field and Keccak hash.</p>
+        <input type="number" id="proof-n" placeholder="Enter n" value="8" min="1" max="8">
+        <input type="number" id="expected" placeholder="Expected F(n)" value="21">
+        <button onclick="generateProof()">Generate ZK Proof</button>
+        <div id="proof-result"></div>
+    </div>
+
+    <script type="module">
+        import init, { fibonacci, prove_fibonacci, prove_fibonacci_minimal, prove_fibonacci_simple, test_simple_proof, test_trace_generation, get_prover_info } from './pkg/fib_wasm.js';
+        
+        async function run() {
+            await init();
+            
+            // Display prover info
+            document.getElementById('info').innerHTML = '<pre>' + get_prover_info() + '</pre>';
+            
+            // Test simple proof function
+            try {
+                const test_result = test_simple_proof();
+                console.log("Test result:", test_result);
+            } catch (e) {
+                console.error("Simple test failed:", e);
+            }
+            
+            // Make functions global
+            window.fibonacci = fibonacci;
+            window.prove_fibonacci = prove_fibonacci;
+            window.prove_fibonacci_minimal = prove_fibonacci_minimal;
+            window.prove_fibonacci_simple = prove_fibonacci_simple;
+            window.test_simple_proof = test_simple_proof;
+            window.test_trace_generation = test_trace_generation;
+            window.get_prover_info = get_prover_info;
+        }
+        
+        window.calculateFib = function() {
+            const n = parseInt(document.getElementById('fib-n').value);
+            if (n < 0 || n > 47) {
+                document.getElementById('fib-result').innerHTML = 
+                    `<div class="error">Please enter n between 0 and 47 (u32 overflow protection)</div>`;
+                return;
+            }
+            const result = fibonacci(n);
+            document.getElementById('fib-result').innerHTML = 
+                `<div class="result">F(${n}) = ${result}</div>`;
+        }
+        
+        window.testSimple = function() {
+            try {
+                const result = test_simple_proof();
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="result">${result}</div>`;
+            } catch (error) {
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="error">Simple test error: ${error}</div>`;
+            }
+        }
+        
+        window.testFibSimple = function() {
+            try {
+                const result = prove_fibonacci_simple(8);
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="result">${result}</div>`;
+            } catch (error) {
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="error">Fibonacci simple test error: ${error}</div>`;
+            }
+        }
+        
+        window.testMinimal = function() {
+            try {
+                console.log("Testing minimal proof...");
+                const result = prove_fibonacci_minimal(3, 2);
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="result">${result}</div>`;
+            } catch (error) {
+                console.error("Minimal test error:", error);
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="error">Minimal proof test error: ${error}</div>`;
+            }
+        }
+        
+        window.testTrace = function() {
+            try {
+                console.log("Testing trace generation...");
+                const result = test_trace_generation(3);
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="result">${result}</div>`;
+            } catch (error) {
+                console.error("Trace test error:", error);
+                document.getElementById('test-result').innerHTML = 
+                    `<div class="error">Trace generation test error: ${error}</div>`;
+            }
+        }
+
+        window.generateProof = function() {
+            const n = parseInt(document.getElementById('proof-n').value);
+            const expected = parseInt(document.getElementById('expected').value);
+            
+            if (n < 1 || n > 8 || expected < 0 || expected > 4294967295) {
+                document.getElementById('proof-result').innerHTML = 
+                    `<div class="error">Please enter n between 1-8 and expected result within u32 range</div>`;
+                return;
+            }
+            
+            // Show loading message
+            document.getElementById('proof-result').innerHTML = 
+                '<p>🔄 Generating zero-knowledge proof... This may take several seconds.</p>';
+            
+            // Use setTimeout to allow UI to update, then generate proof
+            setTimeout(() => {
+                try {
+                    const startTime = Date.now();
+                    const result = prove_fibonacci(n, expected);
+                    const endTime = Date.now();
+                    const duration = ((endTime - startTime) / 1000).toFixed(2);
+                    
+                    document.getElementById('proof-result').innerHTML = 
+                        `<div class="result">✅ ${result}<br><small>Generated in ${duration} seconds</small></div>`;
+                } catch (error) {
+                    document.getElementById('proof-result').innerHTML = 
+                        `<div class="error">❌ ZK Proof failed: ${error}</div>`;
+                }
+            }, 100);
+        }
+        
+        run();
+    </script>
+</body>
+</html>

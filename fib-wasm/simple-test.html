@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple WASM Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px; margin: 5px; }
+        .result { background-color: #e8f5e8; padding: 10px; margin: 10px 0; }
+        .error { background-color: #ffe8e8; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Simple WASM Fibonacci Test</h1>
+    
+    <button onclick="testBasic()">1. Test Basic Fibonacci</button>
+    <button onclick="testSimple()">2. Test Simple Proof</button>
+    <button onclick="testMinimal()">3. Test Minimal Proof</button>
+    <button onclick="testTrace()">4. Test Trace Generation</button>
+    
+    <div id="output"></div>
+    
+    <script type="module">
+        import init, { 
+            fibonacci, 
+            test_simple_proof, 
+            prove_fibonacci_minimal, 
+            test_trace_generation,
+            get_prover_info 
+        } from './pkg/fib_wasm.js';
+        
+        let wasmInitialized = false;
+        
+        async function initWasm() {
+            if (!wasmInitialized) {
+                await init();
+                wasmInitialized = true;
+                log("✅ WASM module initialized successfully");
+                
+                try {
+                    const info = get_prover_info();
+                    log(`📋 Prover info: ${info}`);
+                } catch (e) {
+                    log(`⚠️ Could not get prover info: ${e}`);
+                }
+            }
+        }
+        
+        function log(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += `<div class="result">${message}</div>`;
+            console.log(message);
+        }
+        
+        function logError(message) {
+            const output = document.getElementById('output');
+            output.innerHTML += `<div class="error">${message}</div>`;
+            console.error(message);
+        }
+        
+        window.testBasic = async function() {
+            try {
+                await initWasm();
+                log("🧮 Testing basic Fibonacci calculation...");
+                
+                for (let n = 1; n <= 10; n++) {
+                    const result = fibonacci(n);
+                    log(`F(${n}) = ${result}`);
+                }
+                
+                log("✅ Basic Fibonacci test completed successfully");
+            } catch (error) {
+                logError(`❌ Basic test failed: ${error}`);
+            }
+        }
+        
+        window.testSimple = async function() {
+            try {
+                await initWasm();
+                log("🔍 Testing simple proof function...");
+                
+                const result = test_simple_proof();
+                log(`✅ Simple proof result: ${result}`);
+            } catch (error) {
+                logError(`❌ Simple proof test failed: ${error}`);
+            }
+        }
+        
+        window.testMinimal = async function() {
+            try {
+                await initWasm();
+                log("🔬 Testing minimal proof validation...");
+                
+                // Test F(3) = 2
+                const result = prove_fibonacci_minimal(3, 2);
+                log(`✅ Minimal proof result: ${result}`);
+                
+                // Test with wrong result
+                try {
+                    const wrongResult = prove_fibonacci_minimal(3, 999);
+                    logError(`❌ This should have failed but got: ${wrongResult}`);
+                } catch (e) {
+                    log(`✅ Correctly rejected wrong result: ${e}`);
+                }
+                
+            } catch (error) {
+                logError(`❌ Minimal proof test failed: ${error}`);
+            }
+        }
+        
+        window.testTrace = async function() {
+            try {
+                await initWasm();
+                log("📊 Testing trace generation...");
+                
+                const result = test_trace_generation(3);
+                log(`✅ Trace generation result: ${result}`);
+                
+            } catch (error) {
+                logError(`❌ Trace generation test failed: ${error}`);
+            }
+        }
+        
+        // Initialize on load
+        initWasm().catch(e => logError(`Failed to initialize WASM: ${e}`));
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>WASM Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .result { background-color: #e8f5e8; padding: 10px; margin: 10px 0; }
+        .error { background-color: #ffe8e8; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>WASM Fibonacci Test</h1>
+    <div id="results"></div>
+    
+    <script type="module">
+        import init, { fibonacci, test_simple_proof, prove_fibonacci_simple, prove_fibonacci, get_prover_info } from './pkg/fib_wasm.js';
+        
+        async function runTests() {
+            try {
+                await init();
+                
+                const results = document.getElementById('results');
+                let output = '';
+                
+                // Test 1: Basic fibonacci
+                try {
+                    const fib10 = fibonacci(10);
+                    output += `<div class="result">✅ fibonacci(10) = ${fib10}</div>`;
+                } catch (e) {
+                    output += `<div class="error">❌ fibonacci(10) failed: ${e}</div>`;
+                }
+                
+                // Test 2: Simple test
+                try {
+                    const simple = test_simple_proof();
+                    output += `<div class="result">✅ test_simple_proof(): ${simple}</div>`;
+                } catch (e) {
+                    output += `<div class="error">❌ test_simple_proof() failed: ${e}</div>`;
+                }
+                
+                // Test 3: Fibonacci simple
+                try {
+                    const fibSimple = prove_fibonacci_simple(8);
+                    output += `<div class="result">✅ prove_fibonacci_simple(8): ${fibSimple}</div>`;
+                } catch (e) {
+                    output += `<div class="error">❌ prove_fibonacci_simple(8) failed: ${e}</div>`;
+                }
+                
+                // Test 4: Validation (should work)
+                try {
+                    const proof = prove_fibonacci(8, 21);
+                    output += `<div class="result">✅ prove_fibonacci(8, 21): ${proof}</div>`;
+                } catch (e) {
+                    output += `<div class="error">❌ prove_fibonacci(8, 21) failed: ${e}</div>`;
+                }
+                
+                // Test 5: Validation (should fail)
+                try {
+                    const proof = prove_fibonacci(8, 20);
+                    output += `<div class="error">❌ prove_fibonacci(8, 20) should have failed but got: ${proof}</div>`;
+                } catch (e) {
+                    output += `<div class="result">✅ prove_fibonacci(8, 20) correctly failed: ${e}</div>`;
+                }
+                
+                // Test 6: Get prover info
+                try {
+                    const info = get_prover_info();
+                    output += `<div class="result">✅ get_prover_info(): <pre>${info}</pre></div>`;
+                } catch (e) {
+                    output += `<div class="error">❌ get_prover_info() failed: ${e}</div>`;
+                }
+                
+                results.innerHTML = output;
+                
+            } catch (error) {
+                document.getElementById('results').innerHTML = 
+                    `<div class="error">❌ Failed to initialize WASM: ${error}</div>`;
+            }
+        }
+        
+        runTests();
+    </script>
+</body>
+</html>
