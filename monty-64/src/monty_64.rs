@@ -148,7 +148,7 @@ impl<MP: MontyParameters64> PrimeCharacteristicRing for MontyField64<MP> {
         // Compute (a + P) / 2 if a is odd, otherwise a / 2
         let a = self.value;
         if a & 1 == 1 {
-            Self::new_monty((a + MP::PRIME) >> 1)
+            Self::new_monty(((a as u128 + MP::PRIME as u128) >> 1) as u64)
         } else {
             Self::new_monty(a >> 1)
         }

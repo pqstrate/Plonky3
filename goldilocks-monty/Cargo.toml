@@ -16,3 +16,6 @@ p3-monty-64 = { path = "../monty-64" }
 num-bigint.workspace = true
 rand.workspace = true
 serde = { workspace = true, features = ["derive"] }
+
+[dev-dependencies]
+p3-field-testing.workspace = true
