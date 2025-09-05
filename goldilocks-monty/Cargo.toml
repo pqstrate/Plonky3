@@ -19,3 +19,12 @@ serde = { workspace = true, features = ["derive"] }
 
 [dev-dependencies]
 p3-field-testing.workspace = true
+criterion.workspace = true
+
+[[bench]]
+name = "bench_field"
+harness = false
+
+[[bench]]
+name = "extension"
+harness = false
