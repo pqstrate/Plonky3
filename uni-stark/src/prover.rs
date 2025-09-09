@@ -1,6 +1,7 @@
 use alloc::vec;
 use alloc::vec::Vec;
 
+use ark_std::{end_timer, start_timer};
 use itertools::Itertools;
 use p3_air::Air;
 use p3_challenger::{CanObserve, FieldChallenger};
@@ -33,8 +34,13 @@ where
     SC: StarkGenericConfig,
     A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
 {
+    let proof_timer = start_timer!(|| "Total proof generation");
+
     #[cfg(debug_assertions)]
     crate::check_constraints::check_constraints(air, &trace, public_values);
+
+    // 0 ----- Instance setup: degrees, constraints, domains --------------------------
+    let step_timer = start_timer!(|| "Step 0: Instance setup");
 
     // Compute the height `N = 2^n` and `log_2(height)`, `n`, of the trace.
     let degree = trace.height();
@@ -88,6 +94,11 @@ where
     let pcs = config.pcs();
     let mut challenger = config.initialise_challenger();
 
+    end_timer!(step_timer);
+
+    // 1 ----- Commit to execution trace -------------------------------------------
+    let step_timer = start_timer!(|| "Step 1: Commit to execution trace");
+
     // Get the subgroup `H` of size `N`. We treat each column `T_i` of
     // the trace as an evaluation vector of polynomials `T_i(x)` over `H`.
     // (In the Circle STARK case `H` is instead a standard position twin coset of size `N`)
@@ -109,6 +120,8 @@ where
     let (trace_commit, trace_data) =
         info_span!("commit to trace data").in_scope(|| pcs.commit([(ext_trace_domain, trace)]));
 
+    end_timer!(step_timer);
+
     // Observe the instance.
     // degree < 2^255 so we can safely cast log_degree to a u8.
     challenger.observe(Val::<SC>::from_u8(log_ext_degree as u8));
@@ -120,6 +133,9 @@ where
 
     // Observe the public input values.
     challenger.observe_slice(public_values);
+
+    // 2 ----- Compute quotient polynomial -------------------------------------------
+    let step_timer = start_timer!(|| "Step 2: Compute quotient polynomial");
 
     // Get the first Fiat Shamir challenge which will be used to combine all constraint polynomials
     // into a single polynomial.
@@ -149,6 +165,12 @@ where
     let quotient_domain =
         ext_trace_domain.create_disjoint_domain(1 << (log_ext_degree + log_quotient_degree));
 
+    ark_std::println!(
+        "Trace domain: {:?}, Quotient domain: {:?}",
+        trace_domain.size(),
+        quotient_domain.size()
+    );
+
     // Return a the subset of the extended trace `ET` corresponding to the rows giving evaluations
     // over the quotient domain.
     //
@@ -169,6 +191,10 @@ where
         alpha,
         constraint_count,
     );
+    end_timer!(step_timer);
+
+    // 3 ----- Commit to quotient polynomial -------------------------------------------
+    let step_timer = start_timer!(|| "Step 3: Commit to quotient polynomial");
 
     // Due to `alpha`, evaluations of `Q` all lie in the extension field `E`.
     // We flatten this into a matrix of `F` values by treating `E` as an `F`
@@ -201,6 +227,8 @@ where
         .in_scope(|| pcs.commit_quotient(quotient_domain, quotient_flat, quotient_degree));
     challenger.observe(quotient_commit.clone());
 
+    end_timer!(step_timer);
+
     // If zk is enabled, we generate random extension field values of the size of the randomized trace. If `n` is the degree of the initial trace,
     // then the randomized trace has degree `2n`. To randomize the FRI batch polynomial, we then need an extension field random polynomial of degree `2n -1`.
     // So we can generate a random polynomial  of degree `2n`, and provide it to `open` as is.
@@ -230,6 +258,9 @@ where
         challenger.observe(r_commit);
     }
 
+    // 4 ----- Sample out-of-domain point ------------------------------------------
+    let step_timer = start_timer!(|| "Step 4: Sample out-of-domain point");
+
     // Get an out-of-domain point to open our values at.
     //
     // Soundness Error:
@@ -243,6 +274,11 @@ where
     // cases but it is a completeness issue and contributes a completeness error of |gK| = 2N/|EF|.
     let zeta: SC::Challenge = challenger.sample_algebra_element();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
+
+    end_timer!(step_timer);
+
+    // 5 ----- Open polynomials at out-of-domain point ----------------------------
+    let step_timer = start_timer!(|| "Step 5: Open polynomials");
 
     let is_random = opt_r_data.is_some();
     let (opened_values, opening_proof) = info_span!("open").in_scope(|| {
@@ -273,6 +309,10 @@ where
         quotient_chunks,
         random,
     };
+
+    end_timer!(step_timer);
+    end_timer!(proof_timer);
+
     Proof {
         commitments,
         opened_values,

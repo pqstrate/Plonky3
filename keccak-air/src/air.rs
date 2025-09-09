@@ -23,6 +23,7 @@ impl KeccakAir {
         num_hashes: usize,
         extra_capacity_bits: usize,
     ) -> RowMajorMatrix<F> {
+        println!("Generating Keccak trace with {} hashes", num_hashes);
         let mut rng = SmallRng::seed_from_u64(1);
         let inputs = (0..num_hashes).map(|_| rng.random()).collect();
         generate_trace_rows(inputs, extra_capacity_bits)

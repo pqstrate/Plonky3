@@ -1,0 +1,38 @@
+[package]
+name = "fib_example"
+version = "0.1.0"
+edition = "2021"
+description = "Step-by-step guide to building a Plonky3 proof for Fibonacci sequence"
+
+[dependencies]
+# Core Plonky3 dependencies
+p3-air = { path = "../air" }
+p3-uni-stark = { path = "../uni-stark" }
+p3-matrix = { path = "../matrix" }
+p3-field = { path = "../field" }
+
+# Field implementations
+p3-baby-bear = { path = "../baby-bear" }
+p3-mersenne-31 = { path = "../mersenne-31" }
+
+# Cryptographic primitives
+p3-poseidon2 = { path = "../poseidon2" }
+p3-keccak = { path = "../keccak" }
+p3-symmetric = { path = "../symmetric" }
+
+# PCS and commitment schemes
+p3-fri = { path = "../fri" }
+p3-commit = { path = "../commit" }
+p3-merkle-tree = { path = "../merkle-tree" }
+
+# DFT implementation
+p3-dft = { path = "../dft" }
+
+# Challenger
+p3-challenger = { path = "../challenger" }
+
+# Utilities
+rand = "0.9"
+
+[dev-dependencies]
+tracing-subscriber = "0.3"

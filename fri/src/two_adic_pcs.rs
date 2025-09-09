@@ -18,6 +18,7 @@ use alloc::vec::Vec;
 use core::fmt::Debug;
 use core::marker::PhantomData;
 
+use ark_std::{end_timer, start_timer};
 use itertools::{Itertools, izip};
 use p3_challenger::{CanObserve, FieldChallenger, GrindingChallenger};
 use p3_commit::{BatchOpening, Mmcs, OpenedValues, Pcs};
@@ -240,7 +241,12 @@ where
         // todo: handle extrapolation for LDEs we don't have
         assert_eq!(domain.shift(), Val::GENERATOR);
         let lde = self.mmcs.get_matrices(prover_data)[idx];
-        assert!(lde.height() >= domain.size());
+        assert!(
+            lde.height() >= domain.size(),
+            "lde {} too small for domain {}",
+            lde.height(),
+            domain.size()
+        );
         lde.split_rows(domain.size()).0.bit_reverse_rows()
     }
 
@@ -507,6 +513,7 @@ where
 
         let folding: TwoAdicFriFoldingForMmcs<Val, InputMmcs> = TwoAdicFriFolding(PhantomData);
 
+        let fri_timer = start_timer!(|| "Produce FRI proof");
         // Produce the FRI proof.
         let fri_proof = prover::prove_fri(
             &folding,
@@ -517,6 +524,7 @@ where
             &commitment_data_with_opening_points,
             &self.mmcs,
         );
+        end_timer!(fri_timer);
 
         (all_opened_values, fri_proof)
     }

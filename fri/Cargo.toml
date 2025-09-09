@@ -19,6 +19,7 @@ p3-matrix.workspace = true
 p3-maybe-rayon.workspace = true
 p3-util.workspace = true
 
+ark-std.workspace = true
 itertools.workspace = true
 rand.workspace = true
 serde = { workspace = true, features = ["derive", "alloc"] }

@@ -1,0 +1,2427 @@
+🎯 Demo of New fib2 APIs
+========================
+
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 64×80
+   📝 Writing Miden trace to fib_5_trace_miden.log...
+   ✅ Miden trace written to fib_5_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 64×80 -> 64×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 64×80
+   📈 Conversion stats:
+      Original height: 64
+      Padded height: 64 (2^6)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_5_trace_p3.log...
+   ✅ Plonky3 trace written to fib_5_trace_p3.log
+========================
+   Using P3 trace (64×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 64×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................9.358µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................250.019µs
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 64, Quotient domain: 64
+····End:     Step 2: Compute quotient polynomial ...................................23.354µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................55.725µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................611ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................59.301µs
+······Start:   proof of work
+········End:     proof of work .....................................................992ns
+······Start:   query phase
+········End:     query phase .......................................................166.763µs
+······End:     Produce FRI proof ...................................................246.012µs
+····End:     Step 5: Open polynomials ..............................................339.827µs
+··End:     Total proof generation ..................................................714.820µs
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 1ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 64×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................6.682µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................2.472ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 64, Quotient domain: 64
+····End:     Step 2: Compute quotient polynomial ...................................16.731µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................169.628µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................90ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................237.435µs
+······Start:   proof of work
+········End:     proof of work .....................................................3.447µs
+······Start:   query phase
+········End:     query phase .......................................................97.753µs
+······End:     Produce FRI proof ...................................................356.408µs
+····End:     Step 5: Open polynomials ..............................................506.290µs
+··End:     Total proof generation ..................................................3.207ms
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 5ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (64×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................8.456µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................1.617ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................240.661µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................282.380µs
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................163.737µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................24.346µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................28.854µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.822ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................29.696µs
+····End:     Total proof generation ................................................4.271ms
+··End:     Miden STARK proof generation ............................................4.397ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 4.403109ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................202.220µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 208.371µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................43.161µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................41.072ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................271.589µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................8.681ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................446.067µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................24.415µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................126.387µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................583.235ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................48.782µs
+····End:     Total proof generation ................................................634.022ms
+··End:     Miden STARK proof generation ............................................634.124ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 634.128793ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................4.024ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 4.029287ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 64×80
+   📝 Writing Miden trace to fib_10_trace_miden.log...
+   ✅ Miden trace written to fib_10_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 64×80 -> 64×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 64×80
+   📈 Conversion stats:
+      Original height: 64
+      Padded height: 64 (2^6)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_10_trace_p3.log...
+   ✅ Plonky3 trace written to fib_10_trace_p3.log
+========================
+   Using P3 trace (64×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 64×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................3.096µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................187.471µs
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 64, Quotient domain: 64
+····End:     Step 2: Compute quotient polynomial ...................................15.530µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................46.928µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................541ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................49.363µs
+······Start:   proof of work
+········End:     proof of work .....................................................1.042µs
+······Start:   query phase
+········End:     query phase .......................................................122.610µs
+······End:     Produce FRI proof ...................................................187.552µs
+····End:     Step 5: Open polynomials ..............................................259.948µs
+··End:     Total proof generation ..................................................541.135µs
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 1ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 64×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................4.138µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................2.137ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 64, Quotient domain: 64
+····End:     Step 2: Compute quotient polynomial ...................................14.547µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................144.832µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................80ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................207.299µs
+······Start:   proof of work
+········End:     proof of work .....................................................1.984µs
+······Start:   query phase
+········End:     query phase .......................................................84.188µs
+······End:     Produce FRI proof ...................................................307.487µs
+····End:     Step 5: Open polynomials ..............................................431.078µs
+··End:     Total proof generation ..................................................2.755ms
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 4ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (64×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................3.447µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................1.274ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................206.227µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................237.245µs
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................139.411µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................20.719µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................24.646µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................2.136ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................20.539µs
+····End:     Total proof generation ................................................4.108ms
+··End:     Miden STARK proof generation ............................................4.193ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 4.197212ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................121.207µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 125.906µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................39.414µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 512
+······End:     Step 1: Commit to execution trace ...................................34.807ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................201.488µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................7.411ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................363.192µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................20.598µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................103.044µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................190.102ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................33.833µs
+····End:     Total proof generation ................................................233.131ms
+··End:     Miden STARK proof generation ............................................233.218ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 233.221835ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................3.927ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 3.935081ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 128×80
+   📝 Writing Miden trace to fib_20_trace_miden.log...
+   ✅ Miden trace written to fib_20_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 128×80 -> 128×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 128×80
+   📈 Conversion stats:
+      Original height: 128
+      Padded height: 128 (2^7)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_20_trace_p3.log...
+   ✅ Plonky3 trace written to fib_20_trace_p3.log
+========================
+   Using P3 trace (128×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 128×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................2.886µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................390.633µs
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 128, Quotient domain: 128
+····End:     Step 2: Compute quotient polynomial ...................................25.537µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................90.830µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................461ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................93.806µs
+······Start:   proof of work
+········End:     proof of work .....................................................1.283µs
+······Start:   query phase
+········End:     query phase .......................................................88.596µs
+······End:     Produce FRI proof ...................................................199.844µs
+····End:     Step 5: Open polynomials ..............................................320.761µs
+··End:     Total proof generation ..................................................855.795µs
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 1ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 128×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................3.737µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................4.273ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 128, Quotient domain: 128
+····End:     Step 2: Compute quotient polynomial ...................................24.726µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................281.939µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................90ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................407.665µs
+······Start:   proof of work
+········End:     proof of work .....................................................2.785µs
+······Start:   query phase
+········End:     query phase .......................................................92.754µs
+······End:     Produce FRI proof ...................................................517.491µs
+····End:     Step 5: Open polynomials ..............................................687.920µs
+··End:     Total proof generation ..................................................5.304ms
+   • Proof generated in 0.01s
+
+✅ Verifying proof...
+   • Verification completed in 5ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (128×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................2.675µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 1024
+······End:     Step 1: Commit to execution trace ...................................2.902ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................281.869µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................525.405µs
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................260.939µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................43.141µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................51.116µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................12.366ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................23.003µs
+····End:     Total proof generation ................................................16.499ms
+··End:     Miden STARK proof generation ............................................16.643ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 16.647886ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................140.083µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 144.722µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................33.964µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 1024
+······End:     Step 1: Commit to execution trace ...................................69.124ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................283.131µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................14.713ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................489.468µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................43.541µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................202.470µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................816.942ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................49.814µs
+····End:     Total proof generation ................................................901.948ms
+··End:     Miden STARK proof generation ............................................902.044ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 902.0493ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................4.261ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 4.269398ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 256×80
+   📝 Writing Miden trace to fib_40_trace_miden.log...
+   ✅ Miden trace written to fib_40_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 256×80 -> 256×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 256×80
+   📈 Conversion stats:
+      Original height: 256
+      Padded height: 256 (2^8)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_40_trace_p3.log...
+   ✅ Plonky3 trace written to fib_40_trace_p3.log
+========================
+   Using P3 trace (256×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 256×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................4.108µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................821.250µs
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 256, Quotient domain: 256
+····End:     Step 2: Compute quotient polynomial ...................................46.517µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................180.028µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................842ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................186.009µs
+······Start:   proof of work
+········End:     proof of work .....................................................892ns
+······Start:   query phase
+········End:     query phase .......................................................99.627µs
+······End:     Produce FRI proof ...................................................302.557µs
+····End:     Step 5: Open polynomials ..............................................528.632µs
+··End:     Total proof generation ..................................................1.610ms
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 2ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 256×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................2.424µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................8.569ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 256, Quotient domain: 256
+····End:     Step 2: Compute quotient polynomial ...................................40.717µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................560.852µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................80ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................803.828µs
+······Start:   proof of work
+········End:     proof of work .....................................................5.430µs
+······Start:   query phase
+········End:     query phase .......................................................104.577µs
+······End:     Produce FRI proof ...................................................929.613µs
+····End:     Step 5: Open polynomials ..............................................1.197ms
+··End:     Total proof generation ..................................................10.395ms
+   • Proof generated in 0.01s
+
+✅ Verifying proof...
+   • Verification completed in 6ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (256×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................3.707µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 2048
+······End:     Step 1: Commit to execution trace ...................................6.557ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................479.489µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................1.235ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................510.748µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................93.836µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................110.717µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.179ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................25.899µs
+····End:     Total proof generation ................................................10.243ms
+··End:     Miden STARK proof generation ............................................10.423ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 10.42835ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................167.574µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 172.544µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................34.565µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 2048
+······End:     Step 1: Commit to execution trace ...................................139.394ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................473.007µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................29.709ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................738.325µs
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................94.918µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................4.936ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................162.941ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................35.496µs
+····End:     Total proof generation ................................................338.414ms
+··End:     Miden STARK proof generation ............................................338.653ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 338.658672ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................5.529ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 5.534922ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 512×80
+   📝 Writing Miden trace to fib_80_trace_miden.log...
+   ✅ Miden trace written to fib_80_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 512×80 -> 512×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 512×80
+   📈 Conversion stats:
+      Original height: 512
+      Padded height: 512 (2^9)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_80_trace_p3.log...
+   ✅ Plonky3 trace written to fib_80_trace_p3.log
+========================
+   Using P3 trace (512×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 512×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................2.956µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................1.754ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 512, Quotient domain: 512
+····End:     Step 2: Compute quotient polynomial ...................................86.352µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................346.229µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................450ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................356.899µs
+······Start:   proof of work
+········End:     proof of work .....................................................1.513µs
+······Start:   query phase
+········End:     query phase .......................................................189.034µs
+······End:     Produce FRI proof ...................................................563.407µs
+····End:     Step 5: Open polynomials ..............................................964.870µs
+··End:     Total proof generation ..................................................3.181ms
+   • Proof generated in 0.00s
+
+✅ Verifying proof...
+   • Verification completed in 2ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 512×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.433µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................17.089ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 512, Quotient domain: 512
+····End:     Step 2: Compute quotient polynomial ...................................79.489µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................1.132ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................90ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................1.704ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.174µs
+······Start:   query phase
+········End:     query phase .......................................................127.099µs
+······End:     Produce FRI proof ...................................................1.849ms
+····End:     Step 5: Open polynomials ..............................................2.303ms
+··End:     Total proof generation ..................................................20.643ms
+   • Proof generated in 0.02s
+
+✅ Verifying proof...
+   • Verification completed in 7ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (512×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................2.785µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 4096
+······End:     Step 1: Commit to execution trace ...................................15.217ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................933.220µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................2.699ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................1.075ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................221.094µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................208.031µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.256ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................34.264µs
+····End:     Total proof generation ................................................21.698ms
+··End:     Miden STARK proof generation ............................................21.979ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 21.984886ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................238.307µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 243.487µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................38.282µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 4096
+······End:     Step 1: Commit to execution trace ...................................285.641ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................834.325µs
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................59.551ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................1.247ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................215.634µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................9.905ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.410s
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................75.722µs
+····End:     Total proof generation ................................................1.767s
+··End:     Miden STARK proof generation ............................................1.767s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 1.767857647s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................6.382ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 6.389174ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 1024×80
+   📝 Writing Miden trace to fib_160_trace_miden.log...
+   ✅ Miden trace written to fib_160_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 1024×80 -> 1024×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 1024×80
+   📈 Conversion stats:
+      Original height: 1024
+      Padded height: 1024 (2^10)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_160_trace_p3.log...
+   ✅ Plonky3 trace written to fib_160_trace_p3.log
+========================
+   Using P3 trace (1024×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 1024×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................6.272µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................3.546ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 1024, Quotient domain: 1024
+····End:     Step 2: Compute quotient polynomial ...................................165.760µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................712.597µs
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................551ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................709.160µs
+······Start:   proof of work
+········End:     proof of work .....................................................912ns
+······Start:   query phase
+········End:     query phase .......................................................126.828µs
+······End:     Produce FRI proof ...................................................854.082µs
+····End:     Step 5: Open polynomials ..............................................1.663ms
+··End:     Total proof generation ..................................................6.126ms
+   • Proof generated in 0.01s
+
+✅ Verifying proof...
+   • Verification completed in 2ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 1024×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.883µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................34.854ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 1024, Quotient domain: 1024
+····End:     Step 2: Compute quotient polynomial ...................................168.135µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................2.271ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................80ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................3.278ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.094µs
+······Start:   query phase
+········End:     query phase .......................................................133.511µs
+······End:     Produce FRI proof ...................................................3.430ms
+····End:     Step 5: Open polynomials ..............................................4.275ms
+··End:     Total proof generation ..................................................41.599ms
+   • Proof generated in 0.04s
+
+✅ Verifying proof...
+   • Verification completed in 8ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (1024×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................5.129µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 8192
+······End:     Step 1: Commit to execution trace ...................................30.303ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................1.488ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................5.461ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................1.986ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................448.361µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................388.849µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.395ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................35.847µs
+····End:     Total proof generation ................................................41.569ms
+··End:     Miden STARK proof generation ............................................42.009ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 42.015058ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................244.138µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 249.147µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................41.007µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 8192
+······End:     Step 1: Commit to execution trace ...................................564.240ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................1.706ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................119.883ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................2.279ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................459.151µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................24.426ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................51.559ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................58.680µs
+····End:     Total proof generation ................................................764.727ms
+··End:     Miden STARK proof generation ............................................764.923ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 764.926687ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................8.300ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 8.307062ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 2048×80
+   📝 Writing Miden trace to fib_320_trace_miden.log...
+   ✅ Miden trace written to fib_320_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 2048×80 -> 2048×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 2048×80
+   📈 Conversion stats:
+      Original height: 2048
+      Padded height: 2048 (2^11)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_320_trace_p3.log...
+   ✅ Plonky3 trace written to fib_320_trace_p3.log
+========================
+   Using P3 trace (2048×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 2048×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................6.672µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................7.608ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 2048, Quotient domain: 2048
+····End:     Step 2: Compute quotient polynomial ...................................357.200µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................1.451ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................551ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................1.435ms
+······Start:   proof of work
+········End:     proof of work .....................................................872ns
+······Start:   query phase
+········End:     query phase .......................................................254.878µs
+······End:     Produce FRI proof ...................................................1.709ms
+····End:     Step 5: Open polynomials ..............................................3.359ms
+··End:     Total proof generation ..................................................12.812ms
+   • Proof generated in 0.01s
+
+✅ Verifying proof...
+   • Verification completed in 3ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 2048×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.903µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................68.518ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 2048, Quotient domain: 2048
+····End:     Step 2: Compute quotient polynomial ...................................325.200µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................4.514ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................80ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................6.438ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.054µs
+······Start:   query phase
+········End:     query phase .......................................................137.087µs
+······End:     Produce FRI proof ...................................................6.593ms
+····End:     Step 5: Open polynomials ..............................................8.184ms
+··End:     Total proof generation ..................................................81.575ms
+   • Proof generated in 0.08s
+
+✅ Verifying proof...
+   • Verification completed in 9ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (2048×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................4.358µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 16384
+······End:     Step 1: Commit to execution trace ...................................66.228ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................3.030ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................11.793ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................4.016ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................986.811µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................782.638µs
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................557.887µs
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................50.525µs
+····End:     Total proof generation ................................................87.512ms
+··End:     Miden STARK proof generation ............................................88.298ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 88.303523ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................269.345µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 274.515µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................37.681µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 16384
+······End:     Step 1: Commit to execution trace ...................................1.137s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................3.608ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................243.342ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................4.265ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................989.466µs
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................49.049ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................113.246ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................73.948µs
+····End:     Total proof generation ................................................1.551s
+··End:     Miden STARK proof generation ............................................1.552s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 1.552151043s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................8.026ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 8.031675ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 4096×80
+   📝 Writing Miden trace to fib_640_trace_miden.log...
+   ✅ Miden trace written to fib_640_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 4096×80 -> 4096×80
+   ✅ Conversion completed in 0ms
+   📏 Plonky3 trace dimensions: 4096×80
+   📈 Conversion stats:
+      Original height: 4096
+      Padded height: 4096 (2^12)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_640_trace_p3.log...
+   ✅ Plonky3 trace written to fib_640_trace_p3.log
+========================
+   Using P3 trace (4096×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 4096×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................6.432µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................15.663ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 4096, Quotient domain: 4096
+····End:     Step 2: Compute quotient polynomial ...................................666.360µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................2.908ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................551ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................2.838ms
+······Start:   proof of work
+········End:     proof of work .....................................................1.242µs
+······Start:   query phase
+········End:     query phase .......................................................162.655µs
+······End:     Produce FRI proof ...................................................3.021ms
+····End:     Step 5: Open polynomials ..............................................6.214ms
+··End:     Total proof generation ..................................................25.493ms
+   • Proof generated in 0.03s
+
+✅ Verifying proof...
+   • Verification completed in 3ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 4096×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.793µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................146.000ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 4096, Quotient domain: 4096
+····End:     Step 2: Compute quotient polynomial ...................................735.980µs
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................9.166ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................170ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................13.030ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.385µs
+······Start:   query phase
+········End:     query phase .......................................................174.998µs
+······End:     Produce FRI proof ...................................................13.226ms
+····End:     Step 5: Open polynomials ..............................................16.372ms
+··End:     Total proof generation ..................................................172.323ms
+   • Proof generated in 0.17s
+
+✅ Verifying proof...
+   • Verification completed in 10ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (4096×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................4.669µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 32768
+······End:     Step 1: Commit to execution trace ...................................142.554ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................6.674ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................26.091ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................8.459ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................2.221ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................1.580ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................8.910ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................103.774µs
+····End:     Total proof generation ................................................196.698ms
+··End:     Miden STARK proof generation ............................................198.599ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 198.606236ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................358.352µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 365.215µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................51.647µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 32768
+······End:     Step 1: Commit to execution trace ...................................2.307s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................7.356ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................489.746ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................8.573ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................2.163ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................103.504ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................504.459ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................106.069µs
+····End:     Total proof generation ................................................3.423s
+··End:     Miden STARK proof generation ............................................3.424s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 3.42460952s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................9.524ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 9.532ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 8192×80
+   📝 Writing Miden trace to fib_1280_trace_miden.log...
+   ✅ Miden trace written to fib_1280_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 8192×80 -> 8192×80
+   ✅ Conversion completed in 2ms
+   📏 Plonky3 trace dimensions: 8192×80
+   📈 Conversion stats:
+      Original height: 8192
+      Padded height: 8192 (2^13)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_1280_trace_p3.log...
+   ✅ Plonky3 trace written to fib_1280_trace_p3.log
+========================
+   Using P3 trace (8192×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 8192×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................7.174µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................31.698ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 8192, Quotient domain: 8192
+····End:     Step 2: Compute quotient polynomial ...................................1.271ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................5.704ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................591ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................5.474ms
+······Start:   proof of work
+········End:     proof of work .....................................................1.202µs
+······Start:   query phase
+········End:     query phase .......................................................191.429µs
+······End:     Produce FRI proof ...................................................5.686ms
+····End:     Step 5: Open polynomials ..............................................11.884ms
+··End:     Total proof generation ..................................................50.599ms
+   • Proof generated in 0.05s
+
+✅ Verifying proof...
+   • Verification completed in 3ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 8192×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.583µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................280.182ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 8192, Quotient domain: 8192
+····End:     Step 2: Compute quotient polynomial ...................................1.345ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................18.209ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................160ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................25.951ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.315µs
+······Start:   query phase
+········End:     query phase .......................................................202.770µs
+······End:     Produce FRI proof ...................................................26.175ms
+····End:     Step 5: Open polynomials ..............................................32.335ms
+··End:     Total proof generation ..................................................332.113ms
+   • Proof generated in 0.33s
+
+✅ Verifying proof...
+   • Verification completed in 11ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (8192×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................5.170µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 65536
+······End:     Step 1: Commit to execution trace ...................................301.070ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................13.428ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................54.773ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................17.780ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................4.672ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................3.133ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................766.668µs
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................85.610µs
+····End:     Total proof generation ................................................395.801ms
+··End:     Miden STARK proof generation ............................................399.256ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 399.262418ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................349.235µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 354.705µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................38.472µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 65536
+······End:     Step 1: Commit to execution trace ...................................4.628s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................13.326ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................970.628ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................17.632ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................4.596ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................204.193ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................297.925ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................117.841µs
+····End:     Total proof generation ................................................6.137s
+··End:     Miden STARK proof generation ............................................6.141s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 6.14107772s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................10.349ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 10.356017ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 16384×80
+   📝 Writing Miden trace to fib_2560_trace_miden.log...
+   ✅ Miden trace written to fib_2560_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 16384×80 -> 16384×80
+   ✅ Conversion completed in 3ms
+   📏 Plonky3 trace dimensions: 16384×80
+   📈 Conversion stats:
+      Original height: 16384
+      Padded height: 16384 (2^14)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_2560_trace_p3.log...
+   ✅ Plonky3 trace written to fib_2560_trace_p3.log
+========================
+   Using P3 trace (16384×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 16384×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................7.995µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................66.519ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 16384, Quotient domain: 16384
+····End:     Step 2: Compute quotient polynomial ...................................3.268ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................11.401ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................741ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................11.328ms
+······Start:   proof of work
+········End:     proof of work .....................................................1.062µs
+······Start:   query phase
+········End:     query phase .......................................................229.731µs
+······End:     Produce FRI proof ...................................................11.585ms
+····End:     Step 5: Open polynomials ..............................................23.966ms
+··End:     Total proof generation ..................................................105.224ms
+   • Proof generated in 0.11s
+
+✅ Verifying proof...
+   • Verification completed in 4ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 16384×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................4.289µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................576.731ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 16384, Quotient domain: 16384
+····End:     Step 2: Compute quotient polynomial ...................................3.510ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................36.292ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................160ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................51.193ms
+······Start:   proof of work
+········End:     proof of work .....................................................3.216µs
+······Start:   query phase
+········End:     query phase .......................................................238.518µs
+······End:     Produce FRI proof ...................................................51.456ms
+····End:     Step 5: Open polynomials ..............................................63.734ms
+··End:     Total proof generation ..................................................680.335ms
+   • Proof generated in 0.68s
+
+✅ Verifying proof...
+   • Verification completed in 13ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (16384×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................4.950µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 131072
+······End:     Step 1: Commit to execution trace ...................................655.123ms
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................25.992ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................119.501ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................37.625ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................9.926ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................6.192ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................106.459µs
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................114.164µs
+····End:     Total proof generation ................................................854.699ms
+··End:     Miden STARK proof generation ............................................864.752ms
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 864.759243ms
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................375.555µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 380.784µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................42.660µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 131072
+······End:     Step 1: Commit to execution trace ...................................9.368s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................26.293ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................1.998s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................38.243ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................10.212ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................425.221ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................114.441ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................164.769µs
+····End:     Total proof generation ................................................11.981s
+··End:     Miden STARK proof generation ............................................11.992s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 11.992876465s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................13.002ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 13.022922ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 32768×80
+   📝 Writing Miden trace to fib_5120_trace_miden.log...
+   ✅ Miden trace written to fib_5120_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 32768×80 -> 32768×80
+   ✅ Conversion completed in 14ms
+   📏 Plonky3 trace dimensions: 32768×80
+   📈 Conversion stats:
+      Original height: 32768
+      Padded height: 32768 (2^15)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_5120_trace_p3.log...
+   ✅ Plonky3 trace written to fib_5120_trace_p3.log
+========================
+   Using P3 trace (32768×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 32768×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................7.774µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................160.670ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 32768, Quotient domain: 32768
+····End:     Step 2: Compute quotient polynomial ...................................8.853ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................22.911ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................1.382µs
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................21.807ms
+······Start:   proof of work
+········End:     proof of work .....................................................1.112µs
+······Start:   query phase
+········End:     query phase .......................................................251.332µs
+······End:     Produce FRI proof ...................................................22.082ms
+····End:     Step 5: Open polynomials ..............................................46.720ms
+··End:     Total proof generation ..................................................239.226ms
+   • Proof generated in 0.24s
+
+✅ Verifying proof...
+   • Verification completed in 4ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 32768×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................1.863µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................1.172s
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 32768, Quotient domain: 32768
+····End:     Step 2: Compute quotient polynomial ...................................8.463ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................75.434ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................471ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................108.927ms
+······Start:   proof of work
+········End:     proof of work .....................................................9.147µs
+······Start:   query phase
+········End:     query phase .......................................................319.920µs
+······End:     Produce FRI proof ...................................................109.300ms
+····End:     Step 5: Open polynomials ..............................................136.887ms
+··End:     Total proof generation ..................................................1.392s
+   • Proof generated in 1.40s
+
+✅ Verifying proof...
+   • Verification completed in 15ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (32768×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................6.833µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 262144
+······End:     Step 1: Commit to execution trace ...................................1.458s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................54.082ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................264.868ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................78.119ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................21.422ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................12.505ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................1.063ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................2.100ms
+····End:     Total proof generation ................................................1.892s
+··End:     Miden STARK proof generation ............................................1.916s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 1.916073213s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................475.633µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 483.658µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................41.278µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 262144
+······End:     Step 1: Commit to execution trace ...................................18.832s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................53.119ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................4.009s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................78.277ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................23.538ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................850.839ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................202.779ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................2.982ms
+····End:     Total proof generation ................................................24.053s
+··End:     Miden STARK proof generation ............................................24.075s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 24.075171542s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................13.156ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 13.162078ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.
+
+🔐 Generating proof from Plonky3 trace...
+🚀 Generating trace using Miden VM execution...
+   📝 Assembling Miden program...
+   ▶️  Executing Miden program...
+   ✅ Miden execution completed
+   📏 Original trace dimensions: 65536×80
+   📝 Writing Miden trace to fib_10240_trace_miden.log...
+   ✅ Miden trace written to fib_10240_trace_miden.log
+   🔄 Converting trace to Plonky3 format...
+Converting trace: 65536×80 -> 65536×80
+   ✅ Conversion completed in 41ms
+   📏 Plonky3 trace dimensions: 65536×80
+   📈 Conversion stats:
+      Original height: 65536
+      Padded height: 65536 (2^16)
+      Padding rows added: 0
+   📝 Writing Plonky3 trace to fib_10240_trace_p3.log...
+   ✅ Plonky3 trace written to fib_10240_trace_p3.log
+========================
+   Using P3 trace (65536×80) for proof generation...
+========================
+
+🔐 P3 with Keccak.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Keccak...
+   • P3 trace dimensions: 65536×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................9.368µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................318.295ms
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 65536, Quotient domain: 65536
+····End:     Step 2: Compute quotient polynomial ...................................18.111ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................46.227ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................1.633µs
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................43.792ms
+······Start:   proof of work
+········End:     proof of work .....................................................1.502µs
+······Start:   query phase
+········End:     query phase .......................................................328.036µs
+······End:     Produce FRI proof ...................................................44.162ms
+····End:     Step 5: Open polynomials ..............................................93.661ms
+··End:     Total proof generation ..................................................476.387ms
+   • Proof generated in 0.48s
+
+✅ Verifying proof...
+   • Verification completed in 5ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Keccak proof generation successful!
+
+🔐 P3 with Poseidon2.
+🔐 Generating Plonky3 STARK proof with simple increment constraint using Poseidon2...
+   • P3 trace dimensions: 65536×80
+   • First few values in column 0 (should increment):
+     Row 0: 0
+     Row 1: 1
+     Row 2: 2
+     Row 3: 3
+     Row 4: 4
+     Row 5: 5
+     Row 6: 6
+     Row 7: 7
+
+🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1
+
+🔐 Generating proof...
+Start:   Total proof generation
+··Start:   Step 0: Instance setup
+····End:     Step 0: Instance setup ................................................2.585µs
+··Start:   Step 1: Commit to execution trace
+····End:     Step 1: Commit to execution trace .....................................2.318s
+··Start:   Step 2: Compute quotient polynomial
+Trace domain: 65536, Quotient domain: 65536
+····End:     Step 2: Compute quotient polynomial ...................................18.049ms
+··Start:   Step 3: Commit to quotient polynomial
+····End:     Step 3: Commit to quotient polynomial .................................146.122ms
+··Start:   Step 4: Sample out-of-domain point
+····End:     Step 4: Sample out-of-domain point ....................................471ns
+··Start:   Step 5: Open polynomials
+····Start:   Produce FRI proof
+input poly len: 1
+······Start:   commit phase
+········End:     commit phase ......................................................207.490ms
+······Start:   proof of work
+········End:     proof of work .....................................................2.775µs
+······Start:   query phase
+········End:     query phase .......................................................341.380µs
+······End:     Produce FRI proof ...................................................207.864ms
+····End:     Step 5: Open polynomials ..............................................256.725ms
+··End:     Total proof generation ..................................................2.739s
+   • Proof generated in 2.75s
+
+✅ Verifying proof...
+   • Verification completed in 16ms
+   • ✅ Proof is valid!
+
+🎉 Successfully proved the increment constraint using Plonky3!
+   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions
+   ✅ P3 Poseidon2 proof generation successful!
+========================
+   Using Miden trace (65536×80) for proof generation...
+========================
+
+🔐 Miden with blake3.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................5.590µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 524288
+······End:     Step 1: Commit to execution trace ...................................3.095s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................107.614ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................580.757ms
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................160.086ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................47.314ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................25.753ms
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................7.823ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................4.080ms
+····End:     Total proof generation ................................................4.029s
+··End:     Miden STARK proof generation ............................................4.073s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 4.07363949s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................494.158µs
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 499.778µs
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🔐 Miden with rpo256.
+🔐 Generating native Miden STARK proof...
+Start:   Miden STARK proof generation
+··Start:   Total proof generation
+····Start:   Step 0: AIR and channel setup
+······End:     Step 0: AIR and channel setup .......................................43.091µs
+····Start:   Step 1: Commit to execution trace
+lde domain size: 524288
+······End:     Step 1: Commit to execution trace ...................................37.801s
+····Start:   Step 2: Evaluate constraints
+······End:     Step 2: Evaluate constraints ........................................104.621ms
+····Start:   Step 3: Commit to constraint evaluations
+······End:     Step 3: Commit to constraint evaluations ............................8.064s
+····Start:   Step 4: Build DEEP composition polynomial
+······End:     Step 4: Build DEEP composition polynomial ...........................154.984ms
+····Start:   Step 5: Evaluate DEEP composition polynomial
+······End:     Step 5: Evaluate DEEP composition polynomial ........................46.100ms
+····Start:   Step 6: Compute FRI layers
+······End:     Step 6: Compute FRI layers ..........................................1.688s
+····Start:   Step 7: Determine query positions
+······End:     Step 7: Determine query positions ...................................103.620ms
+····Start:   Step 8: Build proof object
+······End:     Step 8: Build proof object ..........................................6.204ms
+····End:     Total proof generation ................................................47.970s
+··End:     Miden STARK proof generation ............................................48.017s
+   ✅ Miden proof generated successfully!
+   📊 Proof generation time: 48.017797102s
+   🔢 Final result on stack: StackOutputs { elements: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+   🔍 Verifying Miden proof...
+Start:   Miden proof verification
+··End:     Miden proof verification ................................................14.523ms
+   ✅ Proof verification successful!
+   ⏱️  Verification time: 14.53208ms
+   🔒 Security level: 96 bits
+   🎉 Successfully generated and verified native Miden STARK proof!
+   ✅ Miden proof generation successful!
+
+🎉 All API demos completed!
+   Check the generated fib_*_trace_*.log files to see the traces.

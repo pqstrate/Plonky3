@@ -10,7 +10,9 @@ members = [
     "circle",
     "commit",
     "dft",
-    "examples",
+    "examples", 
+    "fib2", 
+    # "fib_example",
     "field",
     "field-testing",
     "fri",
@@ -32,11 +34,15 @@ members = [
     "rescue",
     "sha256",
     "symmetric",
+    "trace-convertor",
     "uni-stark",
     "util",
 ]
 
 [workspace.dependencies]
+
+ark-std = { version ="0.5.0", features = [ "print-trace" ] }
+
 bincode = { version = "2.0.0", default-features = false }
 blake3 = { version = "1.5", default-features = false }
 clap = { version = "4.5.23", features = ["derive"] }
@@ -100,6 +106,7 @@ p3-poseidon2-air = { path = "poseidon2-air", version = "0.3.0" }
 p3-rescue = { path = "rescue", version = "0.3.0" }
 p3-sha256 = { path = "sha256", version = "0.3.0" }
 p3-symmetric = { path = "symmetric", version = "0.3.0" }
+p3-trace-convertor = { path = "trace-convertor", version = "0.3.0" }
 p3-uni-stark = { path = "uni-stark", version = "0.3.0" }
 p3-util = { path = "util", version = "0.3.0" }
 
@@ -117,3 +124,14 @@ categories = ["cryptography::cryptocurrencies"]
 [profile.profiling]
 inherits = "release"
 debug = true
+
+
+[patch.crates-io]
+winter-air = { path = "../winterfell/air", default-features = false }
+winter-crypto = { path = "../winterfell/crypto" }
+winter-fri = { path = "../winterfell/fri" }
+winter-math = { path = "../winterfell/math", default-features = false }
+winter-prover = { path = "../winterfell/prover", default-features = false, features = ["std"] }
+winter-rand-utils = { path = "../winterfell/utils/rand" }
+winter-utils = { path = "../winterfell/utils/core", default-features = false }
+winter-verifier = { path = "../winterfell/verifier", default-features = false }
