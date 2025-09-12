@@ -1,4 +1,5 @@
-use alloc::{vec, vec::Vec};
+use alloc::vec;
+use alloc::vec::Vec;
 use core::arch::x86_64::*;
 use core::fmt::Debug;
 use core::iter::{Product, Sum};
@@ -97,12 +98,7 @@ impl Neg for PackedGoldilocksMontyAVX2 {
     type Output = Self;
     #[inline]
     fn neg(self) -> Self {
-        Self([
-            -self.0[0],
-            -self.0[1],
-            -self.0[2],
-            -self.0[3],
-        ])
+        Self([-self.0[0], -self.0[1], -self.0[2], -self.0[3]])
     }
 }
 
@@ -298,33 +294,37 @@ impl Algebra<Goldilocks> for PackedGoldilocksMontyAVX2 {}
 unsafe impl PackedValue for PackedGoldilocksMontyAVX2 {
     type Value = Goldilocks;
     const WIDTH: usize = WIDTH;
-    
+
     #[inline]
     fn from_slice(slice: &[Self::Value]) -> &Self {
         assert_eq!(slice.len(), Self::WIDTH);
         unsafe { &*(slice.as_ptr() as *const Self) }
     }
-    
+
     #[inline]
     fn from_slice_mut(slice: &mut [Self::Value]) -> &mut Self {
         assert_eq!(slice.len(), Self::WIDTH);
         unsafe { &mut *(slice.as_mut_ptr() as *mut Self) }
     }
-    
+
     #[inline]
     fn as_slice(&self) -> &[Self::Value] {
-        unsafe { core::slice::from_raw_parts(self as *const Self as *const Self::Value, Self::WIDTH) }
+        unsafe {
+            core::slice::from_raw_parts(self as *const Self as *const Self::Value, Self::WIDTH)
+        }
     }
-    
+
     #[inline]
     fn as_slice_mut(&mut self) -> &mut [Self::Value] {
-        unsafe { core::slice::from_raw_parts_mut(self as *mut Self as *mut Self::Value, Self::WIDTH) }
+        unsafe {
+            core::slice::from_raw_parts_mut(self as *mut Self as *mut Self::Value, Self::WIDTH)
+        }
     }
-    
+
     #[inline]
-    fn from_fn<F>(mut f: F) -> Self 
-    where 
-        F: FnMut(usize) -> Self::Value 
+    fn from_fn<F>(mut f: F) -> Self
+    where
+        F: FnMut(usize) -> Self::Value,
     {
         Self([f(0), f(1), f(2), f(3)])
     }
@@ -351,21 +351,21 @@ unsafe impl PackedFieldPow2 for PackedGoldilocksMontyAVX2 {
 
 #[cfg(test)]
 mod tests {
-    use p3_field_testing::test_packed_field;
     use p3_field::PrimeCharacteristicRing;
+    use p3_field_testing::test_packed_field;
 
     use super::{Goldilocks, PackedGoldilocksMontyAVX2, WIDTH};
 
     const SPECIAL_VALS: [Goldilocks; WIDTH] = [
         Goldilocks::new(0xFFFF_FFFF_0000_0000),
-        Goldilocks::new(0xFFFF_FFFF_FFFF_FFFF), 
+        Goldilocks::new(0xFFFF_FFFF_FFFF_FFFF),
         Goldilocks::new(0x0000_0000_0000_0001),
         Goldilocks::new(0xFFFF_FFFF_0000_0001),
     ];
 
     const ZEROS: PackedGoldilocksMontyAVX2 = PackedGoldilocksMontyAVX2([
         Goldilocks::ZERO,
-        Goldilocks::ZERO, 
+        Goldilocks::ZERO,
         Goldilocks::ZERO,
         Goldilocks::ZERO,
     ]);

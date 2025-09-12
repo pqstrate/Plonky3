@@ -38,10 +38,10 @@
 //! and the specific operations being performed.
 
 use core::any::type_name;
+use std::hint::black_box;
 
 use criterion::{BatchSize, Criterion, criterion_group, criterion_main};
-use p3_field::{Field, PrimeCharacteristicRing, PackedValue, PackedFieldPow2};
-use std::hint::black_box;
+use p3_field::{Field, PackedFieldPow2, PackedValue, PrimeCharacteristicRing};
 use p3_field_testing::bench_func::{
     benchmark_add_latency, benchmark_add_throughput, benchmark_inv, benchmark_iter_sum,
     benchmark_sub_latency, benchmark_sub_throughput,
@@ -50,18 +50,16 @@ use p3_field_testing::{
     benchmark_dot_array, benchmark_mul_latency, benchmark_mul_throughput, benchmark_sum_array,
 };
 use p3_goldilocks_monty::Goldilocks;
-use rand::rngs::SmallRng;
-use rand::{Rng, SeedableRng};
-
 #[cfg(all(
     target_arch = "x86_64",
     target_feature = "avx2",
     not(target_feature = "avx512f")
 ))]
 use p3_goldilocks_monty::PackedGoldilocksMontyAVX2;
-
 #[cfg(all(target_arch = "x86_64", target_feature = "avx512f"))]
 use p3_goldilocks_monty::PackedGoldilocksMontyAVX512;
+use rand::rngs::SmallRng;
+use rand::{Rng, SeedableRng};
 
 type F = Goldilocks;
 
@@ -122,11 +120,11 @@ fn bench_packedfield(c: &mut Criterion) {
 fn bench_avx2_operations(c: &mut Criterion) {
     const SIZE: usize = 1024;
     let mut rng = SmallRng::seed_from_u64(42);
-    
+
     // Generate test vectors
     let scalar_a: Vec<Goldilocks> = (0..SIZE).map(|_| rng.random()).collect();
     let scalar_b: Vec<Goldilocks> = (0..SIZE).map(|_| rng.random()).collect();
-    
+
     // Convert to packed vectors (4 elements per AVX2 vector)
     let packed_a: Vec<PackedGoldilocksMontyAVX2> = scalar_a
         .chunks_exact(4)
@@ -200,7 +198,9 @@ fn bench_avx2_operations(c: &mut Criterion) {
                 sum += black_box(val);
             }
             // Sum the components of the packed result
-            sum.as_slice().iter().fold(Goldilocks::ZERO, |acc, &x| acc + x)
+            sum.as_slice()
+                .iter()
+                .fold(Goldilocks::ZERO, |acc, &x| acc + x)
         })
     });
 
@@ -223,7 +223,9 @@ fn bench_avx2_operations(c: &mut Criterion) {
                 sum += black_box(packed_a[i] * packed_b[i]);
             }
             // Sum the components of the packed result
-            sum.as_slice().iter().fold(Goldilocks::ZERO, |acc, &x| acc + x)
+            sum.as_slice()
+                .iter()
+                .fold(Goldilocks::ZERO, |acc, &x| acc + x)
         })
     });
 }
@@ -232,25 +234,27 @@ fn bench_avx2_operations(c: &mut Criterion) {
 fn bench_avx512_operations(c: &mut Criterion) {
     const SIZE: usize = 1024;
     let mut rng = SmallRng::seed_from_u64(42);
-    
+
     // Generate test vectors
     let scalar_a: Vec<Goldilocks> = (0..SIZE).map(|_| rng.random()).collect();
     let scalar_b: Vec<Goldilocks> = (0..SIZE).map(|_| rng.random()).collect();
-    
+
     // Convert to packed vectors (8 elements per AVX512 vector)
     let packed_a: Vec<PackedGoldilocksMontyAVX512> = scalar_a
         .chunks_exact(8)
-        .map(|chunk| PackedGoldilocksMontyAVX512([
-            chunk[0], chunk[1], chunk[2], chunk[3],
-            chunk[4], chunk[5], chunk[6], chunk[7]
-        ]))
+        .map(|chunk| {
+            PackedGoldilocksMontyAVX512([
+                chunk[0], chunk[1], chunk[2], chunk[3], chunk[4], chunk[5], chunk[6], chunk[7],
+            ])
+        })
         .collect();
     let packed_b: Vec<PackedGoldilocksMontyAVX512> = scalar_b
         .chunks_exact(8)
-        .map(|chunk| PackedGoldilocksMontyAVX512([
-            chunk[0], chunk[1], chunk[2], chunk[3],
-            chunk[4], chunk[5], chunk[6], chunk[7]
-        ]))
+        .map(|chunk| {
+            PackedGoldilocksMontyAVX512([
+                chunk[0], chunk[1], chunk[2], chunk[3], chunk[4], chunk[5], chunk[6], chunk[7],
+            ])
+        })
         .collect();
 
     // Benchmark scalar addition
@@ -316,7 +320,9 @@ fn bench_avx512_operations(c: &mut Criterion) {
                 sum += black_box(val);
             }
             // Sum the components of the packed result
-            sum.as_slice().iter().fold(Goldilocks::ZERO, |acc, &x| acc + x)
+            sum.as_slice()
+                .iter()
+                .fold(Goldilocks::ZERO, |acc, &x| acc + x)
         })
     });
 
@@ -339,7 +345,9 @@ fn bench_avx512_operations(c: &mut Criterion) {
                 sum += black_box(packed_a[i] * packed_b[i]);
             }
             // Sum the components of the packed result
-            sum.as_slice().iter().fold(Goldilocks::ZERO, |acc, &x| acc + x)
+            sum.as_slice()
+                .iter()
+                .fold(Goldilocks::ZERO, |acc, &x| acc + x)
         })
     });
 
@@ -347,7 +355,7 @@ fn bench_avx512_operations(c: &mut Criterion) {
     c.bench_function("avx512_interleave_test", |b| {
         let a = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(123));
         let b = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(456));
-        
+
         b.iter(|| {
             let (r1, r2) = black_box(a.interleave(b, 1));
             let (r3, r4) = black_box(a.interleave(b, 2));
@@ -385,20 +393,22 @@ fn bench_avx512_operations(c: &mut Criterion) {
     const LARGE_SIZE: usize = 8192;
     let large_a: Vec<Goldilocks> = (0..LARGE_SIZE).map(|_| rng.random()).collect();
     let large_b: Vec<Goldilocks> = (0..LARGE_SIZE).map(|_| rng.random()).collect();
-    
+
     let large_packed_a: Vec<PackedGoldilocksMontyAVX512> = large_a
         .chunks_exact(8)
-        .map(|chunk| PackedGoldilocksMontyAVX512([
-            chunk[0], chunk[1], chunk[2], chunk[3],
-            chunk[4], chunk[5], chunk[6], chunk[7]
-        ]))
+        .map(|chunk| {
+            PackedGoldilocksMontyAVX512([
+                chunk[0], chunk[1], chunk[2], chunk[3], chunk[4], chunk[5], chunk[6], chunk[7],
+            ])
+        })
         .collect();
     let large_packed_b: Vec<PackedGoldilocksMontyAVX512> = large_b
         .chunks_exact(8)
-        .map(|chunk| PackedGoldilocksMontyAVX512([
-            chunk[0], chunk[1], chunk[2], chunk[3],
-            chunk[4], chunk[5], chunk[6], chunk[7]
-        ]))
+        .map(|chunk| {
+            PackedGoldilocksMontyAVX512([
+                chunk[0], chunk[1], chunk[2], chunk[3], chunk[4], chunk[5], chunk[6], chunk[7],
+            ])
+        })
         .collect();
 
     c.bench_function("avx512_large_array_ops", |b| {
@@ -420,17 +430,17 @@ fn bench_avx512_operations(c: &mut Criterion) {
     not(target_feature = "avx512f")
 ))]
 criterion_group!(
-    goldilocks_monty_arithmetic, 
-    bench_field, 
-    bench_packedfield, 
+    goldilocks_monty_arithmetic,
+    bench_field,
+    bench_packedfield,
     bench_avx2_operations
 );
 
 #[cfg(all(target_arch = "x86_64", target_feature = "avx512f"))]
 criterion_group!(
-    goldilocks_monty_arithmetic, 
-    bench_field, 
-    bench_packedfield, 
+    goldilocks_monty_arithmetic,
+    bench_field,
+    bench_packedfield,
     bench_avx512_operations
 );
 

@@ -6,10 +6,11 @@ use core::iter::{Product, Sum};
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
 
 use num_bigint::BigUint;
+use p3_field::exponentiation::exp_10540996611094048183;
 use p3_field::integers::QuotientMap;
 use p3_field::{
-    Field, Packable, PrimeCharacteristicRing, PrimeField, PrimeField64, RawDataSerializable,
-    TwoAdicField,
+    Field, InjectiveMonomial, Packable, PermutationMonomial, PrimeCharacteristicRing, PrimeField,
+    PrimeField64, RawDataSerializable, TwoAdicField,
 };
 use p3_monty_64::{MontyField64, MontyParameters64};
 use rand::Rng;
@@ -72,6 +73,22 @@ impl Goldilocks {
     /// Create from Montgomery form
     pub const fn new_monty(value: u64) -> Self {
         Self(MontyField64::new_monty(value))
+    }
+
+    /// Create an array of Goldilocks field elements from u64 values
+    pub const fn new_array<const N: usize>(input: [u64; N]) -> [Self; N] {
+        // We can't use generic const fn yet, so we'll use unsafe to cast the array
+        // This is safe because Goldilocks is #[repr(transparent)] over MontyField64
+        unsafe {
+            let mut result = core::mem::MaybeUninit::<[Self; N]>::uninit();
+            let result_ptr = result.as_mut_ptr() as *mut Self;
+            let mut i = 0;
+            while i < N {
+                core::ptr::write(result_ptr.add(i), Self::new(input[i]));
+                i += 1;
+            }
+            result.assume_init()
+        }
     }
 
     /// Get the inner MontyField64
@@ -467,10 +484,22 @@ impl Product for Goldilocks {
     }
 }
 
+impl InjectiveMonomial<7> for Goldilocks {}
+
+impl PermutationMonomial<7> for Goldilocks {
+    /// In the field `Goldilocks`, `a^{1/7}` is equal to a^{10540996611094048183}.
+    ///
+    /// This follows from the calculation `7*10540996611094048183 = 4*(2^64 - 2**32) + 1 = 1 mod (p - 1)`.
+    fn injective_exp_root_n(&self) -> Self {
+        exp_10540996611094048183(*self)
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::*;
     use p3_field::Field;
+
+    use super::*;
 
     #[test]
     fn test_basic_arithmetic() {

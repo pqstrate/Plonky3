@@ -1,4 +1,5 @@
-use alloc::{vec, vec::Vec};
+use alloc::vec;
+use alloc::vec::Vec;
 use core::arch::x86_64::*;
 use core::fmt::Debug;
 use core::iter::{Product, Sum};
@@ -106,13 +107,7 @@ impl Neg for PackedGoldilocksMontyAVX512 {
     #[inline]
     fn neg(self) -> Self {
         Self([
-            -self.0[0],
-            -self.0[1],
-            -self.0[2],
-            -self.0[3],
-            -self.0[4],
-            -self.0[5],
-            -self.0[6],
+            -self.0[0], -self.0[1], -self.0[2], -self.0[3], -self.0[4], -self.0[5], -self.0[6],
             -self.0[7],
         ])
     }
@@ -326,33 +321,37 @@ impl Algebra<Goldilocks> for PackedGoldilocksMontyAVX512 {}
 unsafe impl PackedValue for PackedGoldilocksMontyAVX512 {
     type Value = Goldilocks;
     const WIDTH: usize = WIDTH;
-    
+
     #[inline]
     fn from_slice(slice: &[Self::Value]) -> &Self {
         assert_eq!(slice.len(), Self::WIDTH);
         unsafe { &*(slice.as_ptr() as *const Self) }
     }
-    
+
     #[inline]
     fn from_slice_mut(slice: &mut [Self::Value]) -> &mut Self {
         assert_eq!(slice.len(), Self::WIDTH);
         unsafe { &mut *(slice.as_mut_ptr() as *mut Self) }
     }
-    
+
     #[inline]
     fn as_slice(&self) -> &[Self::Value] {
-        unsafe { core::slice::from_raw_parts(self as *const Self as *const Self::Value, Self::WIDTH) }
+        unsafe {
+            core::slice::from_raw_parts(self as *const Self as *const Self::Value, Self::WIDTH)
+        }
     }
-    
+
     #[inline]
     fn as_slice_mut(&mut self) -> &mut [Self::Value] {
-        unsafe { core::slice::from_raw_parts_mut(self as *mut Self as *mut Self::Value, Self::WIDTH) }
+        unsafe {
+            core::slice::from_raw_parts_mut(self as *mut Self as *mut Self::Value, Self::WIDTH)
+        }
     }
-    
+
     #[inline]
-    fn from_fn<F>(mut f: F) -> Self 
-    where 
-        F: FnMut(usize) -> Self::Value 
+    fn from_fn<F>(mut f: F) -> Self
+    where
+        F: FnMut(usize) -> Self::Value,
     {
         Self([f(0), f(1), f(2), f(3), f(4), f(5), f(6), f(7)])
     }
@@ -380,14 +379,14 @@ unsafe impl PackedFieldPow2 for PackedGoldilocksMontyAVX512 {
 
 #[cfg(test)]
 mod tests {
+    use p3_field::{PackedFieldPow2, PrimeCharacteristicRing};
     use p3_field_testing::test_packed_field;
-    use p3_field::{PrimeCharacteristicRing, PackedFieldPow2};
 
     use super::{Goldilocks, PackedGoldilocksMontyAVX512, WIDTH};
 
     const SPECIAL_VALS: [Goldilocks; WIDTH] = [
         Goldilocks::new(0xFFFF_FFFF_0000_0000),
-        Goldilocks::new(0xFFFF_FFFF_FFFF_FFFF), 
+        Goldilocks::new(0xFFFF_FFFF_FFFF_FFFF),
         Goldilocks::new(0x0000_0000_0000_0001),
         Goldilocks::new(0xFFFF_FFFF_0000_0001),
         Goldilocks::new(0x1234_5678_9ABC_DEF0),
@@ -398,7 +397,7 @@ mod tests {
 
     const ZEROS: PackedGoldilocksMontyAVX512 = PackedGoldilocksMontyAVX512([
         Goldilocks::ZERO,
-        Goldilocks::ZERO, 
+        Goldilocks::ZERO,
         Goldilocks::ZERO,
         Goldilocks::ZERO,
         Goldilocks::ZERO,
@@ -422,18 +421,18 @@ mod tests {
     fn test_avx512_basic_operations() {
         let a = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(123));
         let b = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(456));
-        
+
         let sum = a + b;
         let product = a * b;
-        
+
         // Verify that the results are correct
         let expected_sum = PackedGoldilocksMontyAVX512::from(
-            Goldilocks::from_canonical_u64(123) + Goldilocks::from_canonical_u64(456)
+            Goldilocks::from_canonical_u64(123) + Goldilocks::from_canonical_u64(456),
         );
         let expected_product = PackedGoldilocksMontyAVX512::from(
-            Goldilocks::from_canonical_u64(123) * Goldilocks::from_canonical_u64(456)
+            Goldilocks::from_canonical_u64(123) * Goldilocks::from_canonical_u64(456),
         );
-        
+
         assert_eq!(sum, expected_sum);
         assert_eq!(product, expected_product);
     }
@@ -442,13 +441,13 @@ mod tests {
     fn test_avx512_interleave() {
         let a = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(123));
         let b = PackedGoldilocksMontyAVX512::from(Goldilocks::from_canonical_u64(456));
-        
+
         // Test interleaving at different block lengths
         let (int1_1, int1_2) = a.interleave(b, 1);
         let (int2_1, int2_2) = a.interleave(b, 2);
         let (int4_1, int4_2) = a.interleave(b, 4);
         let (int8_1, int8_2) = a.interleave(b, 8);
-        
+
         // For block_len=8 (full width), interleave should return the original vectors
         assert_eq!(int8_1, a);
         assert_eq!(int8_2, b);

@@ -1,5 +1,5 @@
 //! Goldilocks field implementation using Montgomery arithmetic with extension field support.
-//! 
+//!
 //! This crate provides a Montgomery form implementation of the Goldilocks prime field,
 //! with optional AVX2/AVX512 vectorization support for improved performance.
 //!
@@ -10,7 +10,7 @@
 //! - `PackedGoldilocksMontyAVX512`: processes 8 field elements simultaneously (AVX512)
 //!
 //! ### Building with SIMD
-//! 
+//!
 //! To enable AVX2 optimizations:
 //! ```bash
 //! RUSTFLAGS="-C target-feature=+avx2" cargo build --release
@@ -40,8 +40,15 @@ extern crate alloc;
 
 mod extension;
 mod goldilocks;
+mod mds;
+mod poseidon2;
+
+#[cfg(test)]
+mod tests;
 
 pub use goldilocks::*;
+pub use mds::*;
+pub use poseidon2::*;
 
 #[cfg(all(
     target_arch = "x86_64",
