@@ -62,7 +62,7 @@ impl MontyParameters64 for GoldilocksMontyParameters {
 /// This is a newtype wrapper to allow implementing traits
 #[derive(Clone, Copy, Default, Eq, Hash, PartialEq, PartialOrd, Ord)]
 #[repr(transparent)]
-pub struct Goldilocks(MontyField64<GoldilocksMontyParameters>);
+pub struct Goldilocks(pub MontyField64<GoldilocksMontyParameters>);
 
 impl Goldilocks {
     /// Create a new Goldilocks field element

@@ -30,7 +30,7 @@ impl Convolve<Goldilocks, i128, i64, i128> for SmallConvolveGoldilocksMonty {
     /// We convert from Montgomery form to standard form for arithmetic operations.
     #[inline(always)]
     fn read(input: Goldilocks) -> i128 {
-        input.as_canonical_u64() as i128
+        input.0.value as i128
     }
 
     /// Perform dot product with widened types to avoid overflow.

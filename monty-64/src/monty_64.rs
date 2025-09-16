@@ -28,7 +28,7 @@ use crate::utils::{MontyParameters64, add, from_monty, mul, sub, to_monty};
 #[must_use]
 pub struct MontyField64<MP: MontyParameters64> {
     /// The Montgomery form of the field element, saved as a positive integer less than P.
-    pub(crate) value: u64,
+    pub value: u64,
     _phantom: PhantomData<MP>,
 }
 
