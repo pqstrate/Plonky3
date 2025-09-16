@@ -33,3 +33,7 @@ harness = false
 [[bench]]
 name = "extension"
 harness = false
+
+[[bench]]
+name = "poseidon_comparison"
+harness = false

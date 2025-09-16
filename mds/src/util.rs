@@ -54,6 +54,26 @@ pub fn apply_circulant<R: PrimeCharacteristicRing, const N: usize>(
     output
 }
 
+/// Given the first row `circ_matrix` of an NxN circulant matrix, say
+/// C, return the product `C*input`.
+///
+/// NB: This function is a naive implementation of the n²
+/// evaluation. It is a placeholder until we have FFT implementations
+/// for all combinations of field and size.
+pub fn apply_circulant_with_field_elem<R: PrimeCharacteristicRing, const N: usize>(
+    circ_matrix: &[R; N],
+    input: [R; N],
+) -> [R; N] {
+    let mut mat = circ_matrix.clone();
+    let mut output = [R::ZERO; N];
+    for out_i in output.iter_mut().take(N - 1) {
+        *out_i = R::dot_product(&mat, &input);
+        mat.rotate_right(1);
+    }
+    output[N - 1] = R::dot_product(&mat, &input);
+    output
+}
+
 /// Given the first row of a circulant matrix, return the first column.
 ///
 /// For example if, `v = [0, 1, 2, 3, 4, 5]` then `output = [0, 5, 4, 3, 2, 1]`,
@@ -90,6 +110,27 @@ pub fn apply_circulant_fft<F: TwoAdicField, const N: usize, FFT: TwoAdicSubgroup
 ) -> [F; N] {
     let column = column.map(F::from_u64).to_vec();
     let matrix = fft.dft(column);
+    let input = fft.dft(input.to_vec());
+
+    // point-wise product
+    let product = matrix.iter().zip(input).map(|(&x, y)| x * y).collect();
+
+    let output = fft.idft(product);
+    output.try_into().unwrap()
+}
+
+/// Use the convolution theorem to calculate the product of the given
+/// circulant matrix and the given vector.
+///
+/// The circulant matrix must be specified by its first *column*, not its first row. If you have
+/// the row as an array, you can obtain the column with `first_row_to_first_col()`.
+#[inline]
+pub fn apply_circulant_fft_field<F: TwoAdicField, const N: usize, FFT: TwoAdicSubgroupDft<F>>(
+    fft: FFT,
+    column: [F; N],
+    input: &[F; N],
+) -> [F; N] {
+    let matrix = fft.dft(column.to_vec());
     let input = fft.dft(input.to_vec());
 
     // point-wise product

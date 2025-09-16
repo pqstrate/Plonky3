@@ -66,16 +66,19 @@ pub struct Goldilocks(MontyField64<GoldilocksMontyParameters>);
 
 impl Goldilocks {
     /// Create a new Goldilocks field element
+    #[inline]
     pub const fn new(value: u64) -> Self {
         Self(MontyField64::new(value))
     }
 
     /// Create from Montgomery form
+    #[inline]
     pub const fn new_monty(value: u64) -> Self {
         Self(MontyField64::new_monty(value))
     }
 
     /// Create an array of Goldilocks field elements from u64 values
+    #[inline]
     pub const fn new_array<const N: usize>(input: [u64; N]) -> [Self; N] {
         // We can't use generic const fn yet, so we'll use unsafe to cast the array
         // This is safe because Goldilocks is #[repr(transparent)] over MontyField64
@@ -92,6 +95,7 @@ impl Goldilocks {
     }
 
     /// Get the inner MontyField64
+    #[inline]
     pub const fn inner(&self) -> MontyField64<GoldilocksMontyParameters> {
         self.0
     }
