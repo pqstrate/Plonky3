@@ -5,10 +5,9 @@
 
 use miden_assembly::Assembler;
 use miden_processor::{AdviceInputs, DefaultHost, ExecutionOptions, StackInputs, execute};
-use winter_prover::Trace;
-
 use p3_matrix::Matrix;
 use p3_trace_convertor::convert_miden_execution;
+use winter_prover::Trace;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("🧪 Simple Miden→Plonky3 Constraint System Test");
@@ -33,9 +32,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     "#;
 
     println!("   📝 Program: Fibonacci computation (5 steps)");
-    
-    let program = Assembler::default()
-        .assemble_program(masm_code)?;
+
+    let program = Assembler::default().assemble_program(masm_code)?;
 
     let miden_trace = execute(
         &program,
@@ -46,39 +44,54 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     println!("   ✅ Execution complete");
-    println!("   📏 Trace: {}×{}", miden_trace.length(), miden_trace.main_trace_width());
+    println!(
+        "   📏 Trace: {}×{}",
+        miden_trace.length(),
+        miden_trace.main_trace_width()
+    );
 
     // === Step 2: Convert to Plonky3 ===
     println!("\n🔄 Step 2: Converting to Plonky3 format...");
 
-    let (plonky3_trace, miden_air) = convert_miden_execution::<p3_goldilocks::Goldilocks>(&miden_trace)?;
+    let (plonky3_trace, miden_air) =
+        convert_miden_execution::<p3_goldilocks::Goldilocks>(&miden_trace)?;
 
     println!("   ✅ Conversion successful");
-    println!("   📏 Plonky3 trace: {}×{}", plonky3_trace.height(), plonky3_trace.width());
-    
+    println!(
+        "   📏 Plonky3 trace: {}×{}",
+        plonky3_trace.height(),
+        plonky3_trace.width()
+    );
+
     use p3_air::BaseAir;
-    println!("   🏗️  AIR width: {}", BaseAir::<p3_goldilocks::Goldilocks>::width(&miden_air));
+    println!(
+        "   🏗️  AIR width: {}",
+        BaseAir::<p3_goldilocks::Goldilocks>::width(&miden_air)
+    );
 
     // === Step 3: Constraint System Validation ===
     println!("\n🔍 Step 3: Validating constraint system structure...");
-    
+
     // Test that our AIR has the expected structure
     let trace_width = plonky3_trace.width();
     let air_width = BaseAir::<p3_goldilocks::Goldilocks>::width(&miden_air);
-    
+
     if trace_width == air_width {
         println!("   ✅ Trace and AIR width match: {}", trace_width);
     } else {
-        println!("   ❌ Width mismatch: trace={}, AIR={}", trace_width, air_width);
+        println!(
+            "   ❌ Width mismatch: trace={}, AIR={}",
+            trace_width, air_width
+        );
         return Err("Width mismatch between trace and AIR".into());
     }
 
     // Test that we can access the AIR constraint evaluation (without actually proving)
     println!("   🧪 Testing AIR interface...");
-    
+
     // This demonstrates that our MidenProcessorAir properly implements the required traits
     // The actual constraint evaluation would happen inside Plonky3's prove() function
-    
+
     println!("   ✅ AIR interface validation passed");
 
     // === Summary ===
@@ -88,7 +101,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("✅ Trace conversion to Plonky3 format works");
     println!("✅ AIR constraint system properly structured");
     println!("✅ All interfaces compatible with Plonky3");
-    
+
     println!("\n🚀 Ready for full proof generation!");
     println!("   The constraint system is validated and ready to use with:");
     println!("   ```rust");
@@ -122,7 +135,7 @@ mod tests {
                     end
                 end
             "#,
-            // Fibonacci (3 steps) 
+            // Fibonacci (3 steps)
             r#"
                 begin
                     push.0 push.1
@@ -135,7 +148,7 @@ mod tests {
 
         for (i, program_code) in programs.iter().enumerate() {
             println!("Testing Fibonacci variant {}", i + 1);
-            
+
             let program = Assembler::default()
                 .assemble_program(*program_code)
                 .expect("Program should compile");
@@ -149,8 +162,9 @@ mod tests {
             )
             .expect("Program should execute");
 
-            let (_plonky3_trace, _air) = convert_miden_execution::<p3_goldilocks::Goldilocks>(&trace)
-                .expect("Conversion should succeed");
+            let (_plonky3_trace, _air) =
+                convert_miden_execution::<p3_goldilocks::Goldilocks>(&trace)
+                    .expect("Conversion should succeed");
 
             println!("   ✅ Program {} converted successfully", i + 1);
         }

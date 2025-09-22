@@ -13,7 +13,7 @@ use miden_processor::{AdviceInputs, DefaultHost, ExecutionOptions, StackInputs, 
 use p3_field::PrimeCharacteristicRing;
 use p3_goldilocks::Goldilocks;
 use p3_matrix::Matrix;
-use p3_trace_convertor::{TraceConverter, convert_miden_trace, convert_miden_execution};
+use p3_trace_convertor::{TraceConverter, convert_miden_execution, convert_miden_trace};
 use winter_prover::Trace;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -135,24 +135,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let complete_conversion_start = std::time::Instant::now();
 
     let (plonky3_trace_complete, miden_air) = convert_miden_execution::<Goldilocks>(&miden_trace)?;
-    
+
     let complete_conversion_time = complete_conversion_start.elapsed();
     println!(
         "   ✅ Complete conversion completed in {:.3}ms",
         complete_conversion_time.as_millis()
     );
-    
+
     // Verify both conversions are identical
     assert_eq!(plonky3_trace.height(), plonky3_trace_complete.height());
     assert_eq!(plonky3_trace.width(), plonky3_trace_complete.width());
     println!("   ✅ Trace conversion consistency verified");
-    
+
     // Show AIR properties
     use p3_air::BaseAir;
     println!("   📏 Miden AIR properties:");
-    println!("      Width: {} columns", BaseAir::<Goldilocks>::width(&miden_air));
-    println!("      Matches trace: {}", BaseAir::<Goldilocks>::width(&miden_air) == plonky3_trace.width());
-    
+    println!(
+        "      Width: {} columns",
+        BaseAir::<Goldilocks>::width(&miden_air)
+    );
+    println!(
+        "      Matches trace: {}",
+        BaseAir::<Goldilocks>::width(&miden_air) == plonky3_trace.width()
+    );
+
     // === Step 6: Integration Ready ===
     println!("\n🔐 Step 6: Ready for Plonky3 proving!");
     println!("   Both the trace and AIR are now ready:");

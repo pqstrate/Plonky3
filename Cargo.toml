@@ -42,7 +42,7 @@ members = [
 [workspace.dependencies]
 
 ark-std = { version ="0.5.0", features = [ "print-trace" ] }
-
+atty = "0.2"
 bincode = { version = "2.0.0", default-features = false }
 blake3 = { version = "1.5", default-features = false }
 clap = { version = "4.5.23", features = ["derive"] }
@@ -71,6 +71,7 @@ tracing = { version = "0.1.37", default-features = false, features = [
 tracing-forest = "0.2.0"
 tracing-subscriber = { version = "0.3.17", default-features = false, features = [
     "alloc",
+    "fmt",
 ] }
 transpose = "0.2.3"
 

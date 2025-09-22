@@ -10,20 +10,29 @@ keywords.workspace = true
 categories.workspace = true
 
 [dependencies]
-p3-air.workspace = true
-p3-challenger.workspace = true
-p3-commit.workspace = true
-p3-dft.workspace = true
-p3-field.workspace = true
-p3-fri.workspace = true
-p3-goldilocks.workspace = true
-p3-keccak.workspace = true
-p3-matrix.workspace = true
-p3-merkle-tree.workspace = true
-p3-symmetric.workspace = true
-p3-uni-stark.workspace = true
+p3-air = { path = "../air" }
+p3-goldilocks = { path = "../goldilocks" }
+p3-challenger = { path = "../challenger" }
+p3-commit = { path = "../commit" }
+p3-dft = { path = "../dft", features = ["parallel"] }
+p3-field = { path = "../field" }
+p3-fri = { path = "../fri" }
+p3-interpolation = { path = "../interpolation" }
+p3-keccak = { path = "../keccak" }
+p3-matrix = { path = "../matrix" }
+p3-merkle-tree = { path = "../merkle-tree" }
+p3-poseidon2 = { path = "../poseidon2" }
+p3-blake3 = { path = "../blake3" }
+p3-symmetric = { path = "../symmetric" }
+p3-uni-stark = { path = "../uni-stark", features = ["parallel"] }
+p3-util = { path = "../util", features = ["parallel"] }
+
+
+atty.workspace = true
 rand.workspace = true
+rayon.workspace = true
 tracing.workspace = true
+tracing-subscriber.workspace = true
 
 ark-std = { version = "0.5", features = ["print-trace"] }
 
@@ -37,7 +46,7 @@ miden-processor = { path = "../../miden-vm/processor", default-features = false 
 miden-prover = { path = "../../miden-vm/prover", default-features = false, features = ["std"] }
 miden-verifier = { path = "../../miden-vm/verifier", default-features = false }
 miden-vm = { path = "../../miden-vm/miden-vm", default-features = false }
-winter-prover = { version = "0.13", default-features = false }
+winter-prover = { version = "0.13", default-features = false, features = ["std", "concurrent"]  }
 
 # [patch.crates-io]
 # winter-air = { path = "../../winterfell/air", default-features = false }
