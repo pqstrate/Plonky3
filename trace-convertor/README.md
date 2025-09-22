@@ -9,6 +9,14 @@ This crate provides utilities to convert Miden VM's `ExecutionTrace` directly in
 ## Features
 
 - **Direct Conversion**: Convert Miden VM traces to Plonky3 format in memory
+- **Complete AIR Conversion**: Full constraint system translation from Winterfell to Plonky3
+  - System constraints (clock, frame pointer, context)
+  - Decoder constraints (instruction decoding, operation flags)
+  - Stack constraints (operation semantics, overflow handling)  
+  - Range check constraints (value bounds checking)
+  - Chiplet constraints (hasher, bitwise operations, memory)
+- **Auxiliary Column Support**: Handle multiset checks and lookup tables
+- **Complete Pipeline**: End-to-end conversion from Miden execution to Plonky3 proof generation
 - **Power-of-2 Padding**: Automatic padding to meet STARK requirements
 - **Multiple Padding Strategies**: Choose how to pad traces (repeat last, zero, increment)
 - **Field Agnostic**: Works with any Plonky3-compatible field
@@ -17,7 +25,7 @@ This crate provides utilities to convert Miden VM's `ExecutionTrace` directly in
 
 ## Usage
 
-### Basic Conversion
+### Basic Trace Conversion
 
 ```rust
 use p3_trace_convertor::TraceConverter;
@@ -31,6 +39,22 @@ let plonky3_trace = TraceConverter::convert::<Goldilocks>(&miden_trace)?;
 
 // Use with Plonky3 proving system
 let proof = prove(&config, &air, plonky3_trace, &public_values);
+```
+
+### Complete Execution Conversion (Recommended)
+
+```rust
+use p3_trace_convertor::convert_miden_execution;
+use p3_goldilocks::Goldilocks;
+
+// Execute your Miden program
+let miden_trace = execute_miden_program(program, inputs);
+
+// Convert both trace AND constraint system to Plonky3
+let (plonky3_trace, plonky3_air) = convert_miden_execution::<Goldilocks>(&miden_trace)?;
+
+// Generate proof directly - no need to define constraints manually!
+let proof = prove(&config, &plonky3_air, plonky3_trace, &public_values);
 ```
 
 ### Advanced Usage with Custom Padding

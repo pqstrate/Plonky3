@@ -15,6 +15,7 @@ p3-matrix.workspace = true
 p3-goldilocks.workspace = true
 p3-field.workspace = true
 p3-util.workspace = true
+p3-air.workspace = true
 
 # Miden VM dependencies
 miden-processor = { path = "../../miden-vm/processor", default-features = false }
@@ -28,6 +29,17 @@ p3-baby-bear.workspace = true
 # For examples - additional Miden dependencies needed for full program execution
 miden-core = { path = "../../miden-vm/core", default-features = false }
 miden-assembly = { path = "../../miden-vm/assembly", default-features = false }
+
+# For proof generation examples
+p3-uni-stark.workspace = true
+p3-fri.workspace = true  
+p3-commit.workspace = true
+p3-merkle-tree.workspace = true
+p3-poseidon2.workspace = true
+p3-symmetric.workspace = true
+p3-challenger.workspace = true
+p3-dft.workspace = true
+rand = "0.8"
 
 [features]
 default = []
