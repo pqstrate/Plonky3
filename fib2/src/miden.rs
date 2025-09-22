@@ -24,10 +24,9 @@ pub fn miden_generate_proof(
     println!("🔐 Generating native Miden STARK proof...");
 
     // Generate proof
-    let proving_options = ProvingOptions::with_96_bit_security(!using_blake);
+    let proving_options = ProvingOptions::with_128_bit_security(!using_blake);
     let mut host_for_proving = DefaultHost::default();
 
-    let proof_start = Instant::now();
     let proof_timer = start_timer!(|| "Miden STARK proof generation");
     let (stack_outputs, proof) = prove(
         program,
@@ -37,11 +36,6 @@ pub fn miden_generate_proof(
         proving_options,
     )?;
     end_timer!(proof_timer);
-    let proof_time = proof_start.elapsed();
-
-    println!("   ✅ Miden proof generated successfully!");
-    println!("   📊 Proof generation time: {:?}", proof_time);
-    println!("   🔢 Final result on stack: {:?}", stack_outputs);
 
     // Verify the proof
     println!("   🔍 Verifying Miden proof...");

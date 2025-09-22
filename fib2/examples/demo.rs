@@ -7,7 +7,7 @@
 
 use std::env;
 
-use fib2::{miden_generate_proof, p3_generate_proof, trace_gen};
+use fib2::{miden_generate_proof, p3_generate_proof_blake3, trace_gen};
 use p3_matrix::Matrix;
 use winter_prover::Trace;
 
@@ -30,14 +30,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_span_events(tracing_subscriber::fmt::format::FmtSpan::NEW)
         .with_ansi(atty::is(atty::Stream::Stdout))
         .with_max_level(tracing::Level::DEBUG)
-        .compact()
+        // .compact()
         .init();
 
     println!("🎯 Demo of New fib2 APIs");
     println!("========================\n");
 
     let base = 1;
-    for log_iter in 19..20 {
+    for log_iter in 6..7 {
+        // for log_iter in 16..17 {
         let iteration = base << log_iter;
         println!("\n🔐 Generating proof from Plonky3 trace...");
         let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iteration)?;
@@ -47,17 +48,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             p3_trace.width()
         );
 
-        println!("\n🔐 P3 with Keccak.");
-        match p3_generate_proof(p3_trace.clone(), true) {
-            Ok(()) => println!("   ✅ P3 Keccak proof generation successful!"),
-            Err(e) => println!("   ❌ P3 Keccak proof generation failed: {}", e),
+        tracing::info!("\n🔐 P3 with Blake3.");
+        match p3_generate_proof_blake3(p3_trace.clone()) {
+            Ok(()) => tracing::info!("   ✅ P3 Blake3 proof generation successful!"),
+            Err(e) => tracing::info!("   ❌ P3 Blake3 proof generation failed: {}", e),
         }
-
-        // println!("\n🔐 P3 with Poseidon2.");
-        // match p3_generate_proof(p3_trace, false) {
-        //     Ok(()) => println!("   ✅ P3 Poseidon2 proof generation successful!"),
-        //     Err(e) => println!("   ❌ P3 Poseidon2 proof generation failed: {}", e),
-        // }
 
         println!(
             "========================\n   Using Miden trace ({}×{}) for proof generation...\n========================",
@@ -70,15 +65,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Ok(()) => println!("   ✅ Miden proof generation successful!"),
             Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
         }
-
-        // println!("\n🔐 Miden with rpo256.");
-        // match miden_generate_proof(&program, stack_inputs, advice_inputs, false) {
-        //     Ok(()) => println!("   ✅ Miden proof generation successful!"),
-        //     Err(e) => println!("   ❌ Miden proof generation failed: {}", e),
-        // }
-
-        println!("\n🎉 All API demos completed!");
-        println!("   Check the generated fib_*_trace_*.log files to see the traces.");
     }
 
     Ok(())

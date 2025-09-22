@@ -1,214 +1,145 @@
-use p3_challenger::{DuplexChallenger, HashChallenger, SerializingChallenger64};
-use p3_commit::ExtensionMmcs;
-use p3_dft::Radix2DitParallel;
-use p3_field::PrimeField64;
-use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_params};
-use p3_goldilocks::{Goldilocks, Poseidon2Goldilocks};
+use p3_fri::FriParameters;
 use p3_keccak::KeccakF;
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
-use p3_merkle_tree::MerkleTreeMmcs;
-use p3_symmetric::{PaddingFreeSponge, TruncatedPermutation};
-use p3_uni_stark::{StarkConfig, prove, verify};
-use rand::SeedableRng;
-use rand::rngs::SmallRng;
+use p3_uni_stark::{StarkGenericConfig, prove, verify};
 
-use crate::{ByteHash, Challenge, FieldHash, IncrementAir, MyCompress, U64Hash, Val, ValMmcs};
+use crate::{
+    Blake3ByteHash, Blake3ChallengeMmcs, Blake3Challenger, Blake3Compress, Blake3Config,
+    Blake3FieldHash, Blake3Pcs, Blake3U64Hash, Blake3ValMmcs, ByteHash, ChallengeMmcs, Challenger,
+    Dft, FieldHash, IncrementAir, KeccakConfig, MyCompress, Pcs, U64Hash, Val, ValMmcs,
+};
 
-/// Generate a Plonky3 STARK proof using a simple increment constraint
-///
-/// This function ignores the input trace and generates a synthetic trace
-/// that satisfies the simple increment constraint: trace[i][0] = trace[i-1][0] + 1
-///
-/// # Arguments
-/// * `_p3_trace` - The Plonky3 trace matrix (ignored, used only for sizing)
-///
-/// # Returns
-/// * `Result<(), Box<dyn std::error::Error>>` - Success or error
-pub fn p3_generate_proof(
-    p3_trace: RowMajorMatrix<Goldilocks>,
-    use_keccak: bool,
+/// Create a Keccak-based configuration for Plonky3 STARK proofs
+pub fn create_keccak_config() -> KeccakConfig {
+    let byte_hash = ByteHash {};
+    let u64_hash = U64Hash::new(KeccakF {});
+    let field_hash = FieldHash::new(u64_hash);
+    let compress = MyCompress::new(u64_hash);
+
+    // === MERKLE TREE COMMITMENT SCHEME ===
+    let val_mmcs = ValMmcs::new(field_hash, compress);
+    let challenge_mmcs = ChallengeMmcs::new(val_mmcs.clone());
+
+    // === DISCRETE FOURIER TRANSFORM ===
+    let dft = Dft::default();
+
+    // === CHALLENGER (FIAT-SHAMIR) ===
+    let challenger = Challenger::from_hasher(vec![], byte_hash);
+
+    // === FRI POLYNOMIAL COMMITMENT SCHEME ===
+    let fri_params = FriParameters {
+        log_blowup: 1,
+        log_final_poly_len: 0,
+        num_queries: 100,
+        proof_of_work_bits: 1,
+        mmcs: challenge_mmcs,
+    };
+
+    let pcs = Pcs::new(dft, val_mmcs, fri_params);
+
+    // === STARK CONFIGURATION ===
+    KeccakConfig::new(pcs, challenger)
+}
+
+/// Create a Blake3-based configuration for Plonky3 STARK proofs
+pub fn create_blake3_config() -> Blake3Config {
+    let blake3_byte_hash = Blake3ByteHash {};
+    let blake3_u64_hash = Blake3U64Hash::new(KeccakF {});
+    let field_hash = Blake3FieldHash::new(blake3_u64_hash);
+    let compress = Blake3Compress::new(blake3_u64_hash);
+
+    // === MERKLE TREE COMMITMENT SCHEME ===
+    let val_mmcs = Blake3ValMmcs::new(field_hash, compress);
+    let challenge_mmcs = Blake3ChallengeMmcs::new(val_mmcs.clone());
+
+    // === DISCRETE FOURIER TRANSFORM ===
+    let dft = Dft::default();
+
+    // === CHALLENGER (FIAT-SHAMIR) ===
+    let challenger = Blake3Challenger::from_hasher(vec![], blake3_byte_hash);
+
+    // === FRI POLYNOMIAL COMMITMENT SCHEME ===
+    let fri_params = FriParameters {
+        log_blowup: 1,
+        log_final_poly_len: 0,
+        num_queries: 100,
+        proof_of_work_bits: 1,
+        mmcs: challenge_mmcs,
+    };
+
+    let pcs = Blake3Pcs::new(dft, val_mmcs, fri_params);
+
+    // === STARK CONFIGURATION ===
+    Blake3Config::new(pcs, challenger)
+}
+
+/// Generate a Plonky3 STARK proof using Keccak hash function
+pub fn p3_generate_proof_keccak(
+    p3_trace: RowMajorMatrix<Val>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let hash_name = if use_keccak { "Keccak" } else { "Poseidon2" };
-    println!(
-        "🔐 Generating Plonky3 STARK proof with simple increment constraint using {}...",
-        hash_name
+    let config = create_keccak_config();
+    p3_generate_proof_with_config(p3_trace, config, "Keccak")
+}
+
+/// Generate a Plonky3 STARK proof using Blake3 hash function
+pub fn p3_generate_proof_blake3(
+    p3_trace: RowMajorMatrix<Val>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let config = create_blake3_config();
+    p3_generate_proof_with_config(p3_trace, config, "Blake3")
+}
+
+/// Generic proof generation function that works with any StarkGenericConfig
+fn p3_generate_proof_with_config<C: StarkGenericConfig>(
+    p3_trace: RowMajorMatrix<p3_uni_stark::Val<C>>,
+    config: C,
+    hash_name: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    tracing::info!(
+        "   • P3 trace dimensions: {}×{}",
+        p3_trace.height(),
+        p3_trace.width()
     );
 
-    if use_keccak {
-        // Use Keccak hash functions (original implementation)
-        let byte_hash = ByteHash {};
-        let u64_hash = U64Hash::new(KeccakF {});
-        let field_hash = FieldHash::new(u64_hash);
-        let compress = MyCompress::new(u64_hash);
+    // === AIR INSTANTIATION ===
+    tracing::info!(
+        "\n🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1"
+    );
+    let air = IncrementAir;
 
-        // === MERKLE TREE COMMITMENT SCHEME ===
-        let val_mmcs = ValMmcs::new(field_hash, compress);
+    // === PROOF GENERATION ===
+    tracing::info!("\n🔐 Generating proof with {}...", hash_name);
+    let start_time = std::time::Instant::now();
 
-        // Extension field commitment scheme
-        type ChallengeMmcs = ExtensionMmcs<Val, Challenge, ValMmcs>;
-        let challenge_mmcs = ChallengeMmcs::new(val_mmcs.clone());
+    let proof = prove(&config, &air, p3_trace, &vec![]);
 
-        // === DISCRETE FOURIER TRANSFORM ===
-        type Dft = Radix2DitParallel<Val>;
-        let dft = Dft::default();
+    let proof_time = start_time.elapsed();
+    tracing::info!("   • Proof generated in {:.2}s", proof_time.as_secs_f64());
 
-        // === CHALLENGER (FIAT-SHAMIR) ===
-        type Challenger = SerializingChallenger64<Val, HashChallenger<u8, ByteHash, 32>>;
-        let challenger = Challenger::from_hasher(vec![], byte_hash);
+    // === PROOF VERIFICATION ===
+    tracing::info!("\n✅ Verifying proof...");
+    let start_time = std::time::Instant::now();
 
-        // === FRI POLYNOMIAL COMMITMENT SCHEME ===
-        let fri_params = {
-            let mut param = create_benchmark_fri_params(challenge_mmcs);
-            param.proof_of_work_bits = 1;
-            param
-        };
-
-        type Pcs = TwoAdicFriPcs<Val, Dft, ValMmcs, ChallengeMmcs>;
-        let pcs = Pcs::new(dft, val_mmcs, fri_params);
-
-        // === STARK CONFIGURATION ===
-        type MyConfig = StarkConfig<Pcs, Challenge, Challenger>;
-        let config = MyConfig::new(pcs, challenger);
-
-        // Common proof logic for Keccak
-        println!(
-            "   • P3 trace dimensions: {}×{}",
-            p3_trace.height(),
-            p3_trace.width()
-        );
-
-        // Display first few values to confirm correct increment pattern
-        println!("   • First few values in column 0 (should increment):");
-        for i in 0..std::cmp::min(8, p3_trace.height()) {
-            let row = p3_trace.row_slice(i).unwrap();
-            println!("     Row {}: {}", i, row[0].as_canonical_u64());
+    match verify(&config, &air, &proof, &vec![]) {
+        Ok(()) => {
+            let verify_time = start_time.elapsed();
+            tracing::info!(
+                "   • Verification completed in {:.2}ms",
+                verify_time.as_millis()
+            );
+            tracing::info!("   • ✅ Proof is valid!");
         }
-
-        // === AIR INSTANTIATION ===
-        println!(
-            "\n🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1"
-        );
-        let air = IncrementAir;
-
-        // === PROOF GENERATION ===
-        println!("\n🔐 Generating proof...");
-        let start_time = std::time::Instant::now();
-
-        let proof = prove(&config, &air, p3_trace, &vec![]);
-
-        let proof_time = start_time.elapsed();
-        println!("   • Proof generated in {:.2}s", proof_time.as_secs_f64());
-
-        // === PROOF VERIFICATION ===
-        println!("\n✅ Verifying proof...");
-        let start_time = std::time::Instant::now();
-
-        match verify(&config, &air, &proof, &vec![]) {
-            Ok(()) => {
-                let verify_time = start_time.elapsed();
-                println!(
-                    "   • Verification completed in {:.2}ms",
-                    verify_time.as_millis()
-                );
-                println!("   • ✅ Proof is valid!");
-            }
-            Err(e) => {
-                return Err(format!("Verification failed: {:?}", e).into());
-            }
+        Err(e) => {
+            return Err(format!("Verification failed: {:?}", e).into());
         }
-
-        println!("\n🎉 Successfully proved the increment constraint using Plonky3!");
-        println!("   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions");
-
-        Ok(())
-    } else {
-        // Use Poseidon2 hash functions
-        let mut rng = SmallRng::seed_from_u64(42); // Fixed seed for reproducibility
-
-        type Perm = Poseidon2Goldilocks<8>;
-        let perm = Perm::new_from_rng_128(&mut rng);
-
-        type MyHash = PaddingFreeSponge<Perm, 8, 4, 4>;
-        let hash = MyHash::new(perm.clone());
-
-        type MyCompress = TruncatedPermutation<Perm, 2, 4, 8>;
-        let compress = MyCompress::new(perm.clone());
-
-        type ValMmcs = MerkleTreeMmcs<Val, Val, MyHash, MyCompress, 4>;
-        let val_mmcs = ValMmcs::new(hash, compress);
-
-        type ChallengeMmcs = ExtensionMmcs<Val, Challenge, ValMmcs>;
-        let challenge_mmcs = ChallengeMmcs::new(val_mmcs.clone());
-
-        type Dft = Radix2DitParallel<Val>;
-        let dft = Dft::default();
-
-        type Challenger = DuplexChallenger<Val, Perm, 8, 4>;
-        let challenger = Challenger::new(perm.clone());
-
-        let fri_params = {
-            let mut param = create_benchmark_fri_params(challenge_mmcs);
-            param.proof_of_work_bits = 1;
-            param
-        };
-
-        type Pcs = TwoAdicFriPcs<Val, Dft, ValMmcs, ChallengeMmcs>;
-        let pcs = Pcs::new(dft, val_mmcs, fri_params);
-
-        type MyConfig = StarkConfig<Pcs, Challenge, Challenger>;
-        let config = MyConfig::new(pcs, challenger);
-
-        // Common proof logic for Poseidon2
-        println!(
-            "   • P3 trace dimensions: {}×{}",
-            p3_trace.height(),
-            p3_trace.width()
-        );
-
-        // Display first few values to confirm correct increment pattern
-        println!("   • First few values in column 0 (should increment):");
-        for i in 0..std::cmp::min(8, p3_trace.height()) {
-            let row = p3_trace.row_slice(i).unwrap();
-            println!("     Row {}: {}", i, row[0].as_canonical_u64());
-        }
-
-        // === AIR INSTANTIATION ===
-        println!(
-            "\n🏗️  Using synthetic increment AIR with constraint: trace[i][0] = trace[i-1][0] + 1"
-        );
-        let air = IncrementAir;
-
-        // === PROOF GENERATION ===
-        println!("\n🔐 Generating proof...");
-        let start_time = std::time::Instant::now();
-
-        let proof = prove(&config, &air, p3_trace, &vec![]);
-
-        let proof_time = start_time.elapsed();
-        println!("   • Proof generated in {:.2}s", proof_time.as_secs_f64());
-
-        // === PROOF VERIFICATION ===
-        println!("\n✅ Verifying proof...");
-        let start_time = std::time::Instant::now();
-
-        match verify(&config, &air, &proof, &vec![]) {
-            Ok(()) => {
-                let verify_time = start_time.elapsed();
-                println!(
-                    "   • Verification completed in {:.2}ms",
-                    verify_time.as_millis()
-                );
-                println!("   • ✅ Proof is valid!");
-            }
-            Err(e) => {
-                return Err(format!("Verification failed: {:?}", e).into());
-            }
-        }
-
-        println!("\n🎉 Successfully proved the increment constraint using Plonky3!");
-        println!("   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions");
-
-        Ok(())
     }
+
+    tracing::info!(
+        "\n🎉 Successfully proved the increment constraint using Plonky3 with {}!",
+        hash_name
+    );
+    tracing::info!("   • Constraint: trace[i][0] = trace[i-1][0] + 1 for all transitions");
+
+    Ok(())
 }

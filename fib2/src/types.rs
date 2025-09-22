@@ -1,3 +1,4 @@
+use p3_blake3::Blake3;
 use p3_challenger::{HashChallenger, SerializingChallenger64};
 use p3_commit::ExtensionMmcs;
 use p3_dft::Radix2DitParallel;
@@ -46,4 +47,21 @@ pub type ChallengeMmcs = ExtensionMmcs<Val, Challenge, ValMmcs>;
 pub type Dft = Radix2DitParallel<Val>;
 pub type Challenger = SerializingChallenger64<Val, HashChallenger<u8, ByteHash, 32>>;
 pub type Pcs = TwoAdicFriPcs<Val, Dft, ValMmcs, ChallengeMmcs>;
-pub type MyConfig = StarkConfig<Pcs, Challenge, Challenger>;
+pub type KeccakConfig = StarkConfig<Pcs, Challenge, Challenger>;
+
+// Blake3-specific type definitions - using Blake3 for byte hashing like Keccak256Hash
+pub type Blake3ByteHash = Blake3;
+pub type Blake3U64Hash = PaddingFreeSponge<KeccakF, 25, 17, 4>; // Use KeccakF for field elements
+pub type Blake3FieldHash = SerializingHasher<Blake3U64Hash>;
+pub type Blake3Compress = CompressionFunctionFromHasher<Blake3U64Hash, 2, 4>;
+pub type Blake3ValMmcs = MerkleTreeMmcs<
+    [Val; p3_keccak::VECTOR_LEN],
+    [u64; p3_keccak::VECTOR_LEN],
+    Blake3FieldHash,
+    Blake3Compress,
+    4,
+>;
+pub type Blake3ChallengeMmcs = ExtensionMmcs<Val, Challenge, Blake3ValMmcs>;
+pub type Blake3Challenger = SerializingChallenger64<Val, HashChallenger<u8, Blake3ByteHash, 32>>;
+pub type Blake3Pcs = TwoAdicFriPcs<Val, Dft, Blake3ValMmcs, Blake3ChallengeMmcs>;
+pub type Blake3Config = StarkConfig<Blake3Pcs, Challenge, Blake3Challenger>;
