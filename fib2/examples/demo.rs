@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_target(false)
         .with_thread_ids(false)
         .with_level(true)
-        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::NEW)
+        .with_span_events(tracing_subscriber::fmt::format::FmtSpan::NEW | tracing_subscriber::fmt::format::FmtSpan::CLOSE)
         .with_ansi(atty::is(atty::Stream::Stdout))
         .with_max_level(tracing::Level::DEBUG)
         // .compact()
@@ -37,8 +37,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("========================\n");
 
     let base = 1;
-    for log_iter in 6..7 {
-        // for log_iter in 16..17 {
+    // for log_iter in 6..7 {
+    for log_iter in 16..17 {
         let iteration = base << log_iter;
         println!("\n🔐 Generating proof from Plonky3 trace...");
         let (miden_trace, p3_trace, program, stack_inputs, advice_inputs) = trace_gen(iteration)?;
