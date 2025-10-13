@@ -381,4 +381,179 @@ mod tests {
 
         assert_eq!(result, F::ONE);
     }
+
+    #[test]
+    fn test_pair_col_get_full_with_postprocess() {
+        let pre = [F::from_u8(10), F::from_u8(20)];
+        let main = [F::from_u8(30), F::from_u8(40)];
+        let post = [F::from_u8(50), F::from_u8(60)];
+        let rand = [F::from_u8(70), F::from_u8(80)];
+
+        assert_eq!(
+            PairCol::Preprocessed(1).get_full(&pre, &main, &post, &rand),
+            F::from_u8(20)
+        );
+        assert_eq!(
+            PairCol::Main(0).get_full(&pre, &main, &post, &rand),
+            F::from_u8(30)
+        );
+        assert_eq!(
+            PairCol::Postprocess(1).get_full(&pre, &main, &post, &rand),
+            F::from_u8(60)
+        );
+        assert_eq!(
+            PairCol::Randomness(0).get_full(&pre, &main, &post, &rand),
+            F::from_u8(70)
+        );
+    }
+
+    #[test]
+    fn test_single_postprocess_column() {
+        let col = VirtualPairCol::<F>::single_postprocess(1);
+
+        let pre = [F::ZERO];
+        let main = [F::ZERO];
+        let post = [F::from_u8(15), F::from_u8(25)];
+        let rand = [F::ZERO];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(25));
+    }
+
+    #[test]
+    fn test_single_randomness_column() {
+        let col = VirtualPairCol::<F>::single_randomness(0);
+
+        let pre = [F::ZERO];
+        let main = [F::ZERO];
+        let post = [F::ZERO];
+        let rand = [F::from_u8(42)];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(42));
+    }
+
+    #[test]
+    fn test_sum_postprocess_columns() {
+        let col = VirtualPairCol::<F>::sum_postprocess(vec![0, 2]);
+
+        let pre = [];
+        let main = [];
+        let post = [F::from_u8(3), F::from_u8(99), F::from_u8(7)];
+        let rand = [];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(3) + F::from_u8(7));
+    }
+
+    #[test]
+    fn test_sum_randomness_columns() {
+        let col = VirtualPairCol::<F>::sum_randomness(vec![1, 2]);
+
+        let pre = [];
+        let main = [];
+        let post = [];
+        let rand = [F::from_u8(5), F::from_u8(10), F::from_u8(15)];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(10) + F::from_u8(15));
+    }
+
+    #[test]
+    fn test_diff_postprocess_columns() {
+        let col = VirtualPairCol::<F>::diff_postprocessed(2, 0);
+
+        let pre = [];
+        let main = [];
+        let post = [F::from_u8(8), F::ZERO, F::from_u8(20)];
+        let rand = [];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(20) - F::from_u8(8));
+    }
+
+    #[test]
+    fn test_diff_randomness_columns() {
+        let col = VirtualPairCol::<F>::diff_randomness(1, 0);
+
+        let pre = [];
+        let main = [];
+        let post = [];
+        let rand = [F::from_u8(5), F::from_u8(12)];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        assert_eq!(result, F::from_u8(12) - F::from_u8(5));
+    }
+
+    #[test]
+    fn test_mixed_columns_with_postprocess() {
+        // Test: 2 * main[0] + 3 * post[1] + 5 (constant)
+        let col = VirtualPairCol {
+            column_weights: vec![
+                (PairCol::Main(0), F::TWO),
+                (PairCol::Postprocess(1), F::from_u8(3)),
+            ],
+            constant: F::from_u8(5),
+        };
+
+        let pre = [];
+        let main = [F::from_u8(4)];
+        let post = [F::ZERO, F::from_u8(6)];
+        let rand = [];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        // result = 2*4 + 3*6 + 5 = 8 + 18 + 5 = 31
+        assert_eq!(result, F::from_u8(31));
+    }
+
+    #[test]
+    fn test_all_column_types_combined() {
+        // Test combining all column types: pre, main, post, rand
+        let col = VirtualPairCol {
+            column_weights: vec![
+                (PairCol::Preprocessed(0), F::ONE),
+                (PairCol::Main(0), F::TWO),
+                (PairCol::Postprocess(0), F::from_u8(3)),
+                (PairCol::Randomness(0), F::from_u8(4)),
+            ],
+            constant: F::from_u8(10),
+        };
+
+        let pre = [F::from_u8(1)];
+        let main = [F::from_u8(2)];
+        let post = [F::from_u8(3)];
+        let rand = [F::from_u8(4)];
+
+        let result = col.apply_full::<F, F>(&pre, &main, &post, &rand);
+
+        // result = 1*1 + 2*2 + 3*3 + 4*4 + 10 = 1 + 4 + 9 + 16 + 10 = 40
+        assert_eq!(result, F::from_u8(40));
+    }
+
+    #[test]
+    #[should_panic(
+        expected = "get function works for single phase trace. for auxiliary trace, use get_full"
+    )]
+    fn test_pair_col_get_panics_on_postprocess() {
+        let pre = [F::ZERO];
+        let main = [F::ZERO];
+        PairCol::Postprocess(0).get(&pre, &main);
+    }
+
+    #[test]
+    #[should_panic(
+        expected = "get function works for single phase trace. for auxiliary trace, use get_full"
+    )]
+    fn test_pair_col_get_panics_on_randomness() {
+        let pre = [F::ZERO];
+        let main = [F::ZERO];
+        PairCol::Randomness(0).get(&pre, &main);
+    }
 }
