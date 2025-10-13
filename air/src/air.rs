@@ -1,5 +1,6 @@
 use core::ops::{Add, Mul, Sub};
 
+use p3_challenger::FieldChallenger;
 use p3_field::{Algebra, ExtensionField, Field, PrimeCharacteristicRing};
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
@@ -13,6 +14,11 @@ pub trait BaseAir<F>: Sync {
     fn preprocessed_trace(&self) -> Option<RowMajorMatrix<F>> {
         None
     }
+
+    /// Return an optional post-processed trace matrix to be included in the prover's trace.
+    fn auxiliary_trace(&self) -> Option<RowMajorMatrix<F>> {
+        None
+    }
 }
 
 /// An extension of `BaseAir` that includes support for public values.
@@ -21,6 +27,20 @@ pub trait BaseAirWithPublicValues<F>: BaseAir<F> {
     fn num_public_values(&self) -> usize {
         0
     }
+}
+
+/// An extension of `BaseAir` that includes support for randomness and aux trace.
+pub trait BaseAirWithProvingTimeRandomness<F: Field>: BaseAir<F> {
+    /// Return the number of expected randomness
+    fn number_random_columns(&self) -> usize {
+        // Hardcoded to 2 for now.
+        // TODO: this should reflect the degree of extension field.
+        // But for now we hard code it 2.
+        2
+    }
+
+    /// Fill in the random column with the randomness extracted from the challenger
+    fn fill_rnd_coeff(&mut self, challenger: &mut impl FieldChallenger<F>);
 }
 
 /// An algebraic intermediate representation (AIR) definition.
@@ -77,6 +97,9 @@ pub trait AirBuilder: Sized {
 
     /// Return the matrix representing the main (primary) trace registers.
     fn main(&self) -> Self::M;
+
+    /// Return the aux trace and randomness registers.
+    fn aux_trace_and_randomness(&self) -> (Self::M, Self::M);
 
     /// Expression evaluating to 1 on the first row, 0 elsewhere.
     fn is_first_row(&self) -> Self::Expr;
@@ -263,6 +286,10 @@ impl<AB: AirBuilder> AirBuilder for FilteredAirBuilder<'_, AB> {
 
     fn main(&self) -> Self::M {
         self.inner.main()
+    }
+
+    fn aux_trace_and_randomness(&self) -> (Self::M, Self::M) {
+        self.inner.aux_trace_and_randomness()
     }
 
     fn is_first_row(&self) -> Self::Expr {

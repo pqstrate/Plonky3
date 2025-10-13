@@ -16,6 +16,8 @@ pub struct VirtualPairCol<F: Field> {
 pub enum PairCol {
     Preprocessed(usize),
     Main(usize),
+    Postprocess(usize),
+    Randomness(usize),
 }
 
 impl PairCol {
@@ -23,11 +25,32 @@ impl PairCol {
         match self {
             Self::Preprocessed(i) => preprocessed[*i],
             Self::Main(i) => main[*i],
+            _ => panic!(
+                "get function works for single phase trace. for auxiliary trace, use get_full"
+            ),
+        }
+    }
+
+    pub const fn get_full<T: Copy>(
+        &self,
+        preprocessed: &[T],
+        main: &[T],
+        post_process: &[T],
+        randomness: &[T],
+    ) -> T {
+        match self {
+            Self::Preprocessed(i) => preprocessed[*i],
+            Self::Main(i) => main[*i],
+            Self::Postprocess(i) => post_process[*i],
+            Self::Randomness(i) => randomness[*i],
         }
     }
 }
 
 impl<F: Field> VirtualPairCol<F> {
+    // ====================
+    // new
+    // ====================
     pub const fn new(column_weights: Vec<(PairCol, F)>, constant: F) -> Self {
         Self {
             column_weights,
@@ -55,6 +78,26 @@ impl<F: Field> VirtualPairCol<F> {
         )
     }
 
+    pub fn new_postprocess(column_weights: Vec<(usize, F)>, constant: F) -> Self {
+        Self::new(
+            column_weights
+                .into_iter()
+                .map(|(i, w)| (PairCol::Postprocess(i), w))
+                .collect(),
+            constant,
+        )
+    }
+
+    pub fn new_randomness(column_weights: Vec<(usize, F)>, constant: F) -> Self {
+        Self::new(
+            column_weights
+                .into_iter()
+                .map(|(i, w)| (PairCol::Randomness(i), w))
+                .collect(),
+            constant,
+        )
+    }
+
     pub const ONE: Self = Self::constant(F::ONE);
 
     #[must_use]
@@ -64,6 +107,10 @@ impl<F: Field> VirtualPairCol<F> {
             constant: x,
         }
     }
+
+    // ====================
+    // single
+    // ====================
 
     #[must_use]
     pub fn single(column: PairCol) -> Self {
@@ -84,16 +131,46 @@ impl<F: Field> VirtualPairCol<F> {
     }
 
     #[must_use]
-    pub fn sum_main(columns: Vec<usize>) -> Self {
-        let column_weights = columns.into_iter().map(|col| (col, F::ONE)).collect();
-        Self::new_main(column_weights, F::ZERO)
+    pub fn single_postprocess(column: usize) -> Self {
+        Self::single(PairCol::Postprocess(column))
     }
+
+    #[must_use]
+    pub fn single_randomness(column: usize) -> Self {
+        Self::single(PairCol::Randomness(column))
+    }
+
+    // ====================
+    // sum
+    // ====================
 
     #[must_use]
     pub fn sum_preprocessed(columns: Vec<usize>) -> Self {
         let column_weights = columns.into_iter().map(|col| (col, F::ONE)).collect();
         Self::new_preprocessed(column_weights, F::ZERO)
     }
+
+    #[must_use]
+    pub fn sum_main(columns: Vec<usize>) -> Self {
+        let column_weights = columns.into_iter().map(|col| (col, F::ONE)).collect();
+        Self::new_main(column_weights, F::ZERO)
+    }
+
+    #[must_use]
+    pub fn sum_postprocess(columns: Vec<usize>) -> Self {
+        let column_weights = columns.into_iter().map(|col| (col, F::ONE)).collect();
+        Self::new_postprocess(column_weights, F::ZERO)
+    }
+
+    #[must_use]
+    pub fn sum_randomness(columns: Vec<usize>) -> Self {
+        let column_weights = columns.into_iter().map(|col| (col, F::ONE)).collect();
+        Self::new_randomness(column_weights, F::ZERO)
+    }
+
+    // ====================
+    // diff
+    // ====================
 
     /// `a - b`, where `a` and `b` are columns in the preprocessed trace.
     #[must_use]
@@ -107,6 +184,16 @@ impl<F: Field> VirtualPairCol<F> {
         Self::new_main(vec![(a_col, F::ONE), (b_col, F::NEG_ONE)], F::ZERO)
     }
 
+    #[must_use]
+    pub fn diff_postprocessed(a_col: usize, b_col: usize) -> Self {
+        Self::new_postprocess(vec![(a_col, F::ONE), (b_col, F::NEG_ONE)], F::ZERO)
+    }
+
+    #[must_use]
+    pub fn diff_randomness(a_col: usize, b_col: usize) -> Self {
+        Self::new_randomness(vec![(a_col, F::ONE), (b_col, F::NEG_ONE)], F::ZERO)
+    }
+
     pub fn apply<Expr, Var>(&self, preprocessed: &[Var], main: &[Var]) -> Expr
     where
         F: Into<Expr>,
@@ -117,6 +204,28 @@ impl<F: Field> VirtualPairCol<F> {
             .iter()
             .fold(self.constant.into(), |acc, &(col, w)| {
                 acc + col.get(preprocessed, main).into() * w
+            })
+    }
+
+    pub fn apply_full<Expr, Var>(
+        &self,
+        preprocessed: &[Var],
+        main: &[Var],
+        postprocessed: &[Var],
+        randomness: &[Var],
+    ) -> Expr
+    where
+        F: Into<Expr>,
+        Expr: PrimeCharacteristicRing + Mul<F, Output = Expr>,
+        Var: Into<Expr> + Copy,
+    {
+        self.column_weights
+            .iter()
+            .fold(self.constant.into(), |acc, &(col, w)| {
+                acc + col
+                    .get_full(preprocessed, main, postprocessed, randomness)
+                    .into()
+                    * w
             })
     }
 }
