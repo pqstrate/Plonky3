@@ -169,6 +169,7 @@ mod tests {
 
     use p3_air::BaseAir;
     use p3_baby_bear::BabyBear;
+    use p3_matrix::Matrix;
 
     use super::*;
 
@@ -336,6 +337,85 @@ mod tests {
                 |x| matches!(x, SymbolicExpression::Constant(val) if *val == BabyBear::new(5))
             ),
             "Constraint should match the asserted one"
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "auxiliary trace not supported")]
+    fn test_aux_trace_panics_when_not_set() {
+        let builder = SymbolicAirBuilder::<BabyBear>::new(2, 4, 3);
+        // This should panic because aux_trace is None
+        let _ = builder.aux_trace();
+    }
+
+    #[test]
+    fn test_aux_trace_returns_correctly_when_set() {
+        let mut builder = SymbolicAirBuilder::<BabyBear>::new(2, 4, 3);
+
+        // Set up aux trace with 2 columns
+        let aux_width = 2;
+        let aux_values: Vec<_> = [0, 1]
+            .into_iter()
+            .flat_map(|offset| {
+                (0..aux_width)
+                    .map(move |index| SymbolicVariable::new(Entry::Main { offset }, index))
+            })
+            .collect();
+
+        builder.aux_trace = Some(RowMajorMatrix::new(aux_values.clone(), aux_width));
+
+        // Now aux_trace should return successfully
+        let aux = builder.aux_trace();
+
+        assert_eq!(aux.width, aux_width, "Aux trace width should match");
+        assert_eq!(aux.height(), 2, "Aux trace should have 2 rows");
+        assert_eq!(aux.values.len(), 4, "Aux trace should have 4 total values");
+    }
+
+    #[test]
+    fn test_aux_trace_integration() {
+        #[derive(Debug)]
+        struct AuxAir {
+            width: usize,
+        }
+
+        impl BaseAir<BabyBear> for AuxAir {
+            fn width(&self) -> usize {
+                self.width
+            }
+        }
+
+        impl Air<SymbolicAirBuilder<BabyBear>> for AuxAir {
+            fn eval(&self, builder: &mut SymbolicAirBuilder<BabyBear>) {
+                // Access aux trace and create a constraint from it
+                let aux = builder.aux_trace();
+                let aux_var = aux.row_slice(0).unwrap()[0];
+                builder.assert_zero(aux_var);
+            }
+        }
+
+        let air = AuxAir { width: 2 };
+        let mut builder = SymbolicAirBuilder::<BabyBear>::new(0, 2, 0);
+
+        // Set up aux trace
+        let aux_width = 3;
+        let aux_values: Vec<_> = [0, 1]
+            .into_iter()
+            .flat_map(|offset| {
+                (0..aux_width)
+                    .map(move |index| SymbolicVariable::new(Entry::Main { offset }, index))
+            })
+            .collect();
+        builder.aux_trace = Some(RowMajorMatrix::new(aux_values, aux_width));
+
+        // Evaluate the air with aux trace
+        air.eval(&mut builder);
+
+        let constraints = builder.constraints();
+        assert_eq!(
+            constraints.len(),
+            1,
+            "Should have one constraint from aux trace"
         );
     }
 }

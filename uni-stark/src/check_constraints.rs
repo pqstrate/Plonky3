@@ -239,6 +239,20 @@ mod tests {
                 builder.when_transition().assert_eq(b, a + F::ONE);
             }
 
+            match builder.aux_trace {
+                Some(p) => {
+                    let aux_trace = builder.aux_trace();
+                    for col in 0..W {
+                        let a = aux_trace.top.get(0, col).unwrap();
+                        let b = aux_trace.bottom.get(0, col).unwrap();
+
+                        // New logic: enforce row[i+1] = row[i] + 1, only on transitions
+                        builder.when_transition().assert_eq(b, a + F::ONE);
+                    }
+                }
+                None => (),
+            };
+
             // Add public value equality on last row for extra coverage
             let public_values = builder.public_values;
             let mut when_last = builder.when(builder.is_last_row);
@@ -263,8 +277,11 @@ mod tests {
             BabyBear::new(4),
             BabyBear::new(4), // Row 3 (last)
         ];
-        let main = RowMajorMatrix::new(values, 2);
+        let main = RowMajorMatrix::new(values.clone(), 2);
+        let aux = RowMajorMatrix::new(values, 2);
+
         check_constraints(&air, &main, &vec![BabyBear::new(4); 2]);
+        check_constraints_with_aux_inputs(&air, &main, &vec![BabyBear::new(4); 2], &aux, &vec![]);
     }
 
     #[test]
@@ -284,6 +301,37 @@ mod tests {
         ];
         let main = RowMajorMatrix::new(values, 2);
         check_constraints(&air, &main, &vec![BabyBear::new(6); 2]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_aux_trace_incorrect_increment_logic() {
+        // Row 2 does not equal row 1 + 1 → should fail on transition from row 1 to 2.
+        let air = RowLogicAir::<2>;
+        let values = vec![
+            BabyBear::ONE,
+            BabyBear::ONE, // Row 0
+            BabyBear::new(2),
+            BabyBear::new(2), // Row 1
+            BabyBear::new(3),
+            BabyBear::new(3), // Row 2 (wrong)
+            BabyBear::new(4),
+            BabyBear::new(4), // Row 3
+        ];
+        let main = RowMajorMatrix::new(values, 2);
+
+        let values = vec![
+            BabyBear::ONE,
+            BabyBear::ONE, // Row 0
+            BabyBear::new(2),
+            BabyBear::new(2), // Row 1
+            BabyBear::new(5),
+            BabyBear::new(5), // Row 2 (wrong)
+            BabyBear::new(6),
+            BabyBear::new(6), // Row 3
+        ];
+        let aux_trace = RowMajorMatrix::new(values, 2);
+        check_constraints_with_aux_inputs(&air, &main, &vec![BabyBear::new(6); 2], &aux_trace, &vec![]);
     }
 
     #[test]
@@ -316,7 +364,15 @@ mod tests {
             BabyBear::new(99),
             BabyBear::new(77), // Row 0
         ];
-        let main = RowMajorMatrix::new(values, 2);
+        let main = RowMajorMatrix::new(values.clone(), 2);
+        let aux = RowMajorMatrix::new(values, 2);
         check_constraints(&air, &main, &vec![BabyBear::new(99), BabyBear::new(77)]);
+        check_constraints_with_aux_inputs(
+            &air,
+            &main,
+            &vec![BabyBear::new(99), BabyBear::new(77)],
+            &aux,
+            &vec![],
+        );
     }
 }
