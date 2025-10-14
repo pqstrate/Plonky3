@@ -544,7 +544,7 @@ mod tests {
     fn test_pair_col_get_panics_on_postprocess() {
         let pre = [F::ZERO];
         let main = [F::ZERO];
-        PairCol::Postprocess(0).get(&pre, &main);
+        let _ = PairCol::Postprocess(0).get(&pre, &main);
     }
 
     #[test]
@@ -554,6 +554,6 @@ mod tests {
     fn test_pair_col_get_panics_on_randomness() {
         let pre = [F::ZERO];
         let main = [F::ZERO];
-        PairCol::Randomness(0).get(&pre, &main);
+        let _ = PairCol::Randomness(0).get(&pre, &main);
     }
 }

@@ -3,7 +3,7 @@ use alloc::vec::Vec;
 
 use itertools::Itertools;
 use p3_air::Air;
-use p3_challenger::{CanObserve, FieldChallenger};
+use p3_challenger::{CanObserve, CanSample, FieldChallenger};
 use p3_commit::{Pcs, PolynomialSpace};
 use p3_field::{BasedVectorSpace, PackedValue, PrimeCharacteristicRing};
 use p3_matrix::Matrix;
@@ -27,6 +27,55 @@ pub fn prove<
     config: &SC,
     air: &A,
     trace: RowMajorMatrix<Val<SC>>,
+    public_values: &Vec<Val<SC>>,
+) -> Proof<SC>
+where
+    SC: StarkGenericConfig,
+    A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
+{
+    prove_internal(config, air, trace, None, None, public_values)
+}
+
+#[instrument(skip_all)]
+#[allow(clippy::multiple_bound_locations)] // cfg not supported in where clauses?
+pub fn prove_two_phases<
+    SC,
+    #[cfg(debug_assertions)] A: for<'a> Air<crate::check_constraints::DebugConstraintBuilder<'a, Val<SC>>>,
+    #[cfg(not(debug_assertions))] A,
+>(
+    config: &SC,
+    air: &A,
+    trace: RowMajorMatrix<Val<SC>>,
+    aux_trace: RowMajorMatrix<Val<SC>>,
+    randomness_len: usize,
+    public_values: &Vec<Val<SC>>,
+) -> Proof<SC>
+where
+    SC: StarkGenericConfig,
+    A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
+{
+    prove_internal(
+        config,
+        air,
+        trace,
+        Some(aux_trace),
+        Some(randomness_len),
+        public_values,
+    )
+}
+
+#[instrument(skip_all)]
+#[allow(clippy::multiple_bound_locations)] // cfg not supported in where clauses?
+fn prove_internal<
+    SC,
+    #[cfg(debug_assertions)] A: for<'a> Air<crate::check_constraints::DebugConstraintBuilder<'a, Val<SC>>>,
+    #[cfg(not(debug_assertions))] A,
+>(
+    config: &SC,
+    air: &A,
+    trace: RowMajorMatrix<Val<SC>>,
+    aux_trace: Option<RowMajorMatrix<Val<SC>>>,
+    randomness_len: Option<usize>,
     public_values: &Vec<Val<SC>>,
 ) -> Proof<SC>
 where
@@ -120,6 +169,31 @@ where
 
     // Observe the public input values.
     challenger.observe_slice(public_values);
+
+    // ==== begin of aux trace process ===
+    //
+    //
+    if aux_trace.is_some() {
+        match randomness_len {
+            Some(randomness_len) => {
+                // step 1. extract the randomness needed for processing the auxiliary trace
+                let randomness: Vec<SC::Challenge> = challenger.sample_vec(randomness_len);
+                // step 2. commit to the aux trace and randomness
+                let (aux_trace_commit, trace_data) = info_span!("commit to trace data")
+                    .in_scope(|| pcs.commit([(ext_trace_domain, aux_trace.unwrap())]));
+                // step 3. push the commitment and randomness to the transcript
+                challenger.observe(aux_trace_commit.clone());
+                // Not sure if we need to observe the randomness here. Usually the entropy should already be implied.
+                // challenger.observe(Val::<SC>::from_u8(randomness_len as u8));
+                // challenger.observe(randomness);
+            }
+            None => {
+                panic!("aux trace is supplied but randomness length is missing")
+            }
+        }
+    }
+
+    // ==== end of aux trace process ===
 
     // Get the first Fiat Shamir challenge which will be used to combine all constraint polynomials
     // into a single polynomial.
@@ -346,7 +420,9 @@ where
             let accumulator = PackedChallenge::<SC>::ZERO;
             let mut folder = ProverConstraintFolder {
                 main: main.as_view(),
+                aux_trace: None,
                 public_values,
+                random_values: None,
                 is_first_row,
                 is_last_row,
                 is_transition,

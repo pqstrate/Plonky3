@@ -32,6 +32,7 @@ where
         let local = unsafe { main.row_slice_unchecked(row_index) };
         // row_index_next < height so we can used unchecked indexing.
         let next = unsafe { main.row_slice_unchecked(row_index_next) };
+
         let main = VerticalPair::new(
             RowMajorMatrixView::new_row(&*local),
             RowMajorMatrixView::new_row(&*next),
@@ -40,7 +41,66 @@ where
         let mut builder = DebugConstraintBuilder {
             row_index,
             main,
+            aux_trace: None,
             public_values,
+            randomness: None,
+            is_first_row: F::from_bool(row_index == 0),
+            is_last_row: F::from_bool(row_index == height - 1),
+            is_transition: F::from_bool(row_index != height - 1),
+        };
+
+        air.eval(&mut builder);
+    });
+}
+
+/// Runs constraint checks using a given AIR definition and trace matrix.
+///
+/// Iterates over every row in `main`, providing both the current and next row
+/// (with wraparound) to the AIR logic. Also injects public values into the builder
+/// for first/last row assertions.
+///
+/// # Arguments
+/// - `air`: The AIR logic to run
+/// - `main`: The trace matrix (rows of witness values)
+/// - `public_values`: Public values provided to the builder
+#[instrument(name = "check constraints", skip_all)]
+pub(crate) fn check_constraints_with_aux_inputs<F, A>(
+    air: &A,
+    main: &RowMajorMatrix<F>,
+    public_values: &Vec<F>,
+    aux_trace: &RowMajorMatrix<F>,
+    randomness: &Vec<F>,
+) where
+    F: Field,
+    A: for<'a> Air<DebugConstraintBuilder<'a, F>>,
+{
+    let height = main.height();
+
+    (0..height).for_each(|row_index| {
+        let row_index_next = (row_index + 1) % height;
+
+        // row_index < height so we can used unchecked indexing.
+        let local = unsafe { main.row_slice_unchecked(row_index) };
+        let local_aux = unsafe { aux_trace.row_slice_unchecked(row_index) };
+        // row_index_next < height so we can used unchecked indexing.
+        let next = unsafe { main.row_slice_unchecked(row_index_next) };
+        let next_aux = unsafe { aux_trace.row_slice_unchecked(row_index_next) };
+
+        let main = VerticalPair::new(
+            RowMajorMatrixView::new_row(&*local),
+            RowMajorMatrixView::new_row(&*next),
+        );
+        let aux_trace = VerticalPair::new(
+            RowMajorMatrixView::new_row(&*local_aux),
+            RowMajorMatrixView::new_row(&*next_aux),
+        );
+
+        let mut builder = DebugConstraintBuilder {
+            row_index,
+            main,
+            aux_trace: Some(aux_trace),
+            public_values,
+            randomness: Some(randomness),
             is_first_row: F::from_bool(row_index == 0),
             is_last_row: F::from_bool(row_index == height - 1),
             is_transition: F::from_bool(row_index != height - 1),
@@ -60,8 +120,12 @@ pub struct DebugConstraintBuilder<'a, F: Field> {
     row_index: usize,
     /// A view of the current and next row as a vertical pair.
     main: ViewPair<'a, F>,
+    /// A view of the current aux
+    aux_trace: Option<ViewPair<'a, F>>,
     /// The public values provided for constraint validation (e.g. inputs or outputs).
     public_values: &'a [F],
+    /// The randomness provided for constraint validation
+    randomness: Option<&'a [F]>,
     /// A flag indicating whether this is the first row.
     is_first_row: F,
     /// A flag indicating whether this is the last row.
@@ -81,6 +145,13 @@ where
 
     fn main(&self) -> Self::M {
         self.main
+    }
+
+    fn aux_trace(&self) -> Self::M {
+        match self.aux_trace {
+            Some(p) => p,
+            None => panic!("auxiliary trace is not supported"),
+        }
     }
 
     fn is_first_row(&self) -> Self::Expr {

@@ -16,8 +16,12 @@ use crate::{PackedChallenge, PackedVal, StarkGenericConfig, Val};
 pub struct ProverConstraintFolder<'a, SC: StarkGenericConfig> {
     /// The matrix containing rows on which the constraint polynomial is to be evaluated
     pub main: RowMajorMatrixView<'a, PackedVal<SC>>,
+    /// The matrix containing auxiliary rows on which the constraint polynomial is to be evaluated
+    pub aux_trace: Option<RowMajorMatrixView<'a, PackedVal<SC>>>,
     /// Public inputs to the AIR
     pub public_values: &'a Vec<Val<SC>>,
+    /// Randomness to the aux trace
+    pub random_values: Option<&'a Vec<Val<SC>>>,
     /// Evaluations of the Selector polynomial for the first row of the trace
     pub is_first_row: PackedVal<SC>,
     /// Evaluations of the Selector polynomial for the last row of the trace
@@ -43,8 +47,12 @@ pub struct ProverConstraintFolder<'a, SC: StarkGenericConfig> {
 pub struct VerifierConstraintFolder<'a, SC: StarkGenericConfig> {
     /// Pair of consecutive rows from the committed polynomial evaluations
     pub main: ViewPair<'a, SC::Challenge>,
+    /// Pair of consecutive auxiliary rows from the committed polynomial evaluations
+    pub aux_trace: Option<ViewPair<'a, SC::Challenge>>,
     /// Public values that are inputs to the computation
     pub public_values: &'a Vec<Val<SC>>,
+    /// randomness
+    pub randomness: Option<&'a Vec<Val<SC>>>,
     /// Evaluations of the Selector polynomial for the first row of the trace
     pub is_first_row: SC::Challenge,
     /// Evaluations of the Selector polynomial for the last row of the trace
@@ -66,6 +74,14 @@ impl<'a, SC: StarkGenericConfig> AirBuilder for ProverConstraintFolder<'a, SC> {
     #[inline]
     fn main(&self) -> Self::M {
         self.main
+    }
+
+    #[inline]
+    fn aux_trace(&self) -> Self::M {
+        match self.aux_trace {
+            Some(p) => p,
+            None => panic!("auxiliary trace not supported"),
+        }
     }
 
     #[inline]
@@ -127,6 +143,13 @@ impl<'a, SC: StarkGenericConfig> AirBuilder for VerifierConstraintFolder<'a, SC>
 
     fn main(&self) -> Self::M {
         self.main
+    }
+
+    fn aux_trace(&self) -> Self::M {
+        match self.aux_trace {
+            Some(p) => p,
+            None => panic!("auxiliary trace not supported"),
+        }
     }
 
     fn is_first_row(&self) -> Self::Expr {

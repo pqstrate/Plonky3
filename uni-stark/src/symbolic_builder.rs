@@ -70,7 +70,9 @@ where
 pub struct SymbolicAirBuilder<F: Field> {
     preprocessed: RowMajorMatrix<SymbolicVariable<F>>,
     main: RowMajorMatrix<SymbolicVariable<F>>,
+    aux_trace: Option<RowMajorMatrix<SymbolicVariable<F>>>,
     public_values: Vec<SymbolicVariable<F>>,
+    randomness: Option<Vec<SymbolicVariable<F>>>,
     constraints: Vec<SymbolicExpression<F>>,
 }
 
@@ -95,7 +97,9 @@ impl<F: Field> SymbolicAirBuilder<F> {
         Self {
             preprocessed: RowMajorMatrix::new(prep_values, preprocessed_width),
             main: RowMajorMatrix::new(main_values, width),
+            aux_trace: None,
             public_values,
+            randomness: None,
             constraints: vec![],
         }
     }
@@ -113,6 +117,13 @@ impl<F: Field> AirBuilder for SymbolicAirBuilder<F> {
 
     fn main(&self) -> Self::M {
         self.main.clone()
+    }
+
+    fn aux_trace(&self) -> Self::M {
+        match &self.aux_trace {
+            Some(p) => p.clone(),
+            None => panic!("auxiliary trace not supported"),
+        }
     }
 
     fn is_first_row(&self) -> Self::Expr {

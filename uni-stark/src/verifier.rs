@@ -196,6 +196,8 @@ where
     let mut folder = VerifierConstraintFolder {
         main,
         public_values,
+        aux_trace: None,  // TODO(ZZ): fixme
+        randomness: None, // TODO(ZZ): fixme
         is_first_row: sels.is_first_row,
         is_last_row: sels.is_last_row,
         is_transition: sels.is_transition,

@@ -99,9 +99,7 @@ pub trait AirBuilder: Sized {
     fn main(&self) -> Self::M;
 
     /// Return the aux trace and randomness registers.
-    fn aux_trace_and_randomness(&self) -> (Self::M, Self::M){
-        unimplemented!("two phase proving is not supported")
-    }
+    fn aux_trace(&self) -> Self::M;
 
     /// Expression evaluating to 1 on the first row, 0 elsewhere.
     fn is_first_row(&self) -> Self::Expr;
@@ -290,8 +288,8 @@ impl<AB: AirBuilder> AirBuilder for FilteredAirBuilder<'_, AB> {
         self.inner.main()
     }
 
-    fn aux_trace_and_randomness(&self) -> (Self::M, Self::M) {
-        self.inner.aux_trace_and_randomness()
+    fn aux_trace(&self) -> Self::M {
+        self.inner.aux_trace()
     }
 
     fn is_first_row(&self) -> Self::Expr {
