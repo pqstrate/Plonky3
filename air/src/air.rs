@@ -30,7 +30,7 @@ pub trait BaseAirWithPublicValues<F>: BaseAir<F> {
 }
 
 /// An extension of `BaseAir` that includes support for randomness and aux trace.
-pub trait BaseAirWithProvingTimeRandomness<F: Field>: BaseAir<F> {
+pub trait BaseAirWithAuxTrace<F: Field>: BaseAir<F> {
     /// Return the number of expected randomness
     fn number_random_columns(&self) -> usize {
         // Hardcoded to 2 for now.
@@ -39,8 +39,34 @@ pub trait BaseAirWithProvingTimeRandomness<F: Field>: BaseAir<F> {
         2
     }
 
-    /// Fill in the random column with the randomness extracted from the challenger
-    fn fill_rnd_coeff(&mut self, challenger: &mut impl FieldChallenger<F>);
+    // /// Fill in the random column with the randomness extracted from the challenger
+    // fn fill_rnd_coeff(&mut self, challenger: &mut impl FieldChallenger<F>);
+
+    /// The width of the auxiliary trace (number of columns)
+    fn aux_width(&self) -> usize;
+
+    /// Build the auxiliary trace given the main trace and randomness.
+    ///
+    /// # Arguments
+    /// * `main_trace` - The main execution trace
+    /// * `randomness` - Random challenge values from the verifier
+    ///
+    /// # Returns
+    /// The auxiliary trace matrix
+    fn build_aux_trace(
+        &self,
+        main_trace: &RowMajorMatrix<F>,
+        randomness: &[F],
+    ) -> RowMajorMatrix<F> {
+
+        unimplemented!("`Prover::build_aux_trace` needs to be implemented when the trace has an auxiliary segment.")
+    }
+
+    // /// Return the aux trace and randomness registers.
+    // fn aux_trace(&self) -> RowMajorMatrix<F>;
+
+    // /// Generate the aux trace given the main trace.
+    // fn build_aux_trace(main: &Self::M, randomness: &[Self::F]) -> Self::M;
 }
 
 /// An algebraic intermediate representation (AIR) definition.
@@ -97,9 +123,6 @@ pub trait AirBuilder: Sized {
 
     /// Return the matrix representing the main (primary) trace registers.
     fn main(&self) -> Self::M;
-
-    /// Return the aux trace and randomness registers.
-    fn aux_trace(&self) -> Self::M;
 
     /// Expression evaluating to 1 on the first row, 0 elsewhere.
     fn is_first_row(&self) -> Self::Expr;
@@ -288,10 +311,6 @@ impl<AB: AirBuilder> AirBuilder for FilteredAirBuilder<'_, AB> {
         self.inner.main()
     }
 
-    fn aux_trace(&self) -> Self::M {
-        self.inner.aux_trace()
-    }
-
     fn is_first_row(&self) -> Self::Expr {
         self.inner.is_first_row()
     }
@@ -333,5 +352,198 @@ impl<AB: PermutationAirBuilder> PermutationAirBuilder for FilteredAirBuilder<'_,
 
     fn permutation_randomness(&self) -> &[Self::RandomVar] {
         self.inner.permutation_randomness()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use alloc::vec;
+    use alloc::vec::Vec;
+    use p3_baby_bear::BabyBear;
+    use p3_field::Field;
+
+    type F = BabyBear;
+
+    // Mock implementation for testing
+    struct MockAir {
+        width: usize,
+        aux_width: usize,
+    }
+
+    impl BaseAir<F> for MockAir {
+        fn width(&self) -> usize {
+            self.width
+        }
+    }
+
+    impl BaseAirWithAuxTrace<F> for MockAir {
+        fn aux_width(&self) -> usize {
+            self.aux_width
+        }
+
+        fn build_aux_trace(
+            &self,
+            main_trace: &RowMajorMatrix<F>,
+            randomness: &[F],
+        ) -> RowMajorMatrix<F> {
+            let num_rows = main_trace.height();
+            let aux_width = self.aux_width();
+
+            if aux_width == 0 {
+                return RowMajorMatrix::new(vec![], 0);
+            }
+
+            let mut aux_columns = vec![vec![F::ZERO; num_rows]; aux_width];
+
+            // Simple test implementation: each aux column is a linear combination
+            // of the first two main columns using randomness
+            for row in 0..num_rows {
+                for col in 0..aux_width {
+                    let main_col_0 = main_trace.get(row, 0).unwrap();
+                    let main_col_1 = if main_trace.width() > 1 {
+                        main_trace.get(row, 1).unwrap()
+                    } else {
+                        F::ZERO
+                    };
+                    let rand_idx = col.min(randomness.len() - 1);
+                    aux_columns[col][row] = randomness[rand_idx] * main_col_0 + main_col_1;
+                }
+            }
+
+            // Convert column-major to row-major
+            let mut data = Vec::with_capacity(num_rows * aux_width);
+            for row in 0..num_rows {
+                for col in 0..aux_width {
+                    data.push(aux_columns[col][row]);
+                }
+            }
+
+            RowMajorMatrix::new(data, aux_width)
+        }
+    }
+
+    #[test]
+    fn test_build_aux_trace_empty() {
+        let air = MockAir {
+            width: 4,
+            aux_width: 0,
+        };
+
+        let main_trace = RowMajorMatrix::new(
+            vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)],
+            4,
+        );
+        let randomness = vec![F::from_u32(7), F::from_u32(11)];
+
+        let aux_trace = air.build_aux_trace(&main_trace, &randomness);
+
+        assert_eq!(aux_trace.height(), 0);
+        assert_eq!(aux_trace.width(), 0);
+    }
+
+    #[test]
+    fn test_build_aux_trace_single_row() {
+        let air = MockAir {
+            width: 2,
+            aux_width: 1,
+        };
+
+        // Single row: [5, 7]
+        let main_trace = RowMajorMatrix::new(vec![F::from_u32(5), F::from_u32(7)], 2);
+        let randomness = vec![F::from_u32(3)];
+
+        let aux_trace = air.build_aux_trace(&main_trace, &randomness);
+
+        assert_eq!(aux_trace.height(), 1);
+        assert_eq!(aux_trace.width(), 1);
+
+        // Expected: randomness[0] * 5 + 7 = 3 * 5 + 7 = 22
+        assert_eq!(aux_trace.get(0, 0), Some(F::from_u32(22)));
+    }
+
+    #[test]
+    fn test_build_aux_trace_multiple_rows() {
+        let air = MockAir {
+            width: 2,
+            aux_width: 2,
+        };
+
+        // Two rows: [1, 2], [3, 4]
+        let main_trace = RowMajorMatrix::new(
+            vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)],
+            2,
+        );
+        let randomness = vec![F::from_u32(5), F::from_u32(7)];
+
+        let aux_trace = air.build_aux_trace(&main_trace, &randomness);
+
+        assert_eq!(aux_trace.height(), 2);
+        assert_eq!(aux_trace.width(), 2);
+
+        // Row 0, Col 0: randomness[0] * 1 + 2 = 5 * 1 + 2 = 7
+        assert_eq!(aux_trace.get(0, 0), Some(F::from_u32(7)));
+
+        // Row 0, Col 1: randomness[1] * 1 + 2 = 7 * 1 + 2 = 9
+        assert_eq!(aux_trace.get(0, 1), Some(F::from_u32(9)));
+
+        // Row 1, Col 0: randomness[0] * 3 + 4 = 5 * 3 + 4 = 19
+        assert_eq!(aux_trace.get(1, 0), Some(F::from_u32(19)));
+
+        // Row 1, Col 1: randomness[1] * 3 + 4 = 7 * 3 + 4 = 25
+        assert_eq!(aux_trace.get(1, 1), Some(F::from_u32(25)));
+    }
+
+    #[test]
+    fn test_build_aux_trace_dimensions() {
+        let air = MockAir {
+            width: 5,
+            aux_width: 3,
+        };
+
+        let num_rows = 10;
+        let main_data: Vec<_> = (0..num_rows * 5)
+            .map(|i| F::from_u32(i as u32))
+            .collect();
+        let main_trace = RowMajorMatrix::new(main_data, 5);
+        let randomness = vec![F::from_u32(2), F::from_u32(3), F::from_u32(5)];
+
+        let aux_trace = air.build_aux_trace(&main_trace, &randomness);
+
+        assert_eq!(aux_trace.height(), num_rows);
+        assert_eq!(aux_trace.width(), 3);
+    }
+
+    #[test]
+    fn test_build_aux_trace_with_field_operations() {
+        let air = MockAir {
+            width: 3,
+            aux_width: 1,
+        };
+
+        // Create a trace with specific field elements
+        let main_trace = RowMajorMatrix::new(
+            vec![
+                F::from_u32(10),
+                F::from_u32(20),
+                F::from_u32(30),
+                F::from_u32(15),
+                F::from_u32(25),
+                F::from_u32(35),
+            ],
+            3,
+        );
+        let randomness = vec![F::from_u32(2)];
+
+        let aux_trace = air.build_aux_trace(&main_trace, &randomness);
+
+        assert_eq!(aux_trace.height(), 2);
+        assert_eq!(aux_trace.width(), 1);
+
+        // Row 0: 2 * 10 + 20 = 40
+        assert_eq!(aux_trace.get(0, 0), Some(F::from_u32(40)));
+
+        // Row 1: 2 * 15 + 25 = 55
+        assert_eq!(aux_trace.get(1, 0), Some(F::from_u32(55)));
     }
 }

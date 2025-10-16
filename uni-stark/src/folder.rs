@@ -77,14 +77,6 @@ impl<'a, SC: StarkGenericConfig> AirBuilder for ProverConstraintFolder<'a, SC> {
     }
 
     #[inline]
-    fn aux_trace(&self) -> Self::M {
-        match self.aux_trace {
-            Some(p) => p,
-            None => panic!("auxiliary trace not supported"),
-        }
-    }
-
-    #[inline]
     fn is_first_row(&self) -> Self::Expr {
         self.is_first_row
     }
@@ -143,13 +135,6 @@ impl<'a, SC: StarkGenericConfig> AirBuilder for VerifierConstraintFolder<'a, SC>
 
     fn main(&self) -> Self::M {
         self.main
-    }
-
-    fn aux_trace(&self) -> Self::M {
-        match self.aux_trace {
-            Some(p) => p,
-            None => panic!("auxiliary trace not supported"),
-        }
     }
 
     fn is_first_row(&self) -> Self::Expr {

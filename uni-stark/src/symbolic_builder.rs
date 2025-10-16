@@ -119,13 +119,6 @@ impl<F: Field> AirBuilder for SymbolicAirBuilder<F> {
         self.main.clone()
     }
 
-    fn aux_trace(&self) -> Self::M {
-        match &self.aux_trace {
-            Some(p) => p.clone(),
-            None => panic!("auxiliary trace not supported"),
-        }
-    }
-
     fn is_first_row(&self) -> Self::Expr {
         SymbolicExpression::IsFirstRow
     }

@@ -147,13 +147,6 @@ where
         self.main
     }
 
-    fn aux_trace(&self) -> Self::M {
-        match self.aux_trace {
-            Some(p) => p,
-            None => panic!("auxiliary trace is not supported"),
-        }
-    }
-
     fn is_first_row(&self) -> Self::Expr {
         self.is_first_row
     }
@@ -204,7 +197,7 @@ impl<F: Field> AirBuilderWithPublicValues for DebugConstraintBuilder<'_, F> {
 mod tests {
     use alloc::vec;
 
-    use p3_air::{BaseAir, BaseAirWithPublicValues};
+    use p3_air::{BaseAir, BaseAirWithAuxTrace, BaseAirWithPublicValues};
     use p3_baby_bear::BabyBear;
     use p3_field::PrimeCharacteristicRing;
 
@@ -226,6 +219,13 @@ mod tests {
     }
 
     impl<F: Field, const W: usize> BaseAirWithPublicValues<F> for RowLogicAir<W> {}
+
+    impl<F: Field, const W: usize> BaseAirWithAuxTrace<F> for RowLogicAir<F> {
+        /// The width of the auxiliary trace (number of columns)
+        fn aux_width(&self) -> usize {
+            W
+        }
+    }
 
     impl<F: Field, const W: usize> Air<DebugConstraintBuilder<'_, F>> for RowLogicAir<W> {
         fn eval(&self, builder: &mut DebugConstraintBuilder<'_, F>) {
