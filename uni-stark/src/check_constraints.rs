@@ -220,7 +220,7 @@ mod tests {
 
     impl<F: Field, const W: usize> BaseAirWithPublicValues<F> for RowLogicAir<W> {}
 
-    impl<F: Field, const W: usize> BaseAirWithAuxTrace<F> for RowLogicAir<F> {
+    impl<F: Field, const W: usize> BaseAirWithAuxTrace<F> for RowLogicAir<W> {
         /// The width of the auxiliary trace (number of columns)
         fn aux_width(&self) -> usize {
             W
@@ -240,8 +240,7 @@ mod tests {
             }
 
             match builder.aux_trace {
-                Some(p) => {
-                    let aux_trace = builder.aux_trace();
+                Some(aux_trace) => {
                     for col in 0..W {
                         let a = aux_trace.top.get(0, col).unwrap();
                         let b = aux_trace.bottom.get(0, col).unwrap();

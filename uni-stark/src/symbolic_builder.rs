@@ -334,11 +334,11 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "auxiliary trace not supported")]
+    #[should_panic(expected = "called `Option::unwrap()` on a `None` value")]
     fn test_aux_trace_panics_when_not_set() {
         let builder = SymbolicAirBuilder::<BabyBear>::new(2, 4, 3);
         // This should panic because aux_trace is None
-        let _ = builder.aux_trace();
+        let _ = builder.aux_trace.clone().unwrap();
     }
 
     #[test]
@@ -358,7 +358,7 @@ mod tests {
         builder.aux_trace = Some(RowMajorMatrix::new(aux_values.clone(), aux_width));
 
         // Now aux_trace should return successfully
-        let aux = builder.aux_trace();
+        let aux = builder.aux_trace.clone().unwrap();
 
         assert_eq!(aux.width, aux_width, "Aux trace width should match");
         assert_eq!(aux.height(), 2, "Aux trace should have 2 rows");
@@ -381,7 +381,7 @@ mod tests {
         impl Air<SymbolicAirBuilder<BabyBear>> for AuxAir {
             fn eval(&self, builder: &mut SymbolicAirBuilder<BabyBear>) {
                 // Access aux trace and create a constraint from it
-                let aux = builder.aux_trace();
+                let aux = builder.aux_trace.clone().unwrap();
                 let aux_var = aux.row_slice(0).unwrap()[0];
                 builder.assert_zero(aux_var);
             }
