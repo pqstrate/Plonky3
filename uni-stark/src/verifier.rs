@@ -93,6 +93,16 @@ where
     challenger.observe(commitments.trace.clone());
     challenger.observe_slice(public_values);
 
+    // ==== begin of aux trace commit process ===
+    match &proof.commitments.aux_trace {
+        Some(aux_trace_commit) => {
+            challenger.observe(aux_trace_commit.clone());
+        }
+        None => {}
+    };
+
+    // ==== end of aux trace commit process ===
+
     // Get the first Fiat Shamir challenge which will be used to combine all constraint polynomials
     // into a single polynomial.
     //
