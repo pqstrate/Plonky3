@@ -221,6 +221,10 @@ mod tests {
     impl<F: Field, const W: usize> BaseAirWithPublicValues<F> for RowLogicAir<W> {}
 
     impl<F: Field, const W: usize> BaseAirWithAuxTrace<F> for RowLogicAir<W> {
+        fn num_random_elements(&self) -> usize {
+            0
+        }
+
         /// The width of the auxiliary trace (number of columns)
         fn aux_width(&self) -> usize {
             W

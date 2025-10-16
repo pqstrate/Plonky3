@@ -1,22 +1,16 @@
 use core::ops::{Add, Mul, Sub};
 
-use p3_challenger::FieldChallenger;
 use p3_field::{Algebra, ExtensionField, Field, PrimeCharacteristicRing};
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
 
 /// The underlying structure of an AIR.
 pub trait BaseAir<F>: Sync {
-    /// The number of columns (a.k.a. registers) in this AIR.
+    /// The number of columns (a.k.a. registers) in the main trace of this AIR.
     fn width(&self) -> usize;
 
     /// Return an optional preprocessed trace matrix to be included in the prover's trace.
     fn preprocessed_trace(&self) -> Option<RowMajorMatrix<F>> {
-        None
-    }
-
-    /// Return an optional post-processed trace matrix to be included in the prover's trace.
-    fn auxiliary_trace(&self) -> Option<RowMajorMatrix<F>> {
         None
     }
 }
@@ -31,19 +25,16 @@ pub trait BaseAirWithPublicValues<F>: BaseAir<F> {
 
 /// An extension of `BaseAir` that includes support for randomness and aux trace.
 pub trait BaseAirWithAuxTrace<F: Field>: BaseAir<F> {
-    /// Return the number of expected randomness
-    fn number_random_columns(&self) -> usize {
-        // Hardcoded to 2 for now.
-        // TODO: this should reflect the degree of extension field.
-        // But for now we hard code it 2.
-        2
-    }
+    /// The number of random elements required for the aux trace
+    fn num_random_elements(&self) -> usize;
 
-    // /// Fill in the random column with the randomness extracted from the challenger
-    // fn fill_rnd_coeff(&mut self, challenger: &mut impl FieldChallenger<F>);
-
-    /// The width of the auxiliary trace (number of columns)
+    /// The number of columns (a.k.a. registers) in the aux trace of this AIR; can be 0.
     fn aux_width(&self) -> usize;
+
+    /// Return an optional post-processed trace matrix to be included in the prover's trace.
+    fn auxiliary_trace(&self) -> Option<RowMajorMatrix<F>> {
+        None
+    }
 
     /// Build the auxiliary trace given the main trace and randomness.
     ///
@@ -55,18 +46,13 @@ pub trait BaseAirWithAuxTrace<F: Field>: BaseAir<F> {
     /// The auxiliary trace matrix
     fn build_aux_trace(
         &self,
-        main_trace: &RowMajorMatrix<F>,
-        randomness: &[F],
+        _main_trace: &RowMajorMatrix<F>,
+        _randomness: &[F],
     ) -> RowMajorMatrix<F> {
-
-        unimplemented!("`Prover::build_aux_trace` needs to be implemented when the trace has an auxiliary segment.")
+        unimplemented!(
+            "`Prover::build_aux_trace` needs to be implemented when the trace has an auxiliary segment."
+        )
     }
-
-    // /// Return the aux trace and randomness registers.
-    // fn aux_trace(&self) -> RowMajorMatrix<F>;
-
-    // /// Generate the aux trace given the main trace.
-    // fn build_aux_trace(main: &Self::M, randomness: &[Self::F]) -> Self::M;
 }
 
 /// An algebraic intermediate representation (AIR) definition.
@@ -357,11 +343,12 @@ impl<AB: PermutationAirBuilder> PermutationAirBuilder for FilteredAirBuilder<'_,
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use alloc::vec;
     use alloc::vec::Vec;
+
     use p3_baby_bear::BabyBear;
-    use p3_field::Field;
+
+    use super::*;
 
     type F = BabyBear;
 
@@ -369,6 +356,7 @@ mod tests {
     struct MockAir {
         width: usize,
         aux_width: usize,
+        num_randomness_elements: usize,
     }
 
     impl BaseAir<F> for MockAir {
@@ -378,6 +366,10 @@ mod tests {
     }
 
     impl BaseAirWithAuxTrace<F> for MockAir {
+        fn num_random_elements(&self) -> usize {
+            self.num_randomness_elements
+        }
+
         fn aux_width(&self) -> usize {
             self.aux_width
         }
@@ -428,12 +420,11 @@ mod tests {
         let air = MockAir {
             width: 4,
             aux_width: 0,
+            num_randomness_elements: 0,
         };
 
-        let main_trace = RowMajorMatrix::new(
-            vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)],
-            4,
-        );
+        let main_trace =
+            RowMajorMatrix::new(vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)], 4);
         let randomness = vec![F::from_u32(7), F::from_u32(11)];
 
         let aux_trace = air.build_aux_trace(&main_trace, &randomness);
@@ -447,6 +438,7 @@ mod tests {
         let air = MockAir {
             width: 2,
             aux_width: 1,
+            num_randomness_elements: 2,
         };
 
         // Single row: [5, 7]
@@ -467,13 +459,12 @@ mod tests {
         let air = MockAir {
             width: 2,
             aux_width: 2,
+            num_randomness_elements: 2,
         };
 
         // Two rows: [1, 2], [3, 4]
-        let main_trace = RowMajorMatrix::new(
-            vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)],
-            2,
-        );
+        let main_trace =
+            RowMajorMatrix::new(vec![F::ONE, F::TWO, F::from_u32(3), F::from_u32(4)], 2);
         let randomness = vec![F::from_u32(5), F::from_u32(7)];
 
         let aux_trace = air.build_aux_trace(&main_trace, &randomness);
@@ -499,12 +490,11 @@ mod tests {
         let air = MockAir {
             width: 5,
             aux_width: 3,
+            num_randomness_elements: 2,
         };
 
         let num_rows = 10;
-        let main_data: Vec<_> = (0..num_rows * 5)
-            .map(|i| F::from_u32(i as u32))
-            .collect();
+        let main_data: Vec<_> = (0..num_rows * 5).map(|i| F::from_u32(i as u32)).collect();
         let main_trace = RowMajorMatrix::new(main_data, 5);
         let randomness = vec![F::from_u32(2), F::from_u32(3), F::from_u32(5)];
 
@@ -519,6 +509,7 @@ mod tests {
         let air = MockAir {
             width: 3,
             aux_width: 1,
+            num_randomness_elements: 2,
         };
 
         // Create a trace with specific field elements
