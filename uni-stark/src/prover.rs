@@ -170,10 +170,10 @@ where
     // Observe the public input values.
     challenger.observe_slice(public_values);
 
-    // ==== begin of aux trace process ===
+    // ==== begin of aux trace commit process ===
     //
     //
-    if aux_trace.is_some() {
+    let (aux_trace_commit, aux_trace_data) = if aux_trace.is_some() {
         match randomness_len {
             Some(randomness_len) => {
                 // step 1. extract the randomness needed for processing the auxiliary trace
@@ -186,14 +186,17 @@ where
                 // Not sure if we need to observe the randomness here. Usually the entropy should already be implied.
                 // challenger.observe(Val::<SC>::from_u8(randomness_len as u8));
                 // challenger.observe(randomness);
+                (Some(aux_trace_commit), Some(trace_data))
             }
             None => {
                 panic!("aux trace is supplied but randomness length is missing")
             }
         }
-    }
+    } else {
+        (None, None)
+    };
 
-    // ==== end of aux trace process ===
+    // ==== end of aux trace commit process ===
 
     // Get the first Fiat Shamir challenge which will be used to combine all constraint polynomials
     // into a single polynomial.
@@ -230,6 +233,10 @@ where
     // TODO: Make this explicit in `get_evaluations_on_domain` or otherwise fix this.
     let trace_on_quotient_domain = pcs.get_evaluations_on_domain(&trace_data, 0, quotient_domain);
 
+    let aux_trace_on_quotient_domain = aux_trace_data
+        .as_ref()
+        .map(|trace_data| pcs.get_evaluations_on_domain(trace_data, 0, quotient_domain));
+
     // Compute the quotient polynomial `Q(x)` by evaluating
     //          `C(T_1(x), ..., T_w(x), T_1(hx), ..., T_w(hx), selectors(x)) / Z_H(x)`
     // at every point in the quotient domain. The degree of `Q(x)` is `<= deg(C(x)) - N = 2N - 2` in the case
@@ -240,6 +247,7 @@ where
         trace_domain,
         quotient_domain,
         trace_on_quotient_domain,
+        aux_trace_on_quotient_domain,
         alpha,
         constraint_count,
     );
@@ -296,6 +304,7 @@ where
     // will be passed to the verifier.
     let commitments = Commitments {
         trace: trace_commit,
+        aux_trace: aux_trace_commit,
         quotient_chunks: quotient_commit,
         random: opt_r_commit.clone(),
     };
@@ -364,6 +373,7 @@ fn quotient_values<SC, A, Mat>(
     trace_domain: Domain<SC>,
     quotient_domain: Domain<SC>,
     trace_on_quotient_domain: Mat,
+    aux_trace_on_quotient_domain: Option<Mat>,
     alpha: SC::Challenge,
     constraint_count: usize,
 ) -> Vec<SC::Challenge>
@@ -417,10 +427,24 @@ where
                 width,
             );
 
+            let aux = match &aux_trace_on_quotient_domain {
+                Some(trace_on_quotient_domain) => Some(
+                    RowMajorMatrix::new(
+                        trace_on_quotient_domain.vertically_packed_row_pair(i_start, next_step),
+                        width,
+                    )
+                    ,
+                ),
+                None => None,
+            };
+            let aux_view = aux.as_ref().map(|x| x.as_view());
+
             let accumulator = PackedChallenge::<SC>::ZERO;
+
+
             let mut folder = ProverConstraintFolder {
                 main: main.as_view(),
-                aux_trace: None,
+                aux_trace: aux_view,
                 public_values,
                 random_values: None,
                 is_first_row,

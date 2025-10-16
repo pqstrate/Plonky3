@@ -331,7 +331,13 @@ mod tests {
             BabyBear::new(6), // Row 3
         ];
         let aux_trace = RowMajorMatrix::new(values, 2);
-        check_constraints_with_aux_inputs(&air, &main, &vec![BabyBear::new(6); 2], &aux_trace, &vec![]);
+        check_constraints_with_aux_inputs(
+            &air,
+            &main,
+            &vec![BabyBear::new(6); 2],
+            &aux_trace,
+            &vec![],
+        );
     }
 
     #[test]
