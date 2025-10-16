@@ -428,19 +428,15 @@ where
             );
 
             let aux = match &aux_trace_on_quotient_domain {
-                Some(trace_on_quotient_domain) => Some(
-                    RowMajorMatrix::new(
-                        trace_on_quotient_domain.vertically_packed_row_pair(i_start, next_step),
-                        width,
-                    )
-                    ,
-                ),
+                Some(trace_on_quotient_domain) => Some(RowMajorMatrix::new(
+                    trace_on_quotient_domain.vertically_packed_row_pair(i_start, next_step),
+                    width,
+                )),
                 None => None,
             };
             let aux_view = aux.as_ref().map(|x| x.as_view());
 
             let accumulator = PackedChallenge::<SC>::ZERO;
-
 
             let mut folder = ProverConstraintFolder {
                 main: main.as_view(),

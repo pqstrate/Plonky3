@@ -1,4 +1,5 @@
 use alloc::vec::Vec;
+use core::fmt::Debug;
 
 use p3_commit::Pcs;
 use serde::{Deserialize, Serialize};
@@ -25,8 +26,8 @@ pub struct Proof<SC: StarkGenericConfig> {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Commitments<Com> {
-    pub(crate) trace: Com,
-    pub(crate) aux_trace: Option<Com>,
+    pub trace: Com,
+    pub aux_trace: Option<Com>,
     pub(crate) quotient_chunks: Com,
     pub(crate) random: Option<Com>,
 }
